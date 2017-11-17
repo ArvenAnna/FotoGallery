@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import FotoSlider from "../components/FotoSlider.jsx";
+import FotoSlider from '../components/FotoSlider.jsx';
+import '../main.less';
 
 const Content = styled.div`
     margin: 2rem 10rem;

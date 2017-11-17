@@ -45,6 +45,7 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.22.0",
     "file-loader": "^0.10.1",
+    "image-webpack-loader": "^3.4.2",
     "less": "^2.7.2",
     "less-loader": "^4.0.2",
     "source-map-loader": "^0.2.2",
