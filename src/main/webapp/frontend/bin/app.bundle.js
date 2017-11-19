@@ -21572,10 +21572,11 @@ module.exports = function isObject(val) {
 			if (caret === eol) {
 				// last character + noop context, add synthetic padding for noop context to terminate
 				if (comment + quote + parentheses + bracket !== 0) {
-					if (comment === FOWARDSLASH) {
-						code = NEWLINE
+					if (comment !== 0) {
+						code = comment === FOWARDSLASH ? NEWLINE : FOWARDSLASH
 					}
 
+					quote = parentheses = bracket = 0
 					eof++
 					eol++
 				}
@@ -23769,7 +23770,7 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _templateObject = _taggedTemplateLiteral(['\n'], ['\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n    margin: 0 auto;\n    height: 600px;\n'], ['\n    margin: 0 auto;\n    height: 600px;\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n    margin: 0 auto;\n    height: 560px;\n    box-shadow: 10px 10px 5px 3px rgba(0, 0, 0, 0.5);\n    border-radius:5px;\n'], ['\n    margin: 0 auto;\n    height: 560px;\n    box-shadow: 10px 10px 5px 3px rgba(0, 0, 0, 0.5);\n    border-radius:5px;\n']);
 
 var _react = __webpack_require__(0);
 
@@ -23826,12 +23827,12 @@ var FotoSlider = function (_React$Component) {
         _react2.default.createElement(
           ImageWrapper,
           null,
-          _react2.default.createElement(Image, { src: '/frontend/foto/5b405dc14959cd421a7579261b5ee261--awesome-pictures-colorful-pictures.jpg' })
+          _react2.default.createElement(Image, { src: '/frontend/foto/IMG_2119.JPG' })
         ),
         _react2.default.createElement(
           ImageWrapper,
           null,
-          _react2.default.createElement(Image, { src: '/frontend/foto/download.jpg' })
+          _react2.default.createElement(Image, { src: '/frontend/foto/IMG_2357.JPG' })
         ),
         _react2.default.createElement(
           ImageWrapper,
@@ -26450,7 +26451,7 @@ exports.i(__webpack_require__(65), "");
 exports.i(__webpack_require__(66), "");
 
 // module
-exports.push([module.i, ".slick-slider {\n  width: 100%;\n  height: 600px;\n}\n.slick-prev,\n.slick-next {\n  background-color: blue;\n}\n.slick-prev:hover,\n.slick-next:hover {\n  background-color: green;\n}\n", ""]);
+exports.push([module.i, "body {\n  background-color: #d2f6f1;\n}\n.slick-slider {\n  width: 100%;\n  height: 600px;\n}\n.slick-prev,\n.slick-next {\n  background-color: blue;\n}\n.slick-prev:hover,\n.slick-next:hover {\n  background-color: green;\n}\n", ""]);
 
 // exports
 
