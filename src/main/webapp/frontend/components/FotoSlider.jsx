@@ -26,13 +26,13 @@ class FotoSlider extends React.Component {
   return (
     <Slider {...settings}>
       <ImageWrapper>
-        <Image src='/frontend/foto/5b405dc14959cd421a7579261b5ee261--awesome-pictures-colorful-pictures.jpg'/>
+        <Image src='/foto/5b405dc14959cd421a7579261b5ee261--awesome-pictures-colorful-pictures.jpg'/>
       </ImageWrapper>
       <ImageWrapper>
-        <Image src='/frontend/foto/download.jpg'/>
+        <Image src='/foto/download.jpg'/>
       </ImageWrapper>
       <ImageWrapper>
-        <Image src='/frontend/foto/images.jpg'></Image>
+        <Image src='/foto/images.jpg'></Image>
       </ImageWrapper>
     </Slider>
   );

@@ -7,7 +7,9 @@
     "recept": "app.bundle.js"
   },
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "dev-server": "node dev-server.js",
+    "dev-client": "webpack-dev-server --port 3000"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.15.3",
+    "express": "^4.16.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.3",
@@ -51,6 +54,7 @@
     "source-map-loader": "^0.2.2",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.6",
-    "webpack": "^3.6.0"
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.9.4"
   }
 }

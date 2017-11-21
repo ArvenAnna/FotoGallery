@@ -57,5 +57,23 @@ module.exports = {
   watch: true,
   watchOptions: {
     aggregateTimeout: 100
-  }
+  },
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+    inline: true,
+    host: 'localhost', // Defaults to `localhost`
+    port: 3000, // Defaults to 8080
+    proxy: {
+      '^/api/*': {
+        target: 'http://localhost:4000/',
+        secure: false
+      }
+    }
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin({
+      multiStep: true
+    })
+  ]
 };
