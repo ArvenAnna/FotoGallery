@@ -1,6 +1,7 @@
 import React from 'react';
 import  Slider from 'react-slick';
 import styled from 'styled-components';
+import {LeftArrowIcon, RightArrowIcon} from "./Icons.jsx";
 
 const ImageWrapper = styled.div`
 `
@@ -24,6 +25,8 @@ class FotoSlider extends React.Component {
     adaptiveHeight: true,
     autoplay: false,
     fade: true,
+    nextArrow: <RightArrowIcon/>,
+    prevArrow: <LeftArrowIcon/>
 
   };
   return (

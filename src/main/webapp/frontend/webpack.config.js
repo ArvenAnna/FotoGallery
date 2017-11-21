@@ -27,17 +27,22 @@ module.exports = {
       test: /\.jsx$/,
       exclude: [/node_modules/, /bin/],
       loader: "babel-loader"
-    }, {
-      test: /\.(jpe?g|png|gif|svg)$/i,
+    },
+      {
+      test: /\.(jpe?g|png|gif)$/i,
       loaders: [
         'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
         'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
       ]
-    }, { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      loader: "url-loader?limit=10000&minetype=application/font-woff"
-    }, { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+    },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: "url-loader?limit=10000&minetype=application/font-woff"
+    },
+      { test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       loader: "file-loader"
-    }, {
+    },
+      {
       test: /\.svg$/,
       use: [
         {
@@ -51,6 +56,9 @@ module.exports = {
         }
       ]
     }]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
   },
 
   devtool: "source-map",

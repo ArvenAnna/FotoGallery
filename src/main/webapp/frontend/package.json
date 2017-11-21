@@ -4,7 +4,7 @@
   "description": "foto gallery",
   "main": "webpack.config.js",
   "bin": {
-    "recept": "app.bundle.js"
+    "foto": "app.bundle.js"
   },
   "scripts": {
     "test": "test",
