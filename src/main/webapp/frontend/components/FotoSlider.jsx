@@ -7,10 +7,13 @@ const ImageWrapper = styled.div`
 
 const Image = styled.img`
     margin: 0 auto;
-    height: 600px;
+    height: 560px;
+    box-shadow: 10px 10px 5px 3px rgba(0, 0, 0, 0.5);
+    border-radius:5px;
 `
 
 class FotoSlider extends React.Component {
+
   render () {
 
   var settings = {
