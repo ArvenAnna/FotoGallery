@@ -1,0 +1,186 @@
+@black_transparent: rgba(0, 0, 0, 0);
+@black_mid_transparent: rgba(0, 0, 0, 0.5);
+@black_few_transparent: rgba(0, 0, 0, 0.7);
+@white_transparent: rgba(255, 255, 255, 0);
+//@white_mid_transparent: rgba(255, 255, 255, 0.5);
+@white_few_transparent: rgba(255, 255, 255, 0.7);
+
+// ---------- animation mixins -----------
+
+.__fade_in(@bgFrom, @bgTo, @colorFrom, @colorTo) {
+  from {
+    background-color: @bgFrom;
+    color: @colorFrom;
+  }
+  to {
+    background-color: @bgTo;
+    color: @colorTo;
+  }
+}
+
+.__fade_in_icon(@from, @to) {
+  from {
+    fill: @from;
+  }
+  to {
+    fill: @to;
+  }
+}
+
+.__move_to(@side) {
+  from {
+      @{side}: 100%;
+  }
+  to {
+      @{side}: 0;
+  }
+}
+
+// ---------- animations -----------
+
+@keyframes fade_in_top {
+  .__fade_in(@black_transparent, @black_mid_transparent, @white_transparent, @white_few_transparent);
+}
+
+@keyframes fade_in_bottom {
+  .__fade_in(@black_transparent, @black_few_transparent, @white_transparent, @white_few_transparent);
+}
+
+@keyframes fade_in_icon {
+  .__fade_in_icon(@white_transparent, @white_few_transparent);
+}
+
+@keyframes fade_out_bottom {
+  from {
+    background-color: @black_mid_transparent;
+    visibility: visible;
+  }
+  to {
+    background-color: @black_transparent;
+    visibility: hidden;
+  }
+}
+
+@keyframes fade_out_icon {
+  from {
+    fill: @white_few_transparent;
+  }
+  to {
+    fill: @white_transparent;
+  }
+}
+
+@keyframes fade_out_bottom {
+  from {
+    background-color: @black_few_transparent;
+    color: @white_few_transparent;
+  }
+  to {
+    background-color: @black_transparent;
+    color: @white_transparent;
+  }
+}
+
+
+
+@keyframes move_to_right {
+  .__move_to(right);
+}
+
+@keyframes move_to_left {
+  .__move_to(left);
+}
+
+@keyframes move_to_top {
+  .__move_to(top);
+}
+
+@keyframes move_to_bottom {
+  .__move_to(bottom);
+}
+
+// ---------- mixins ------------------------
+
+.__flex_row_middle() {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+// ----------- main styles -------------------------
+
+.image_wrapper {
+  position: relative;
+  overflow: hidden;
+  color: @white_few_transparent;
+  box-shadow: 0.5rem 0.5rem 0.3rem 0.1rem @black_mid_transparent;
+  border-radius: 0.3rem;
+
+  &:hover {
+    .overlay {
+      visibility: visible;
+    }
+  }
+
+  img {
+    margin: 0 auto;
+    height: 30rem;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+
+    .overlay_top {
+      .__flex_row_middle();
+      height: 80%;
+      background-color: @black_mid_transparent;
+    }
+
+    .overlay_bottom {
+      .__flex_row_middle();
+      height: 20%;
+      background-color: @black_few_transparent;
+
+      &_text {
+        font-weight: 400;
+        font-size: 2rem;
+        font-style: italic;
+        margin: 0 20px;
+      }
+    }
+  }
+
+  // ----------------- applying fade animation ----------------
+
+  .__animation_fade(@name) {
+    animation-name: @name;
+    animation-duration: 2s;
+    animation-timing-function: ease;
+  }
+
+  &.fade_in {
+    .overlay_top {
+      .__animation_fade(fade_in_top);
+
+      svg {
+        .__animation_fade(fade_in_icon);
+      }
+    }
+    .overlay_bottom {
+      .__animation_fade(fade_in_bottom);
+    }
+  }
+
+  &.fade_out {
+    .overlay_bottom {
+      .__animation_fade(fade_out_bottom);
+    }
+  }
+
+}
