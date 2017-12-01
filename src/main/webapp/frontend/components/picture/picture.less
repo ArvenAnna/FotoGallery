@@ -1,24 +1,39 @@
 @black_transparent: rgba(0, 0, 0, 0);
 @black_mid_transparent: rgba(0, 0, 0, 0.5);
 @black_few_transparent: rgba(0, 0, 0, 0.7);
+@black_almost_transparent: rgba(0, 0, 0, 0.2);
 @white_transparent: rgba(255, 255, 255, 0);
 //@white_mid_transparent: rgba(255, 255, 255, 0.5);
 @white_few_transparent: rgba(255, 255, 255, 0.7);
+@white_almost_transparent:  rgba(255, 255, 255, 0.2);
+
+@image_preview_frame: rgba(0, 0, 0, 1);
+@image_preview_bottom: rgba(255, 255, 255, 1);
+
 
 // ---------- animation mixins -----------
 
-.__fade_in(@bgFrom, @bgTo, @colorFrom, @colorTo) {
+.__fade_bg_color(@bgFrom, @bgTo) {
   from {
     background-color: @bgFrom;
-    color: @colorFrom;
   }
   to {
     background-color: @bgTo;
+  }
+}
+
+.__fade_visibility_color(@vFrom, @vTo, @colorFrom, @colorTo) {
+  from {
+    visibility: @vFrom;
+    color: @colorFrom;
+  }
+  to {
+    visibility: @vTo;
     color: @colorTo;
   }
 }
 
-.__fade_in_icon(@from, @to) {
+.__fade_icon(@from, @to) {
   from {
     fill: @from;
   }
@@ -36,52 +51,50 @@
   }
 }
 
+.__move_from(@side) {
+  from {
+      @{side}: 0;
+      visibility: visible;
+  }
+  to {
+      @{side}: 100%;
+      visibility: hidden;
+  }
+}
+
 // ---------- animations -----------
 
+@keyframes fade_in_base {
+  .__fade_visibility_color(hidden, visible, @white_transparent, @white_few_transparent);
+}
+
 @keyframes fade_in_top {
-  .__fade_in(@black_transparent, @black_mid_transparent, @white_transparent, @white_few_transparent);
+  .__fade_bg_color(@black_transparent, @black_mid_transparent);
 }
 
 @keyframes fade_in_bottom {
-  .__fade_in(@black_transparent, @black_few_transparent, @white_transparent, @white_few_transparent);
+  .__fade_bg_color(@black_transparent, @black_few_transparent);
 }
 
 @keyframes fade_in_icon {
-  .__fade_in_icon(@white_transparent, @white_few_transparent);
+  .__fade_icon(@white_transparent, @white_few_transparent);
+}
+
+@keyframes fade_out_base {
+  .__fade_visibility_color(visible, hidden, @white_few_transparent, @white_transparent);
+}
+
+@keyframes fade_out_top {
+  .__fade_bg_color(@black_mid_transparent, @black_transparent);
 }
 
 @keyframes fade_out_bottom {
-  from {
-    background-color: @black_mid_transparent;
-    visibility: visible;
-  }
-  to {
-    background-color: @black_transparent;
-    visibility: hidden;
-  }
+  .__fade_bg_color(@black_few_transparent, @black_transparent);
 }
 
 @keyframes fade_out_icon {
-  from {
-    fill: @white_few_transparent;
-  }
-  to {
-    fill: @white_transparent;
-  }
+  .__fade_icon(@white_few_transparent, @white_transparent);
 }
-
-@keyframes fade_out_bottom {
-  from {
-    background-color: @black_few_transparent;
-    color: @white_few_transparent;
-  }
-  to {
-    background-color: @black_transparent;
-    color: @white_transparent;
-  }
-}
-
-
 
 @keyframes move_to_right {
   .__move_to(right);
@@ -96,8 +109,41 @@
 }
 
 @keyframes move_to_bottom {
-  .__move_to(bottom);
+  from {
+    bottom: 100%;
+    top: -100%;
+  }
+  to {
+    bottom: 0;
+    top: 0;
+  }
 }
+
+@keyframes move_from_right {
+  .__move_from(right);
+}
+
+@keyframes move_from_left {
+  .__move_from(left);
+}
+
+@keyframes move_from_top {
+  .__move_from(top);
+}
+
+@keyframes move_from_bottom {
+  from {
+    bottom: 0;
+    top: 0;
+    visibility: visible;
+  }
+  to {
+    bottom: 100%;
+    top: -100%;
+    visibility: hidden;
+  }
+}
+
 
 // ---------- mixins ------------------------
 
@@ -106,6 +152,12 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+.__icon(@size, @color) {
+  width: @size;
+  height: @size;
+  fill: @color;
 }
 
 // ----------- main styles -------------------------
@@ -123,7 +175,7 @@
     }
   }
 
-  img {
+  .image {
     margin: 0 auto;
     height: 30rem;
   }
@@ -135,51 +187,239 @@
     width: 100%;
     height: 100%;
     visibility: hidden;
+    display: flex;
+    flex-direction: column;
 
     .overlay_top {
       .__flex_row_middle();
-      height: 80%;
       background-color: @black_mid_transparent;
+      flex-grow: 1;
     }
 
     .overlay_bottom {
       .__flex_row_middle();
-      height: 20%;
       background-color: @black_few_transparent;
 
       &_text {
         font-weight: 400;
         font-size: 2rem;
         font-style: italic;
-        margin: 0 20px;
+        margin: 1.5rem;
       }
     }
   }
 
-  // ----------------- applying fade animation ----------------
+  // ----------------- applying animations ----------------
 
-  .__animation_fade(@name) {
+  .__animation(@name) {
     animation-name: @name;
-    animation-duration: 2s;
+    animation-duration: 1s;
     animation-timing-function: ease;
   }
 
-  &.fade_in {
-    .overlay_top {
-      .__animation_fade(fade_in_top);
+  // ----------- fade animation -----------------
 
-      svg {
-        .__animation_fade(fade_in_icon);
+  &.fade_in {
+    .overlay {
+      .__animation(fade_in_base);
+
+      .overlay_top {
+        .__animation(fade_in_top);
+
+        svg {
+          .__animation(fade_in_icon);
+        }
       }
-    }
-    .overlay_bottom {
-      .__animation_fade(fade_in_bottom);
+      .overlay_bottom {
+        .__animation(fade_in_bottom);
+      }
     }
   }
 
   &.fade_out {
-    .overlay_bottom {
-      .__animation_fade(fade_out_bottom);
+    .overlay {
+      .__animation(fade_out_base);
+
+      .overlay_top {
+        .__animation(fade_out_top);
+
+        svg {
+          .__animation(fade_out_icon);
+        }
+      }
+
+      .overlay_bottom {
+        .__animation(fade_out_bottom);
+      }
+    }
+  }
+
+  // ----------- move animation -----------------
+
+  &.move_to_right {
+    .overlay {
+      .__animation(move_to_right);
+    }
+
+  }
+
+  &.move_to_left {
+    .overlay {
+      .__animation(move_to_left);
+    }
+  }
+
+  &.move_to_top {
+    .overlay {
+      .__animation(move_to_top);
+    }
+  }
+
+  &.move_to_bottom {
+    .overlay {
+      .__animation(move_to_bottom);
+    }
+  }
+
+  &.move_from_right {
+    .overlay {
+      .__animation(move_from_right);
+    }
+
+  }
+
+  &.move_from_left {
+    .overlay {
+      .__animation(move_from_left);
+    }
+  }
+
+  &.move_from_top {
+    .overlay {
+      .__animation(move_from_top);
+    }
+  }
+
+  &.move_from_bottom {
+    .overlay {
+      .__animation(move_from_bottom);
+    }
+  }
+
+
+
+
+
+
+
+}
+
+
+
+
+
+.magnify_modal {
+  .__flex_row_middle();
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 112;
+  height: 100%;
+  width: 100%;
+  background-color: @black_few_transparent;
+
+  &_img_frame {
+    height: 85%;
+    border-radius: 0.3rem;
+    background-color: @image_preview_frame;
+
+    &_container {
+      position: relative;
+      .__flex_row_middle();
+
+
+      .counter_container {
+        .__flex_row_middle();
+        position: absolute;
+        top: 1.5rem;
+        width: 100%;
+
+        .counter {
+          border-radius: 1rem;
+          box-shadow: 0.3rem 0.3rem 0.1rem 0.05rem @black_mid_transparent;
+          padding: 0.2rem 1rem;
+          color: @white_few_transparent;
+        }
+      }
+
+      .cross {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1;
+        .__icon(2rem, @black_mid_transparent);
+
+        &:hover {
+          fill: @image_preview_frame;
+        }
+      }
+
+      // --------------- arrow mixin -----------------------
+      .__arrow(@side) {
+        position: absolute;
+        top: 50%;
+        @{side}: 1rem;
+
+        background-color: @black_almost_transparent;
+        border-radius: 0.2rem;
+        height: 5rem;
+        .__flex_row_middle();
+
+        &:hover {
+          background-color: @black_mid_transparent;
+        }
+
+        svg {
+        .__icon(3rem, @white_almost_transparent);
+
+          &:hover {
+            fill: @image_preview_frame;
+          }
+        }
+      }
+
+      // ------------------------------------
+
+      .left_arrow {
+        .__arrow(left);
+      }
+
+      .right_arrow {
+        .__arrow(right);
+      }
+
+      .image_preview {
+        margin: 0.7rem;
+        height: 80%;
+      }
+    }
+
+    &_bottom {
+      color: @image_preview_bottom;
+      padding: 0 2rem;
+      height: 20%;
+      box-sizing: border-box;
+
+      &_caption {
+        font-size: 2.5rem;
+        margin: 0.5rem;
+      }
+
+      &_text {
+        font-style: italic;
+        font-size: 1rem;
+        color: @white_few_transparent;
+      }
     }
   }
 

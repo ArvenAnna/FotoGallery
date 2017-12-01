@@ -38,7 +38,7 @@ class FotoSlider extends React.Component {
       {/*</ImageWrapper>*/}
     {/*</Slider>*/}
 
-      <Picture src='/foto/download.jpg' animation='fade'/>
+      <Picture src='/foto/download.jpg' animation='move'/>
 
     </div>
 

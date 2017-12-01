@@ -1,142 +1,101 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
 import {MagnifierIcon} from "../Icons";
-import './picture.less';
-
-// const ImageWrapper = styled.div`
-//
-//   &:hover > .move_to_right {
-//       animation-name: move_to_right;
-//       animation-duration: 0.5s;
-//       animation-timing-function: ease;
-//   }
-//
-//   &:hover > .move_to_left {
-//       animation-name: move_to_left;
-//       animation-duration: 0.5s;
-//       animation-timing-function: ease;
-//   }
-//
-//   &:hover > .move_to_top {
-//       animation-name: move_to_top;
-//       animation-duration: 0.5s;
-//       animation-timing-function: ease;
-//   }
-//
-//   &:hover > .move_to_bottom {
-//       animation-name: move_to_bottom;
-//       animation-duration: 0.5s;
-//       animation-timing-function: ease;
-//   }
-//
-//
-//   .overlay {
-//
-//     .overlay_top {
-//
-//        &.fade_out {
-//             animation-name: fade_out_base;
-//             animation-duration: 4s;
-//             animation-timing-function: ease;
-//         }
-//
-//         &.fade_out > svg {
-//             animation-name: fade_out_icon;
-//             animation-duration: 2s;
-//             animation-timing-function: ease;
-//         }
-//     }
-//
-//     .overlay_bottom {
-//
-//       &.fade_out {
-//         animation-name: fade_out_bottom;
-//         animation-duration: 2s;
-//         animation-timing-function: ease;
-//       }
-//     }
-//   }
-// `
+import "./picture.less";
+import Preview from "./Preview";
 
 class Picture extends React.Component {
-    // animation: fade, move_to
+  // animation: fade, move
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            animation: ''
-        };
-        this.mouseEnter = this.mouseEnter.bind(this);
-        this.mouseLeave = this.mouseLeave.bind(this);
+    this.state = {
+      magnify: ''
+    };
+  }
 
-    }
+  click() {
+    this.setState({
+      magnify: 'magnify',
+      animation: ''
+    });
+  };
 
-    mouseLeave(e) {
-        if (this.props.animation === 'fade') {
-            this.setState({
-                animation: 'fade_out'
-            });
-            return;
-        }
-    }
+  closePreview() {
+    this.setState({
+      magnify: ''
+    });
+  }
 
-    mouseEnter(e) {
-        if (this.props.animation === 'fade') {
-            this.setState({
-               animation: 'fade_in'
-            });
-            return;
-        }
+  mouseLeave(e)  {
+    !this.state.magnify && this.chooseAnimation(e, 'fade_out', 'from');
+  };
 
-        const clientRect = e.target.getClientRects()[0];
-        const x = e.clientX;
-        const y = e.clientY;
-        const diffs = [
-            {
-                side: 'move_to_right',
-                diff: Math.abs(x - clientRect.left)
-            }, {
-                side: 'move_to_left',
-                diff: Math.abs(x - clientRect.right)
-            }, {
-                side: 'move_to_bottom',
-                diff: Math.abs(y - clientRect.top)
-            }, {
-                side: 'move_to_top',
-                diff: Math.abs(y - clientRect.bottom)
-            }
-        ];
+  mouseEnter(e)  {
+    !this.state.magnify && this.chooseAnimation(e, 'fade_in', 'to');
+  };
 
-        const minDiff = Math.min( ...Array.from(diffs, el => el.diff));
-        const side = diffs.find(el => el.diff == minDiff).side;
-        console.log(side);
-
+  chooseAnimation(e, fade, move) {
+    switch (this.props.animation) {
+      case 'fade':
         this.setState({
-            animation: side
+          animation: fade
+        });
+        break;
+      case 'move':
+        this.setState({
+          animation: this.findSide(e, move)
         });
     }
+  }
 
-    render () {
-        const {src} = this.props;
-        const {animation} = this.state;
-        return (
-                <div
-                    className={`image_wrapper ${animation}`}
-                    onMouseLeave={this.mouseLeave}
-                    onMouseEnter={this.mouseEnter}>
-                    <img src={src}/>
-                    <div className={'overlay ${animation}'}>
-                        <div className={`overlay_top`}>
-                            <MagnifierIcon/>
-                        </div>
-                        <div className={`overlay_bottom`}>
-                            <span className='overlay_bottom_text'>some beautiful picture</span>
-                        </div>
-                    </div>
-                </div>
-        );
-    }
+  findSide (e, direction) {
+    const clientRect = e.target.getClientRects()[0];
+    const diffs = [
+      {
+        side: `move_${direction}_right`,
+        diff: Math.abs(e.clientX - clientRect.left)
+      }, {
+        side: `move_${direction}_left`,
+        diff: Math.abs(e.clientX - clientRect.right)
+      }, {
+        side: `move_${direction}_bottom`,
+        diff: Math.abs(e.clientY - clientRect.top)
+      }, {
+        side: `move_${direction}_top`,
+        diff: Math.abs(e.clientY - clientRect.bottom)
+      }
+    ];
+
+    const minDiff = Math.min(...Array.from(diffs, el => el.diff));
+    return diffs.find(el => el.diff == minDiff).side;
+  }
+
+  render() {
+    const {src} = this.props;
+    const {animation, magnify} = this.state;
+    return (
+      <div>
+      <div
+        className={`image_wrapper ${animation} ${magnify}`}
+        onMouseLeave={(e) => this.mouseLeave(e)}
+        onMouseEnter={(e) => this.mouseEnter(e)}
+        onClick={(e) => this.click(e)}
+      >
+        <img className='image' src={src}/>
+        <div className={'overlay'}>
+          <div className={`overlay_top`}>
+            <MagnifierIcon/>
+          </div>
+          <div className={`overlay_bottom`}>
+            <div className='overlay_bottom_text'>some beautiful picture</div>
+          </div>
+        </div>
+      </div>
+        {magnify && <Preview src={src} close={() => this.closePreview()} images={this.props.images || [this.props.src]}/>}
+      </div>
+    );
+  }
 }
 
 export default Picture;
