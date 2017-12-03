@@ -1,0 +1,239 @@
+@import "colors";
+@import "mixins";
+
+@preview_caption: @white;
+
+@preview_text: @white_few_transparent;
+
+@preview_cross: @black_mid_transparent;
+@preview_cross_hover: @black;
+
+@preview_arrow: @white_almost_transparent;
+@preview_arrow_hover: @black;
+@preview_arrow_container: @black_mid_transparent;
+@preview_arrow_container_hover: @black_few_transparent;
+
+@preview_counter_text: @white_few_transparent;
+@preview_counter_shadow: @black_few_transparent;
+@preview_counter: @black_mid_transparent;
+
+@preview_overlay: @black_few_transparent;
+
+@preview_frame: @black;
+
+@preview_border_radius: 0.3rem;
+@frame_height: 90%;
+
+// ---------------------- mixins -----------------------------
+
+.__counter_shadow(@color) {
+  box-shadow: 0.3rem 0.3rem 0.1rem 0.05rem @color;
+}
+
+// ---------------------- animation mixins --------------------
+.__appearance_animation(@prop, @one, @two, @three) {
+  0% {
+      @{prop}: @one;
+  }
+  50% {
+      @{prop}: @two;
+  }
+  100% {
+      @{prop}: @three;
+  }
+}
+
+.__increase_animation(@prop, @to) {
+  .__appearance_animation(@prop, transparent, transparent, @to);
+}
+
+.__decrease_animation(@prop, @from) {
+  .__appearance_animation(@prop, @from, transparent, transparent);
+}
+
+.__counter_props(@color, @shadow, @bgColor) {
+  background-color: @bgColor;
+  color: @color;
+  .__counter_shadow(@shadow);
+}
+
+.__increase_counter_animation() {
+  0% {
+    .__counter_props(transparent, transparent, transparent);
+  }
+  50% {
+    .__counter_props(transparent, transparent, transparent);
+  }
+  100% {
+    .__counter_props(@preview_counter_text, @preview_counter_shadow, @preview_counter);
+  }
+}
+
+.__decrease_counter_animation() {
+  0% {
+    .__counter_props(@preview_counter_text, @preview_counter_shadow, @preview_counter);
+  }
+  50% {
+    .__counter_props(transparent, transparent, transparent);
+  }
+  100% {
+    .__counter_props(transparent, transparent, transparent);
+  }
+}
+
+// --------------------- animations ----------------------
+
+@keyframes fade_in_text_caption {
+  .__increase_animation(color, @preview_caption);
+}
+@keyframes fade_in_text {
+  .__increase_animation(color, @preview_text);
+}
+@keyframes fade_in_cross {
+  .__increase_animation(fill, @preview_cross);
+}
+@keyframes fade_in_arrow_container {
+  .__increase_animation(background-color, @preview_arrow_container);
+}
+@keyframes fade_in_arrow {
+  .__increase_animation(fill, @preview_arrow);
+}
+@keyframes fade_in_counter {
+  .__increase_counter_animation();
+}
+@keyframes fade_in_overlay {
+  .__increase_animation(background-color, @preview_overlay);
+}
+
+@keyframes fade_out_text_caption {
+  .__decrease_animation(color, @preview_caption);
+}
+@keyframes fade_out_text_desc {
+  .__decrease_animation(color, @preview_text);
+}
+@keyframes fade_out_cross {
+  .__decrease_animation(fill, @preview_cross);
+}
+@keyframes fade_out_arrow_container {
+  .__decrease_animation(background-color, @preview_arrow_container);
+}
+@keyframes fade_out_arrow {
+  .__decrease_animation(fill, @preview_arrow);
+}
+@keyframes fade_out_counter {
+  .__decrease_counter_animation();
+}
+@keyframes fade_out_overlay {
+  .__decrease_animation(background-color, @preview_overlay);
+}
+
+
+// --------------------------- main styles -----------------------------
+
+.magnify_modal {
+  .__flex_row_middle();
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  height: 100%;
+  width: 100%;
+  background-color: @preview_overlay;
+
+  &_img_frame {
+    height: @frame_height;
+    border-radius: @preview_border_radius;
+    background-color: @preview_frame;
+
+    &_container {
+      .__flex_row_middle();
+      position: relative;
+      height: 80%;
+
+      .counter_container {
+        .__flex_row_middle();
+        position: absolute;
+        top: 1.5rem;
+        width: 100%;
+
+        .counter {
+          padding: 0.2rem 1rem;
+          background-color: @preview_counter;
+          border-radius: 1rem;
+          .__counter_shadow(@preview_counter_shadow);
+          color: @white_few_transparent;
+          font-size: 2vh;
+        }
+      }
+
+      .cross {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1;
+        .__icon(2rem, @preview_cross);
+
+        &:hover {
+          fill: @preview_cross_hover;
+        }
+      }
+
+      // --------------- arrow mixin -----------------------
+      .__arrow(@side) {
+        .__flex_row_middle();
+        position: absolute;
+        top: 50%;
+        @{side}: 1rem;
+        background-color: @preview_arrow_container;
+        border-radius: 0.2rem;
+        height: 5rem;
+
+        &:hover {
+          background-color: @preview_arrow_container_hover;
+        }
+
+        svg {
+          .__icon(3rem, @preview_arrow);
+
+          &:hover {
+            fill: @preview_arrow_hover;
+          }
+        }
+      }
+      // ------------------------------------
+
+      .left_arrow {
+        .__arrow(left);
+      }
+
+      .right_arrow {
+        .__arrow(right);
+      }
+
+      .image_preview {
+        height: 100%;
+        border: 0.7rem solid @preview_frame;
+        box-sizing: border-box;
+        border-radius: @preview_border_radius;
+      }
+    }
+
+    &_bottom {
+      padding: 0 2rem;
+      height: 20%;
+      box-sizing: border-box;
+      color: @preview_caption;
+
+      &_caption {
+        font-size: 4vh;
+      }
+
+      &_text {
+        font-style: italic;
+        font-size: 2vh;
+        color: @preview_text;
+      }
+    }
+  }
+
+}

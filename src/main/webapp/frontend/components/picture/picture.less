@@ -1,15 +1,16 @@
-@black_transparent: rgba(0, 0, 0, 0);
-@black_mid_transparent: rgba(0, 0, 0, 0.5);
-@black_few_transparent: rgba(0, 0, 0, 0.7);
-@black_almost_transparent: rgba(0, 0, 0, 0.2);
-@white_transparent: rgba(255, 255, 255, 0);
-//@white_mid_transparent: rgba(255, 255, 255, 0.5);
-@white_few_transparent: rgba(255, 255, 255, 0.7);
-@white_almost_transparent:  rgba(255, 255, 255, 0.2);
+@import "colors";
+@import "mixins";
 
-@image_preview_frame: rgba(0, 0, 0, 1);
-@image_preview_bottom: rgba(255, 255, 255, 1);
+@picture_text: @white_few_transparent;
+@picture_text_hover: @white_almost_transparent;
 
+@picture_overlay_top: @black_mid_transparent;
+@picture_overlay_bottom: @black_few_transparent;
+
+@picture_shadow: @black_mid_transparent;
+
+
+@picture_height: 30rem;
 
 // ---------- animation mixins -----------
 
@@ -65,37 +66,30 @@
 // ---------- animations -----------
 
 @keyframes fade_in_base {
-  .__fade_visibility_color(hidden, visible, @white_transparent, @white_few_transparent);
+  .__fade_visibility_color(hidden, visible, transparent, @picture_text);
 }
-
 @keyframes fade_in_top {
-  .__fade_bg_color(@black_transparent, @black_mid_transparent);
+  .__fade_bg_color(transparent, @picture_overlay_top);
 }
-
 @keyframes fade_in_bottom {
-  .__fade_bg_color(@black_transparent, @black_few_transparent);
+  .__fade_bg_color(transparent, @picture_overlay_bottom);
 }
-
 @keyframes fade_in_icon {
-  .__fade_icon(@white_transparent, @white_few_transparent);
+  .__fade_icon(transparent, @picture_text);
 }
 
 @keyframes fade_out_base {
-  .__fade_visibility_color(visible, hidden, @white_few_transparent, @white_transparent);
+  .__fade_visibility_color(visible, hidden, @picture_text, transparent);
 }
-
 @keyframes fade_out_top {
-  .__fade_bg_color(@black_mid_transparent, @black_transparent);
+  .__fade_bg_color(@picture_overlay_top, transparent);
 }
-
 @keyframes fade_out_bottom {
-  .__fade_bg_color(@black_few_transparent, @black_transparent);
+  .__fade_bg_color(@picture_overlay_bottom, transparent);
 }
-
 @keyframes fade_out_icon {
-  .__fade_icon(@white_few_transparent, @white_transparent);
+  .__fade_icon(@picture_text, transparent);
 }
-
 @keyframes move_to_right {
   .__move_to(right);
 }
@@ -144,29 +138,13 @@
   }
 }
 
-
-// ---------- mixins ------------------------
-
-.__flex_row_middle() {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-.__icon(@size, @color) {
-  width: @size;
-  height: @size;
-  fill: @color;
-}
-
 // ----------- main styles -------------------------
 
 .image_wrapper {
   position: relative;
   overflow: hidden;
-  color: @white_few_transparent;
-  box-shadow: 0.5rem 0.5rem 0.3rem 0.1rem @black_mid_transparent;
+  color: @picture_text;
+  box-shadow: 0.5rem 0.5rem 0.3rem 0.1rem @picture_shadow;
   border-radius: 0.3rem;
 
   &:hover {
@@ -177,28 +155,36 @@
 
   .image {
     margin: 0 auto;
-    height: 30rem;
+    height: @picture_height;
   }
 
   .overlay {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     top: 0;
-    z-index: 99;
+    z-index: 50;
     width: 100%;
     height: 100%;
     visibility: hidden;
-    display: flex;
-    flex-direction: column;
 
     .overlay_top {
       .__flex_row_middle();
-      background-color: @black_mid_transparent;
       flex-grow: 1;
+      background-color: @picture_overlay_top;
+
+      svg {
+        .__icon(3rem, @picture_text);
+
+        &:hover {
+          fill: @picture_text_hover;
+        }
+      }
     }
 
     .overlay_bottom {
       .__flex_row_middle();
-      background-color: @black_few_transparent;
+      background-color: @picture_overlay_bottom;
 
       &_text {
         font-weight: 400;
@@ -245,6 +231,8 @@
 
         svg {
           .__animation(fade_out_icon);
+          //animation-direction: alternate-reverse;
+          //animation-iteration-count: 6;
         }
       }
 
@@ -303,123 +291,6 @@
   &.move_from_bottom {
     .overlay {
       .__animation(move_from_bottom);
-    }
-  }
-
-
-
-
-
-
-
-}
-
-
-
-
-
-.magnify_modal {
-  .__flex_row_middle();
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 112;
-  height: 100%;
-  width: 100%;
-  background-color: @black_few_transparent;
-
-  &_img_frame {
-    height: 85%;
-    border-radius: 0.3rem;
-    background-color: @image_preview_frame;
-
-    &_container {
-      position: relative;
-      .__flex_row_middle();
-
-
-      .counter_container {
-        .__flex_row_middle();
-        position: absolute;
-        top: 1.5rem;
-        width: 100%;
-
-        .counter {
-          border-radius: 1rem;
-          box-shadow: 0.3rem 0.3rem 0.1rem 0.05rem @black_mid_transparent;
-          padding: 0.2rem 1rem;
-          color: @white_few_transparent;
-        }
-      }
-
-      .cross {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        z-index: 1;
-        .__icon(2rem, @black_mid_transparent);
-
-        &:hover {
-          fill: @image_preview_frame;
-        }
-      }
-
-      // --------------- arrow mixin -----------------------
-      .__arrow(@side) {
-        position: absolute;
-        top: 50%;
-        @{side}: 1rem;
-
-        background-color: @black_almost_transparent;
-        border-radius: 0.2rem;
-        height: 5rem;
-        .__flex_row_middle();
-
-        &:hover {
-          background-color: @black_mid_transparent;
-        }
-
-        svg {
-        .__icon(3rem, @white_almost_transparent);
-
-          &:hover {
-            fill: @image_preview_frame;
-          }
-        }
-      }
-
-      // ------------------------------------
-
-      .left_arrow {
-        .__arrow(left);
-      }
-
-      .right_arrow {
-        .__arrow(right);
-      }
-
-      .image_preview {
-        margin: 0.7rem;
-        height: 80%;
-      }
-    }
-
-    &_bottom {
-      color: @image_preview_bottom;
-      padding: 0 2rem;
-      height: 20%;
-      box-sizing: border-box;
-
-      &_caption {
-        font-size: 2.5rem;
-        margin: 0.5rem;
-      }
-
-      &_text {
-        font-style: italic;
-        font-size: 1rem;
-        color: @white_few_transparent;
-      }
     }
   }
 
