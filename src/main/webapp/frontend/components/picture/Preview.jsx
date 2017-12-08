@@ -2,6 +2,7 @@ import React from "react";
 import styled from 'styled-components';
 import {CrossIcon, LeftArrowIcon, RightArrowIcon} from "../Icons";
 import './preview.less';
+import PreviewImageFrame from "./PreviewImageFrame";
 
 const BottomSection = styled.div`
    width: ${props => props.imageWidth};
@@ -96,114 +97,56 @@ class Preview extends React.Component {
   constructor(props) {
     super(props);
 
-    this.animationTime = 4;
-
-    const current = props.images.find(img => img === props.src);
-    const currentIndex = props.images.indexOf(current);
+    this.animationTime = 2;
 
     this.state = {
       imageWidth: 0,
-      animate: '',
-      src: props.src,
-      left: currentIndex > 0,
-      right: currentIndex < (props.images.length - 1)
+      animate: ''
     };
   }
 
-  componentDidMount() {
+  setImageWidth(width) {
     this.setState({
-      imageWidth: this.getImageContainerWidth(),
-      animate: 'increase'
+      imageWidth: width,
     });
-    window.addEventListener('resize', () => this.resize());
   }
 
-  componentWillUnmount() {
-      window.removeEventListener('resize', () => this.resize());
+  clearAnimate() {
+    this.setState({
+      animate: ''
+    });
   }
 
-  getImageContainerWidth() {
-    const img = this.refs.img;
-    if (!img) return 0;
-    const imageRect = img.getClientRects()[0];
-    const style = img.currentStyle || window.getComputedStyle(img);
-    //const margin = parseFloat(style.borderLeft) + parseFloat(style.borderRight);
-    return imageRect.width;
-  }
-
-  componentWillReceiveProps(props) {
-    const dd = props;
-    console.log(props);
-  }
-
-  componentDidUpdate(pvevProps, prevState) {
-    if(prevState.src != this.state.src) {
-      this.setState({
-          imageWidth: this.getImageContainerWidth(),
-          animate: ''
-      });
-    }
-  }
-
-  onCrossClick() {
+  close() {
     if (!(this.state.animate === 'decrease')) {
       this.setState({
-        imageWidth: this.getImageContainerWidth(),
         animate: 'decrease'
       });
       window.setTimeout(this.props.close, this.animationTime * 1000);
     }
   }
 
-  onArrowClick(arrow) {
-    const {images} = this.props;
-    const current = images.find(img => img === this.state.src);
-    const currentIndex = images.indexOf(current);
-
-    if (current && arrow === 'left' && currentIndex > 0) {
-      this.setState({
-        src: images[currentIndex - 1],
-        left: (currentIndex - 1) > 0,
-        right: (currentIndex - 1) < (images.length - 1)
-      });
-    }
-
-    if (current && arrow === 'right' && currentIndex < (images.length - 1)) {
-      this.setState({
-        src: images[currentIndex + 1],
-        left: (currentIndex + 1) > 0,
-        right: (currentIndex + 1) < (images.length - 1)
-      })
-    }
-
-  }
-
-  resize(e) {
-      this.setState({
-          imageWidth: this.getImageContainerWidth()
-      });
+  componentDidMount() {
+    this.setState({
+      animate: 'increase'
+    });
   }
 
   render() {
-    const {src, left, right, animate, imageWidth} = this.state;
-    const {images} = this.props;
+    const {animate, imageWidth} = this.state;
+    const {images, src} = this.props;
 
     return (
-        <Modal className={`magnify_modal ${animate}`}  imageWidth={imageWidth} animationTime={this.animationTime}>
+        <Modal className={`magnify_modal ${animate}`}
+               imageWidth={imageWidth}
+               animationTime={this.animationTime}>
           <div className='magnify_modal_img_frame'>
-            <div className='magnify_modal_img_frame_container'>
-              <CrossIcon className='cross' onClick={() => this.onCrossClick()}/>
-              {left && <div className='left_arrow'>
-                <LeftArrowIcon onClick={() => this.onArrowClick('left')}/>
-              </div>}
-              {right && <div className='right_arrow'>
-                <RightArrowIcon onClick={() => this.onArrowClick('right')}/>
-              </div>}
-              <div className='counter_container'>
-                <div className='counter'>{`${(images.indexOf(src) + 1)} of ${images.length}`}</div>
-              </div>
-              <img src={src} className='image_preview' ref='img'/>
-            </div>
+            <PreviewImageFrame src={src}
+                               images={images}
+                               setImageWidth={(width) => {this.setImageWidth(width)}}
+                               close={() => this.close()}
+                               clearAnimate={() => this.clearAnimate()}
+            />
             <BottomSection className='magnify_modal_img_frame_bottom' imageWidth={imageWidth}>
               <div className='magnify_modal_img_frame_bottom_caption'>Caption</div>
               <div className='magnify_modal_img_frame_bottom_text'>Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason.</div>
