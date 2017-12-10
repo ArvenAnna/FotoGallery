@@ -1,103 +1,55 @@
 import React from "react";
-import styled from 'styled-components';
-import {CrossIcon, LeftArrowIcon, RightArrowIcon} from "../Icons";
+import styled, {keyframes} from 'styled-components';
 import './preview.less';
 import PreviewImageFrame from "./PreviewImageFrame";
+import constants from './styles';
 
 const BottomSection = styled.div`
    width: ${props => props.imageWidth};
 `
 
-const Modal = styled.div`
-
-@keyframes increase {
-  0% {
+const increase = (props) => keyframes`
+   0% {
       height: 0;
       width: 0;
   }
   50% {
       height: 90%;
-      width: ${props => props.imageWidth};
+      width: ${props.imageWidth};
   }
-}
+`
 
-&.increase {
-  
-   animation: fade_in_overlay ${props => props.animationTime}s ease;
-
-  .magnify_modal_img_frame {
-    animation: increase ${props => props.animationTime}s ease;
-  }
-  .cross {
-     animation: fade_in_cross ${props => props.animationTime}s ease;
-  }
-  .left_arrow, .right_arrow {
-     animation: fade_in_arrow_container ${props => props.animationTime}s ease;
-     
-     svg {
-          animation: fade_in_arrow ${props => props.animationTime}s ease;
-     }
-  }
-  .counter {
-     animation: fade_in_counter ${props => props.animationTime}s ease;
-  }
-  .magnify_modal_img_frame_bottom_caption {
-    animation: fade_in_text_caption ${props => props.animationTime}s ease;
-  }
-  .magnify_modal_img_frame_bottom_text {
-      animation: fade_in_text ${props => props.animationTime}s ease;
-  }
-   
-}
-
-@keyframes decrease {
-  50% {
+const decrease = (props) => keyframes`
+   50% {
       height: 90%;
-      width: ${props => props.imageWidth};
+      width: ${props.imageWidth};
   }
   100% {
       height: 0;
       width: 0;
   }
+`
+
+const Modal = styled.div`
+&.increase {
+  .magnify_modal_img_frame {
+    animation: ${increase} ${props => props.animationTime}s ease;
+  }
 }
 
-
 &.decrease {
-
-  animation: fade_out_overlay ${props => props.animationTime}s ease;
-
   .magnify_modal_img_frame {
-    animation: decrease ${props => props.animationTime}s ease;
-  }
-  .cross {
-     animation: fade_out_cross ${props => props.animationTime}s ease;
-  }
-  .left_arrow, .right_arrow {
-     animation: fade_out_arrow_container ${props => props.animationTime}s ease;
-     svg {
-          animation: fade_out_arrow ${props => props.animationTime}s ease;
-     }
-  }
-  .counter {
-     animation: fade_out_counter ${props => props.animationTime}s ease;
-  }
-  .magnify_modal_img_frame_bottom_caption {
-      animation: fade_out_text_caption ${props => props.animationTime}s ease;
-  }
-  .magnify_modal_img_frame_bottom_text {
-    animation: fade_out_text_desc ${props => props.animationTime}s ease;
+    animation: ${decrease} ${props => props.animationTime}s ease;
   }
 }
 `
-
-
 
 class Preview extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.animationTime = 2;
+    this.animationTime = parseInt(constants['preview_animation_duration']);
 
     this.state = {
       imageWidth: 0,

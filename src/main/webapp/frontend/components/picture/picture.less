@@ -1,3 +1,4 @@
+require("styles.js");
 @import "colors";
 @import "mixins";
 
@@ -199,7 +200,7 @@
 
   .__animation(@name) {
     animation-name: @name;
-    animation-duration: 1s;
+    animation-duration: @picture_animation_duration;
     animation-timing-function: ease;
   }
 

@@ -1,3 +1,4 @@
+require("styles.js");
 @import "colors";
 @import "mixins";
 
@@ -86,21 +87,27 @@
 @keyframes fade_in_text_caption {
   .__increase_animation(color, @preview_caption);
 }
+
 @keyframes fade_in_text {
   .__increase_animation(color, @preview_text);
 }
+
 @keyframes fade_in_cross {
   .__increase_animation(fill, @preview_cross);
 }
+
 @keyframes fade_in_arrow_container {
   .__increase_animation(background-color, @preview_arrow_container);
 }
+
 @keyframes fade_in_arrow {
   .__increase_animation(fill, @preview_arrow);
 }
+
 @keyframes fade_in_counter {
   .__increase_counter_animation();
 }
+
 @keyframes fade_in_overlay {
   .__increase_animation(background-color, @preview_overlay);
 }
@@ -108,25 +115,30 @@
 @keyframes fade_out_text_caption {
   .__decrease_animation(color, @preview_caption);
 }
+
 @keyframes fade_out_text_desc {
   .__decrease_animation(color, @preview_text);
 }
+
 @keyframes fade_out_cross {
   .__decrease_animation(fill, @preview_cross);
 }
+
 @keyframes fade_out_arrow_container {
   .__decrease_animation(background-color, @preview_arrow_container);
 }
+
 @keyframes fade_out_arrow {
   .__decrease_animation(fill, @preview_arrow);
 }
+
 @keyframes fade_out_counter {
   .__decrease_counter_animation();
 }
+
 @keyframes fade_out_overlay {
   .__decrease_animation(background-color, @preview_overlay);
 }
-
 
 // --------------------------- main styles -----------------------------
 
@@ -183,7 +195,7 @@
         .__flex_row_middle();
         position: absolute;
         top: 50%;
-        @{side}: 1rem;
+          @{side}: 1rem;
         background-color: @preview_arrow_container;
         border-radius: 0.2rem;
         height: 5rem;
@@ -223,6 +235,7 @@
       height: 20%;
       box-sizing: border-box;
       color: @preview_caption;
+      overflow: auto;
 
       &_caption {
         font-size: 4vh;
@@ -232,7 +245,64 @@
         font-style: italic;
         font-size: 2vh;
         color: @preview_text;
+        padding-bottom: 1rem;
       }
+    }
+  }
+
+  // --------- animation ------------------------
+
+  .__animation(@name) {
+    animation-name: @name;
+    animation-duration: @preview_animation_duration;
+    animation-timing-function: ease;
+  }
+
+  &.increase {
+    .__animation(fade_in_overlay);
+
+    .cross {
+      .__animation(fade_in_cross);
+    }
+    .left_arrow, .right_arrow {
+      .__animation(fade_in_arrow_container);
+
+      svg {
+        .__animation(fade_in_arrow);
+      }
+    }
+    .counter {
+      .__animation(fade_in_counter);
+    }
+    .magnify_modal_img_frame_bottom_caption {
+      .__animation(fade_in_text_caption);
+    }
+    .magnify_modal_img_frame_bottom_text {
+      .__animation(fade_in_text);
+    }
+  }
+
+  &.decrease {
+    .__animation(fade_out_overlay);
+
+    .cross {
+      .__animation(fade_out_cross);
+    }
+    .left_arrow, .right_arrow {
+      .__animation(fade_out_arrow_container);
+
+      svg {
+        .__animation(fade_out_arrow);
+      }
+    }
+    .counter {
+      .__animation(fade_out_counter);
+    }
+    .magnify_modal_img_frame_bottom_caption {
+      .__animation(fade_out_text_caption);
+    }
+    .magnify_modal_img_frame_bottom_text {
+      .__animation(fade_out_text_desc);
     }
   }
 
