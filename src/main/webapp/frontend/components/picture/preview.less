@@ -20,8 +20,6 @@ require("styles.js");
 
 @preview_overlay: @black_few_transparent;
 
-@preview_frame: @black;
-
 @preview_border_radius: 0.3rem;
 @frame_height: 90%;
 
@@ -83,6 +81,23 @@ require("styles.js");
 }
 
 // --------------------- animations ----------------------
+@keyframes fade_in_preview_bottom {
+  0% {
+    background-color: transparent;
+    border-bottom: 1rem solid transparent;
+    overflow: hidden;
+  }
+  50% {
+    background-color: transparent;
+    border-bottom: 1rem solid transparent;
+    overflow: visible;
+  }
+  100% {
+    background-color: @preview_frame_color;
+    border-bottom: 1rem solid @preview_frame_color;
+    overflow: visible;
+  }
+}
 
 @keyframes fade_in_text_caption {
   .__increase_animation(color, @preview_caption);
@@ -110,6 +125,24 @@ require("styles.js");
 
 @keyframes fade_in_overlay {
   .__increase_animation(background-color, @preview_overlay);
+}
+
+@keyframes fade_out_preview_bottom {
+  0% {
+    background-color: @preview_frame_color;
+    border-bottom: 1rem solid @preview_frame_color;
+    overflow: visible;
+  }
+  50% {
+    background-color: transparent;
+    border-bottom: 1rem solid transparent;
+    overflow: hidden;
+  }
+  100% {
+    background-color: transparent;
+    border-bottom: 1rem solid transparent;
+    overflow: hidden;
+  }
 }
 
 @keyframes fade_out_text_caption {
@@ -155,7 +188,7 @@ require("styles.js");
   &_img_frame {
     height: @frame_height;
     border-radius: @preview_border_radius;
-    background-color: @preview_frame;
+    background-color: @preview_frame_color;
 
     &_container {
       .__flex_row_middle();
@@ -224,7 +257,7 @@ require("styles.js");
 
       .image_preview {
         height: 100%;
-        border: 0.7rem solid @preview_frame;
+        border: 0.7rem solid @preview_frame_color;
         box-sizing: border-box;
         border-radius: @preview_border_radius;
       }
@@ -235,6 +268,7 @@ require("styles.js");
       height: 20%;
       box-sizing: border-box;
       color: @preview_caption;
+      border-bottom: 1rem solid @preview_frame_color;
       overflow: auto;
 
       &_caption {
@@ -245,7 +279,6 @@ require("styles.js");
         font-style: italic;
         font-size: 2vh;
         color: @preview_text;
-        padding-bottom: 1rem;
       }
     }
   }
@@ -261,25 +294,29 @@ require("styles.js");
   &.increase {
     .__animation(fade_in_overlay);
 
-    .cross {
-      .__animation(fade_in_cross);
+    .magnify_modal_img_frame_bottom {
+        .__animation(fade_in_preview_bottom);
+        &_caption {
+          .__animation(fade_in_text_caption);
+        }
+        &_text {
+          .__animation(fade_in_text);
+        }
     }
-    .left_arrow, .right_arrow {
-      .__animation(fade_in_arrow_container);
-
-      svg {
-        .__animation(fade_in_arrow);
+      .cross {
+        .__animation(fade_in_cross);
       }
-    }
-    .counter {
-      .__animation(fade_in_counter);
-    }
-    .magnify_modal_img_frame_bottom_caption {
-      .__animation(fade_in_text_caption);
-    }
-    .magnify_modal_img_frame_bottom_text {
-      .__animation(fade_in_text);
-    }
+      .left_arrow, .right_arrow {
+        .__animation(fade_in_arrow_container);
+
+        svg {
+          .__animation(fade_in_arrow);
+        }
+      }
+      .counter {
+        .__animation(fade_in_counter);
+      }
+
   }
 
   &.decrease {
@@ -298,12 +335,18 @@ require("styles.js");
     .counter {
       .__animation(fade_out_counter);
     }
-    .magnify_modal_img_frame_bottom_caption {
-      .__animation(fade_out_text_caption);
+
+    .magnify_modal_img_frame_bottom {
+      .__animation(fade_out_preview_bottom);
+
+      &_caption {
+        .__animation(fade_out_text_caption);
+      }
+      &_text {
+        .__animation(fade_out_text_desc);
+      }
     }
-    .magnify_modal_img_frame_bottom_text {
-      .__animation(fade_out_text_desc);
-    }
+
   }
 
 }
