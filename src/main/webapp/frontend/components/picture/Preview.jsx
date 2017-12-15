@@ -1,6 +1,6 @@
 import React from "react";
 import styled, {keyframes} from 'styled-components';
-import { Scrollbars } from 'react-custom-scrollbars';
+//import { Scrollbars } from 'react-custom-scrollbars';
 import './preview.less';
 import PreviewImageFrame from "./PreviewImageFrame";
 import constants from './styles';
@@ -139,16 +139,17 @@ class Preview extends React.Component {
             />
 
             <BottomSection id='bottom' className='magnify_modal_img_frame_bottom' imageWidth={imageWidth}>
-              <Scrollbars
-                  autoHide={false}
-                  autoHeight={true}
-                  style={{ width: bottomWidthWithoutPaddings, height: '100%' }}
-                  renderThumbVertical={this.renderThumb}
-                  renderTrackHorizontal={props => <div {...props} style={{display: 'none'}}/>}
-                  renderThumbHorizontal={props => <div {...props} style={{display: 'none'}}/>}>
+
+              {/*<Scrollbars*/}
+                  {/*autoHide={false}*/}
+                  {/*autoHeight={true}*/}
+                  {/*style={{ width: bottomWidthWithoutPaddings, height: '100%' }}*/}
+                  {/*renderThumbVertical={this.renderThumb}*/}
+                  {/*renderTrackHorizontal={props => <div {...props} style={{display: 'none'}}/>}*/}
+                  {/*renderThumbHorizontal={props => <div {...props} style={{display: 'none'}}/>}>*/}
               <div className='magnify_modal_img_frame_bottom_caption'>Caption</div>
               <div className='magnify_modal_img_frame_bottom_text'>Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason.</div>
-              </Scrollbars>
+              {/*</Scrollbars>*/}
             </BottomSection>
           </div>
         </Modal>

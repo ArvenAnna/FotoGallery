@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Header from "./Header";
 import AddNewAlbum from "./AddNewAlbum";
 import AlbumContainer from "./AlbumContainer";
+import Scroll from "./scroll/Scroll";
 
 const Page = styled.div`
     margin: 2rem 10rem;
@@ -38,13 +39,15 @@ class FotoSlider extends React.Component {
 
     render() {
         return (
-            <Page>
-                {this.state.addAlbumModal && <AddNewAlbum closeModal={() => this.closeModal()}/>}
-                <Content>
-                    <Header createAlbum={() => this.createAlbum()}/>
-                    <AlbumContainer/>
-                </Content>
-            </Page>
+        <Scroll>
+            {/*<Page>*/}
+                {/*{this.state.addAlbumModal && <AddNewAlbum closeModal={() => this.closeModal()}/>}*/}
+                {/*<Content>*/}
+                    {/*<Header createAlbum={() => this.createAlbum()}/>*/}
+                    {/*<AlbumContainer/>*/}
+                {/*</Content>*/}
+            {/*</Page>*/}
+        </Scroll>
         );
     }
 }
