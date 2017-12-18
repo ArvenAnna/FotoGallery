@@ -1,0 +1,51 @@
+:root {
+  --scroll-track-width: 20px;
+  --scroll-width: 10px;
+}
+
+.text_container {
+  overflow: hidden;
+  position: relative;
+  padding-right:  var(--scroll-track-width);
+
+  .text {
+    position: relative;
+  }
+
+
+
+  .scroll_track {
+    position: absolute;
+    width: var(--scroll-track-width);
+    top: 0;
+    right: 0;
+    background-color: red;
+
+    .scroll {
+      --delta-width: ~"calc(var(--scroll-track-width) - var(--scroll-width))";
+      position: relative;
+      width: var(--scroll-width);
+      left: ~"calc(var(--delta-width) / 2)";
+      background-color: green;
+      cursor: auto;
+      border-radius: 3px;
+
+      //-moz-user-select: none; /* These user-select properties are inheritable, used to prevent text selection */
+      //-webkit-user-select: none;
+      //-ms-user-select: none; /* From IE10 only */
+      //user-select: none; /* Not valid CSS yet, as of July 2012 */
+
+      //-webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+      //user-drag: none;
+
+      //pointer-events: none;
+    }
+
+    //.scroll_x {
+    //  visibility: hidden;
+    //}
+  }
+}
+
+
+

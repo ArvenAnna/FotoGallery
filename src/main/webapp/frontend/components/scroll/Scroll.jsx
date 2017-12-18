@@ -1,125 +1,142 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Cont = styled.div`
-.cont{
-
-    width: 200px;
-    margin: 0 auto;
-    height: 100px;
-    overflow: hidden;
-    color: white;
-    position: relative;
-    padding-right: 20px;
-    }
-    
-    .text {
-        position: relative;
-    
-    }
-    
-    .track {
-        position: absolute;
-        width: 20px;
-        height: 100px;
-        top: 0;
-        right: 0;
-        background-color: red;
-  
-        .scroll {
-            position: relative;
-            width: 20px;
-            background-color: green;
-            cursor: pointer;
-        }
-    }
-}
-`
+import './scroll.less';
 
 class Scroll extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.track = null;
-    this.cont = null;
-    this.text = null;
-    this.scroll = null;
-    this.state = {
-     // scrollHeight: 0,
-      currentScrollY: 0
-    }
-  }
+    constructor(props) {
+        super(props);
+        this.track = null;
+        this.cont = null;
+        this.text = null;
+        this.scroll = null;
 
-  componentDidMount() {
-    // this.setState({
-    //     scrollHeight: this.calculateScrollHeight()
-    // });
-    //const scrollStyle = this.scroll.currentStyle || window.getComputedStyle(this.scroll);
-  this.scroll.style.height = this.calculateScrollHeight();
-
-  }
-
-  calculateScrollHeight() {
-    const container = this.cont;
-    const text = this.text;
-    if (!container || !text) return 0;
-    const contRect = container.getBoundingClientRect();
-    const textRect = container.getBoundingClientRect();
-
-    return parseInt(contRect.height) * parseInt(contRect.height) / parseInt(textRect.height);
-  }
-
-  onWheel(e) {
-    const textStyle = this.text.currentStyle || window.getComputedStyle(this.text);
-    this.text.style.top = (parseInt(textStyle.top) + (e.deltaY > 0 ? 1 : -1)) + 'px';
-  }
-
-  onWheelWithSpeed(e, px) {
-
-  }
-
-  onDrag(e) {
-
-    const scrollStyle = this.scroll.currentStyle || window.getComputedStyle(this.scroll);
-    const trackStyle = this.track.currentStyle || window.getComputedStyle(this.track);
-
-
-    if((parseInt(scrollStyle.top) - 1 < 0 && !this.isScrollDown(e)) || (parseInt(scrollStyle.top) + 1 > parseInt(trackStyle.height) && this.isScrollDown(e))) {
-      return;
+        this.speed = this.props.speed || 4;
+        this.state = {
+            currentScrollY: 0,
+            dragStarted: false
+        }
     }
 
+    componentDidMount() {
+        this.cont.style.height = this.props.height;
+        this.cont.style.width = this.props.width;
+        this.track.style.height = this.props.height;
 
-    this.scroll.style.top = parseInt(scrollStyle.top) + (this.isScrollDown(e) ? 1 : -1) + 'px';
+        this.scroll.style.height = this.calculateScrollHeight();
+    }
 
-    this.setState({
-      currentScrollY: e.clientY
-    });
+    calculateScrollHeight() {
+        const contRect = this.cont.getBoundingClientRect();
+        const textRect = this.text.getBoundingClientRect();
+
+        return parseInt(contRect.height) * parseInt(contRect.height) / parseInt(textRect.height);
+    }
+
+    onWheel(e) {
+        this.scrollTo(() => e.deltaY > 0 ? 1 : (e.deltaY < 0 ? -1 : 0));
+    }
+
+    onDrag(e) {
+        if(!this.state.dragStarted) {
+            return;
+        }
+
+        this.scrollTo(() => this.getScrollDelta(e));
+        this.setState({
+            currentScrollY: e.clientY
+        });
+        //return false;
+    }
+
+    scrollTo(getScrollDirectionAsNumber) {
+        const scrollStyle = this.scroll.currentStyle || window.getComputedStyle(this.scroll);
+        const trackStyle = this.track.currentStyle || window.getComputedStyle(this.track);
+
+        const scrollTop = parseInt(scrollStyle.top);
+        const scrollGap = (parseInt(trackStyle.height) - parseInt(scrollStyle.height));
+
+        if ((scrollTop <= 0 && getScrollDirectionAsNumber() < 0)
+            || (scrollTop >= scrollGap && getScrollDirectionAsNumber() > 0)
+            || getScrollDirectionAsNumber() == 0) {
+            return;
+        }
+
+        const nextScrollTop = scrollTop + getScrollDirectionAsNumber() * this.speed;
+
+        this.scroll.style.top = nextScrollTop + 'px';
+
+        const textStyle = this.text.currentStyle || window.getComputedStyle(this.text);
+        const contStyle = this.cont.currentStyle || window.getComputedStyle(this.cont);
+        const nextTextTop = - nextScrollTop * (parseInt(trackStyle.height) / parseInt(scrollStyle.height));
+
+        const minTextScroll = -(parseInt(textStyle.height) - parseInt(contStyle.height));
+
+        if (nextTextTop > 0) {
+            this.text.style.top = 0 + 'px';
+        } else if (nextTextTop < minTextScroll) {
+            this.text.style.top = minTextScroll + 'px';
+        } else {
+            this.text.style.top = nextTextTop + 'px';
+        }
+    }
+
+    getScrollDelta(e) {
+        console.log(e.clientY);
+        if (e.clientY > this.state.currentScrollY) {
+            return 1;
+        }
+        if (e.clientY < this.state.currentScrollY) {
+            return -1;
+        }
+        return 0;
+    }
+
+    onStart(e) {
+        // console.log('start');
+        // e.dataTransfer.setData('text/plain', 'anything');
+        //e.dataTransfer.effectAllowed = 'none';
+        //e.dataTransfer.setData( 'text/plain', '' );
+        // var crt = e.target.cloneNode(true);
+        // crt.style.backgroundColor = "red";
+        // crt.style.cursor ="pointer";
+        // crt.style.display = "none";
+        // e.target.style.cursor = 'pointer';
+        // /* or visibility: hidden, or any of the above */
+        // document.body.appendChild(crt);
+        // e.dataTransfer.setDragImage(crt, 0, 0);
+    }
 
 
-  }
 
-  isScrollDown(e) {
-    return e.clientY > this.state.currentScrollY;
-  }
+    render() {
+        const FirstChild = () => {
+            const childrenArray = React.Children.toArray(this.props.children);
+            return childrenArray[0] || null;
+        }
+        return (
+                <div className='text_container' ref={node => this.cont = node}>
+                    <div className='text'
+                         onWheel={(e) => this.onWheel(e)}
+                         ref={node => this.text = node}>
+                        <FirstChild/>
+                    </div>
 
-  render() {
-    return (
-      <Cont>
-      <div className="cont" ref={node => this.cont = node}>
-        <div className="text"
-             onWheel={(e) => this.onWheel(e)}
-             ref={node => this.text = node}>
-          sadasj sakd j d sdaskd a sda k  sda sjhjhshhj tteqwtetwyet 7723 dqouweu we qweqweqyo  eqye qwe yqywueyqw yeyqw eg g fdgcs fggggggggggs jdhhhhhhhhhhhh ddddddddddd ddddddddddd dddddddddddd ddddddd dsjfhdhfsd hdjfd fsdgf d fd fgsd fgsdgf sdjf sjdfg dsfdshfgdsgkfgyru fjdgs  dsfl sdkfh lds flsa dfdklsfkjdhs f;sdk fsd f dasjdsjfuwewuiewiriewb</div>
-        <div className="track" ref={node => this.track = node}>
-          <div className="scroll"
-               ref={node => this.scroll = node}
-               draggable="true"
-               onDrag={(e) => this.onDrag(e)}></div>
-        </div>
-      </div>
-      </Cont>
-    );
-  }
+                    <div className='scroll_track'
+                         onMouseLeave={() => this.setState({dragStarted: false})}
+                         ref={node => this.track = node}>
+                        <div className='scroll'
+                             //onDragStart={(e) => this.onStart(e)}
+                             ref={node => this.scroll = node}
+                             onMouseDown={() => this.setState({dragStarted: true})}
+                             //onMouseUp={() => this.setState({dragStarted: false})}
+                             onMouseMove={(e) => this.onDrag(e)}
+                             //draggable='true'
+                            // onDrag={(e) => this.onDrag(e)}
+                            />
+                    </div>
+                </div>
+        );
+    }
 }
 
 export default Scroll;

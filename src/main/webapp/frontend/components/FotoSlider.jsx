@@ -10,6 +10,8 @@ const Page = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    
+   font-size:2rem;
 `
 
 const Content = styled.div`
@@ -39,15 +41,24 @@ class FotoSlider extends React.Component {
 
     render() {
         return (
-        <Scroll>
-            {/*<Page>*/}
+        <Page>
+            <Scroll height='100px' width='200px'>
+                <div>
+                    sadasj sakd j d sdaskd a sda k sda sjhjhshhj tteqwtetwyet 7723 dqouweu we qweqweqyo eqye qwe
+                    yqywueyqw yeyqw eg g fdgcs fggggggggggs jdhhhhhhhhhhhh ddddddddddd ddddddddddd dddddddddddd
+                    ddddddd dsjfhdhfsd hdjfd fsdgf d fd fgsd fgsdgf sdjf sjdfg dsfdshfgdsgkfgyru fjdgs dsfl sdkfh
+                    lds flsa dfdklsfkjdhs f;sdk fsd f dasjdsjfuwewuiewiriewb
+                </div>
+                {/*<Page>*/}
                 {/*{this.state.addAlbumModal && <AddNewAlbum closeModal={() => this.closeModal()}/>}*/}
                 {/*<Content>*/}
-                    {/*<Header createAlbum={() => this.createAlbum()}/>*/}
-                    {/*<AlbumContainer/>*/}
+                {/*<Header createAlbum={() => this.createAlbum()}/>*/}
+                {/*<AlbumContainer/>*/}
                 {/*</Content>*/}
-            {/*</Page>*/}
-        </Scroll>
+                {/*</Page>*/}
+            </Scroll>
+        </Page>
+
         );
     }
 }
