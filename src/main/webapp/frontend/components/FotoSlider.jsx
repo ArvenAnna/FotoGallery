@@ -4,6 +4,7 @@ import Header from "./Header";
 import AddNewAlbum from "./AddNewAlbum";
 import AlbumContainer from "./AlbumContainer";
 import Scroll from "./scroll/Scroll";
+import ProgressScroll from "./scroll/ProgressScroll";
 
 const Page = styled.div`
     margin: 2rem 10rem;
@@ -42,21 +43,21 @@ class FotoSlider extends React.Component {
     render() {
         return (
         <Page>
-            <Scroll height='100px' width='200px'>
-                <div>
-                    sadasj sakd j d sdaskd a sda k sda sjhjhshhj tteqwtetwyet 7723 dqouweu we qweqweqyo eqye qwe
-                    yqywueyqw yeyqw eg g fdgcs fggggggggggs jdhhhhhhhhhhhh ddddddddddd ddddddddddd dddddddddddd
-                    ddddddd dsjfhdhfsd hdjfd fsdgf d fd fgsd fgsdgf sdjf sjdfg dsfdshfgdsgkfgyru fjdgs dsfl sdkfh
-                    lds flsa dfdklsfkjdhs f;sdk fsd f dasjdsjfuwewuiewiriewb
-                </div>
+            {/*<Scroll progress={true} height='100px' width='200px'>*/}
+                {/*<div>*/}
+                    {/*sadasj sakd j d sdaskd a sda k sda sjhjhshhj tteqwtetwyet 7723 dqouweu we qweqweqyo eqye qwe*/}
+                    {/*yqywueyqw yeyqw eg g fdgcs fggggggggggs jdhhhhhhhhhhhh ddddddddddd ddddddddddd dddddddddddd*/}
+                    {/*ddddddd dsjfhdhfsd hdjfd fsdgf d fd fgsd fgsdgf sdjf sjdfg dsfdshfgdsgkfgyru fjdgs dsfl sdkfh*/}
+                    {/*lds flsa dfdklsfkjdhs f;sdk fsd f dasjdsjfuwewuiewiriewb*/}
+                {/*</div>*/}
                 {/*<Page>*/}
-                {/*{this.state.addAlbumModal && <AddNewAlbum closeModal={() => this.closeModal()}/>}*/}
-                {/*<Content>*/}
-                {/*<Header createAlbum={() => this.createAlbum()}/>*/}
-                {/*<AlbumContainer/>*/}
-                {/*</Content>*/}
+                {this.state.addAlbumModal && <AddNewAlbum closeModal={() => this.closeModal()}/>}
+                <Content>
+                <Header createAlbum={() => this.createAlbum()}/>
+                <AlbumContainer/>
+                </Content>
                 {/*</Page>*/}
-            </Scroll>
+
         </Page>
 
         );

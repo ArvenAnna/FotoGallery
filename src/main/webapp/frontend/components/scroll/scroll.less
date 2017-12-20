@@ -1,6 +1,8 @@
 :root {
   --scroll-track-width: 20px;
   --scroll-width: 10px;
+  --scroll-color: white; //rgba(1,1,1,0.7);
+  --track-color: red; //rgba(1,1,1,0.3);
 }
 
 .text_container {
@@ -10,40 +12,36 @@
 
   .text {
     position: relative;
+    overflow: hidden;
   }
-
-
 
   .scroll_track {
     position: absolute;
     width: var(--scroll-track-width);
     top: 0;
     right: 0;
-    background-color: red;
+    cursor: default;
+    border-radius: 3px;
+    background-color: var(--track-color);
 
     .scroll {
       --delta-width: ~"calc(var(--scroll-track-width) - var(--scroll-width))";
       position: relative;
       width: var(--scroll-width);
       left: ~"calc(var(--delta-width) / 2)";
-      background-color: green;
-      cursor: auto;
+      background-color: var(--scroll-color);
+      cursor: default;
       border-radius: 3px;
-
-      //-moz-user-select: none; /* These user-select properties are inheritable, used to prevent text selection */
-      //-webkit-user-select: none;
-      //-ms-user-select: none; /* From IE10 only */
-      //user-select: none; /* Not valid CSS yet, as of July 2012 */
-
-      //-webkit-user-drag: none; /* Prevents dragging of images/divs etc */
-      //user-drag: none;
-
-      //pointer-events: none;
     }
+  }
 
-    //.scroll_x {
-    //  visibility: hidden;
-    //}
+  .progress_track {
+    .scroll {
+      border-radius: 0px;
+      background: linear-gradient(0deg, var(--track-color), var(--scroll-color));
+      width: var(--scroll-track-width);
+      left: 0;
+    }
   }
 }
 

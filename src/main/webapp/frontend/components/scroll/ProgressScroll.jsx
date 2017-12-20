@@ -1,7 +1,7 @@
 import React from 'react';
 import './scroll.less';
 
-class Scroll extends React.Component {
+class ProgressScroll extends React.Component {
 
   constructor(props) {
     super(props);
@@ -25,14 +25,6 @@ class Scroll extends React.Component {
     this.scroll.style.height = this.calculateScrollHeight();
   }
 
-  componentWillReceiveProps(nextProps){
-    this.cont.style.height = nextProps.height;
-    this.cont.style.width = nextProps.width;
-    this.track.style.height = nextProps.height;
-
-    this.scroll.style.height = this.calculateScrollHeight();
-  }
-
   calculateScrollHeight() {
     const contRect = this.cont.getBoundingClientRect();
     const textRect = this.text.getBoundingClientRect();
@@ -46,41 +38,17 @@ class Scroll extends React.Component {
 
   onDrag(e) {
     e.preventDefault();
-    if (!this.state.dragStarted) {
+    if(!this.state.dragStarted) {
       return;
     }
-    this.props.progress
-      ? this.progressScrollTo(() => this.getScrollDelta(e))
-      : this.scrollTo(() => this.getScrollDelta(e));
 
+    this.scrollTo(() => this.getScrollDelta(e));
     this.setState({
       currentScrollY: e.clientY
     });
   }
 
   scrollTo(getScrollDirectionAsNumber) {
-    const scrollStyle = this.scroll.currentStyle || window.getComputedStyle(this.scroll);
-    const trackStyle = this.track.currentStyle || window.getComputedStyle(this.track);
-
-    const scrollTop = parseInt(scrollStyle.top);
-    const scrollGap = (parseInt(trackStyle.height) - parseInt(scrollStyle.height));
-
-    if ((scrollTop <= 0 && getScrollDirectionAsNumber() < 0)
-      || (scrollTop > scrollGap - 1 && getScrollDirectionAsNumber() > 0)
-      || getScrollDirectionAsNumber() == 0) {
-      return;
-    }
-
-    const nextScrollTop = scrollTop + getScrollDirectionAsNumber() * this.speed;
-
-    this.scroll.style.top = nextScrollTop + 'px';
-
-    const nextTextTop = Math.round(-nextScrollTop * (parseInt(trackStyle.height) / parseInt(scrollStyle.height)));
-
-    this.changeTextTop(nextTextTop);
-  }
-
-  progressScrollTo(getScrollDirectionAsNumber) {
     const scrollStyle = this.scroll.currentStyle || window.getComputedStyle(this.scroll);
     const trackStyle = this.track.currentStyle || window.getComputedStyle(this.track);
 
@@ -97,14 +65,10 @@ class Scroll extends React.Component {
 
     this.scroll.style.height = nextScrollHeight + 'px';
 
-    const nextTextTop = Math.round(- (nextScrollHeight - minScrollHeight) * (parseInt(trackStyle.height) / minScrollHeight));
-
-    this.changeTextTop(nextTextTop);
-  }
-
-  changeTextTop(nextTextTop) {
     const textStyle = this.text.currentStyle || window.getComputedStyle(this.text);
     const contStyle = this.cont.currentStyle || window.getComputedStyle(this.cont);
+    const nextTextTop = Math.round(- (nextScrollHeight - minScrollHeight) * (parseInt(trackStyle.height) / minScrollHeight));
+
     const minTextScroll = -(parseInt(textStyle.height) - parseInt(contStyle.height));
 
     if (nextTextTop > 0) {
@@ -114,7 +78,6 @@ class Scroll extends React.Component {
     } else {
       this.text.style.top = nextTextTop + 'px';
     }
-
   }
 
   getScrollDelta(e) {
@@ -146,7 +109,7 @@ class Scroll extends React.Component {
   render() {
     const FirstChild = () => {
       const childrenArray = React.Children.toArray(this.props.children);
-      return childrenArray || null;
+      return childrenArray[0] || null;
     }
     return (
       <div className='text_container'
@@ -162,7 +125,7 @@ class Scroll extends React.Component {
           <FirstChild/>
         </div>
 
-        <div className={`scroll_track ${this.props.progress ? 'progress_track' : ''}`}
+        <div className='scroll_track progress_track'
              ref={node => this.track = node}>
           <div className='scroll'
                ref={node => this.scroll = node}
@@ -173,4 +136,5 @@ class Scroll extends React.Component {
   }
 }
 
-export default Scroll;
+export default ProgressScroll;
+

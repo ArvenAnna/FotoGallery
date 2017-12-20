@@ -4,6 +4,7 @@ import styled, {keyframes} from 'styled-components';
 import './preview.less';
 import PreviewImageFrame from "./PreviewImageFrame";
 import constants from './styles';
+import Scroll from "../scroll/Scroll";
 
 const BottomSection = styled.div`
    width: ${props => props.imageWidth};
@@ -96,6 +97,14 @@ class Preview extends React.Component {
     this.setState({
       animate: 'increase'
     });
+    window.setTimeout(() => this.clearAnimation(), this.animationTime * 1000);
+  }
+
+
+  clearAnimation() {
+    this.setState({
+      animate: ''
+    });
   }
 
 
@@ -138,19 +147,22 @@ class Preview extends React.Component {
                                clearAnimate={() => this.clearAnimate()}
             />
 
-            <BottomSection id='bottom' className='magnify_modal_img_frame_bottom' imageWidth={imageWidth}>
+              <BottomSection id='bottom'
+                             className='magnify_modal_img_frame_bottom'
+                             imageWidth={imageWidth}
+              >
 
-              {/*<Scrollbars*/}
-                  {/*autoHide={false}*/}
-                  {/*autoHeight={true}*/}
-                  {/*style={{ width: bottomWidthWithoutPaddings, height: '100%' }}*/}
-                  {/*renderThumbVertical={this.renderThumb}*/}
-                  {/*renderTrackHorizontal={props => <div {...props} style={{display: 'none'}}/>}*/}
-                  {/*renderThumbHorizontal={props => <div {...props} style={{display: 'none'}}/>}>*/}
+
+
               <div className='magnify_modal_img_frame_bottom_caption'>Caption</div>
-              <div className='magnify_modal_img_frame_bottom_text'>Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason.</div>
-              {/*</Scrollbars>*/}
+
+                  <div>
+                    <Scroll height='100%' width={imageWidth}>
+              <div className='magnify_modal_img_frame_bottom_text'>Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason.</div> </Scroll>
+                  </div>
+
             </BottomSection>
+
           </div>
         </Modal>
     );
