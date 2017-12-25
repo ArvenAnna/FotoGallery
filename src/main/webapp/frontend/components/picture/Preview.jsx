@@ -61,12 +61,12 @@ class Preview extends React.Component {
     constructor(props) {
         super(props);
 
-
         this.animationTime = parseInt(constants['preview_animation_duration']);
 
         this.state = {
             imageWidth: 0,
-            animate: ''
+            animate: '',
+            currentSlide: props.main
         };
     }
 
@@ -76,9 +76,10 @@ class Preview extends React.Component {
         });
     }
 
-    clearAnimate() {
+    clearAnimate(slide) {
         this.setState({
-            animate: ''
+            animate: '',
+            currentSlide: slide
         });
     }
 
@@ -99,7 +100,7 @@ class Preview extends React.Component {
     }
 
 
-    clearAnimation() {
+    clearAnimation(slide) {
         this.setState({
             animate: ''
         });
@@ -143,39 +144,33 @@ class Preview extends React.Component {
 
     render() {
         const {animate, imageWidth} = this.state;
-        const {images, src} = this.props;
+        const {images, main} = this.props;
 
         return (
             <Modal className={`magnify_modal ${animate}`}
                    imageWidth={imageWidth}
                    animationTime={this.animationTime}>
                 <div className='magnify_modal_img_frame'>
-                    <PreviewImageFrame src={src}
+                    <PreviewImageFrame main={main}
                                        images={images}
                                        editRoute={this.props.editRoute}
                                        setImageWidth={(width) => {
                                            this.setImageWidth(width)
                                        }}
                                        close={() => this.close()}
-                                       clearAnimate={() => this.clearAnimate()}
+                                       clearAnimate={(s) => this.clearAnimate(s)}
                     />
 
                     <BottomSection className='magnify_modal_img_frame_bottom'
                                    imageWidth={imageWidth}>
 
-                        <div className='magnify_modal_img_frame_bottom_caption' ref={r => this.caption = r }>Caption</div>
+                        <div className='magnify_modal_img_frame_bottom_caption' ref={r => this.caption = r }>{this.state.currentSlide.name}</div>
 
                         <Scroll height={this.calculateTextHeight()}
                                 width={this.calculateTextWidth(imageWidth)}
                                 className='magnify_modal_img_frame_bottom_text'
                                 progress={true}>
-                            <div>Some text which was provided for some reason. Some text which was provided for some
-                                reason. Some text which was provided for some reason. Some text which was provided for
-                                some reason. Some text which was provided for some reason. Some text which was provided
-                                for some reason. Some text which was provided for some reason. Some text which was
-                                provided for some reason. Some text which was provided for some reason. Some text which
-                                was provided for some reason.
-                            </div>
+                            <div>{this.state.currentSlide.text}</div>
                         </Scroll>
 
                     </BottomSection>

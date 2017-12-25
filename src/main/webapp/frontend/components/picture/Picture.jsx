@@ -79,7 +79,7 @@ class Picture extends React.Component {
     }
 
     render() {
-        const {src} = this.props;
+        const {main} = this.props;
         const {animation, magnify} = this.state;
         return this.state.valid && <div>
                 <div
@@ -90,22 +90,22 @@ class Picture extends React.Component {
                 >
                     <img className='image'
                          onError={(e) => this.handleBrokenImg(e)}
-                         src={src}
+                         src={main.src}
                          alt="something wrong happens"/>
                     <div className={'overlay'}>
                         <div className={`overlay_top`}>
                             <MagnifierIcon/>
                         </div>
                         <div className={`overlay_bottom`}>
-                            <div className='overlay_bottom_text'>some beautiful picture</div>
+                            <div className='overlay_bottom_text'>{main.text}</div>
                         </div>
                     </div>
                 </div>
                 {magnify &&
-                <Preview src={src}
+                <Preview main={main}
                          close={() => this.closePreview()}
                          editRoute={this.props.editRoute}
-                         images={this.props.images || [this.props.src]}/>}
+                         images={this.props.images}/>}
             </div>;
     }
 }

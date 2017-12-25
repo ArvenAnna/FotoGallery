@@ -15,7 +15,7 @@ class PreviewImageFrame extends React.Component {
 
     this.state = {
       imageWidth: 0,
-      src: props.src,
+      main: props.main,
       left: currentIndex > 0,
       right: currentIndex < (props.images.length - 1)
     };
@@ -42,7 +42,7 @@ class PreviewImageFrame extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.src != this.state.src) {
+    if (prevState.main != this.state.main) {
       // in order to make sure width will be recalculated
       window.setTimeout(() => this.changeImageWidth(), 100);
     }
@@ -54,36 +54,39 @@ class PreviewImageFrame extends React.Component {
 
   onArrowClick(arrow) {
     const {images} = this.props;
-    const current = images.find(img => img === this.state.src);
-    const currentIndex = images.indexOf(current);
+    //const current = images.find(img => img === this.state.main);
+    const currentIndex = images.indexOf(this.state.main);
+    let main;
 
-    if (current && arrow === 'left' && currentIndex > 0) {
+    if (arrow === 'left' && currentIndex > 0) {
+      main = images[currentIndex - 1];
       this.setState({
-        src: images[currentIndex - 1],
+        main,
         left: (currentIndex - 1) > 0,
         right: (currentIndex - 1) < (images.length - 1)
       });
     }
 
-    if (current && arrow === 'right' && currentIndex < (images.length - 1)) {
-      this.setState({
-        src: images[currentIndex + 1],
+    if (arrow === 'right' && currentIndex < (images.length - 1)) {
+        main = images[currentIndex + 1];
+        this.setState({
+        main,
         left: (currentIndex + 1) > 0,
         right: (currentIndex + 1) < (images.length - 1)
       })
     }
 
-    this.props.clearAnimate();
+    this.props.clearAnimate(main);
   }
 
   edit() {
-      const current = this.props.images.find(img => img === this.state.src);
-      const currentIndex = this.props.images.indexOf(current);
+      //const current = this.props.images.find(img => img === this.state.src);
+      const currentIndex = this.props.images.indexOf(this.state.main);
       return this.props.editRoute + '/' + currentIndex;
   }
 
   render() {
-    const {src, left, right} = this.state;
+    const {main, left, right} = this.state;
     const {images, editRoute} = this.props;
 
     return (<div className='magnify_modal_img_frame_container'>
@@ -96,9 +99,9 @@ class PreviewImageFrame extends React.Component {
           <RightArrowIcon onClick={() => this.onArrowClick('right')}/>
         </div>}
         <div className='counter_container'>
-          <div className='counter'>{`${(images.indexOf(src) + 1)} of ${images.length}`}</div>
+          <div className='counter'>{`${(images.indexOf(main) + 1)} of ${images.length}`}</div>
         </div>
-        <img src={src} className='image_preview' ref={node => this.img = node}/>
+        <img src={main.src} className='image_preview' ref={node => this.img = node}/>
       </div>
     );
   }

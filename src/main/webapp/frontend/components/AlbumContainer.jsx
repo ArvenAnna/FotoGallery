@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Picture from "./picture/Picture";
+import connect from "react-redux/es/connect/connect";
+import {fetchAlbums} from "../actions/albumActions";
 
 // overrides picture styles
 const Container = styled.div`
@@ -24,33 +26,25 @@ const Container = styled.div`
       }
   }
 `
-
+@connect(store => ({
+    albums: store.albums
+}), {
+    fetchAlbums
+})
 class AlbumContainer extends React.Component {
+    constructor(props) {
+        super(props);
+        this.props.fetchAlbums();
+    }
 
     render() {
         return (
             <Container>
-                <Picture src='/foto/download.jpg' animation='fade'
-                         editRoute='/edit'
-                         images={['/foto/images.jpg', '/foto/download.jpg']}/>
-                <Picture src='/foto/images.jpg' animation='fade'
-                         editRoute='/edit'
-                         images={['/foto/images.jpg', '/foto/download.jpg']}/>
-                <Picture src='/foto/5b405dc14959cd421a7579261b5ee261--awesome-pictures-colorful-pictures.jpg'
-                         editRoute='/edit'
-                         animation='fade' images={['/foto/images.jpg', '/foto/download.jpg']}/>
-                <Picture src='/foto/images.jpg' animation='fade'
-                         editRoute='/edit'
-                         images={['/foto/images.jpg', '/foto/download.jpg']}/>
-                <Picture src='/foto/download.jpg' animation='fade'
-                         editRoute='/edit'
-                         images={['/foto/images.jpg', '/foto/download.jpg']}/>
-                <Picture src='/foto/images.jpg' animation='fade'
-                         editRoute='/edit'
-                         images={['/foto/images.jpg', '/foto/download.jpg']}/>
-                <Picture src='/foto/download.jpg' animation='fade'
-                         editRoute='/edit'
-                         images={['/foto/images.jpg', '/foto/download.jpg']}/>
+                {this.props.albums.map(album => <Picture main={album.images[0]}
+                                                         key={album.id}
+                                                         animation='fade'
+                                                         editRoute='/edit'
+                                                         images={album.images}/>)}
 
             </Container>
         );
