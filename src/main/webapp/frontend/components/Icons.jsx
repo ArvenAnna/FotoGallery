@@ -3,6 +3,8 @@ import LeftArrow from '../svg/left-arrow.svg';
 import RightArrow from '../svg/right-arrow.svg';
 import Magnifier from '../svg/magnifier.svg';
 import Cross from '../svg/cancel.svg';
+import Edit from '../svg/edit.svg';
+import Save from '../svg/save-file-option.svg';
 
 const Icon = `
         width: 1rem;
@@ -30,5 +32,13 @@ export const MagnifierIcon = styled(Magnifier)`
 `
 
 export const CrossIcon = styled(Cross)`
+   ${Icon}
+`
+
+export const EditIcon = styled(Edit)`
+   ${Icon}
+`
+
+export const SaveIcon = styled(Save)`
    ${Icon}
 `

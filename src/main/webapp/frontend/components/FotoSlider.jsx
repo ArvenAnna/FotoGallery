@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import Header from "./Header";
-import AddNewAlbum from "./AddNewAlbum";
+import AddNewAlbum from "./newAlbum/AddNewAlbum";
 import AlbumContainer from "./AlbumContainer";
 import Scroll from "./scroll/Scroll";
 import ProgressScroll from "./scroll/ProgressScroll";
+import {Route, Switch} from "react-router-dom";
+import EditAlbum from "./editAlbum/EditAlbum";
 
 const Page = styled.div`
     margin: 2rem 10rem;
@@ -42,23 +44,16 @@ class FotoSlider extends React.Component {
 
     render() {
         return (
-        <Page>
-            {/*<Scroll progress={true} height='100px' width='200px'>*/}
-                {/*<div>*/}
-                    {/*sadasj sakd j d sdaskd a sda k sda sjhjhshhj tteqwtetwyet 7723 dqouweu we qweqweqyo eqye qwe*/}
-                    {/*yqywueyqw yeyqw eg g fdgcs fggggggggggs jdhhhhhhhhhhhh ddddddddddd ddddddddddd dddddddddddd*/}
-                    {/*ddddddd dsjfhdhfsd hdjfd fsdgf d fd fgsd fgsdgf sdjf sjdfg dsfdshfgdsgkfgyru fjdgs dsfl sdkfh*/}
-                    {/*lds flsa dfdklsfkjdhs f;sdk fsd f dasjdsjfuwewuiewiriewb*/}
-                {/*</div>*/}
-                {/*<Page>*/}
+            <Page>
                 {this.state.addAlbumModal && <AddNewAlbum closeModal={() => this.closeModal()}/>}
                 <Content>
-                <Header createAlbum={() => this.createAlbum()}/>
-                <AlbumContainer/>
+                    <Header createAlbum={() => this.createAlbum()}/>
+                    <Switch>
+                        <Route exact path='/' component={AlbumContainer}/>
+                        <Route path='/edit/:id' component={EditAlbum}/>
+                    </Switch>
                 </Content>
-                {/*</Page>*/}
-
-        </Page>
+            </Page>
 
         );
     }

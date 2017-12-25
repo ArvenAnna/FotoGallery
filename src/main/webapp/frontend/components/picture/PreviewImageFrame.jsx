@@ -1,6 +1,7 @@
 import React from "react";
-import {CrossIcon, LeftArrowIcon, RightArrowIcon} from "../Icons";
+import {CrossIcon, EditIcon, LeftArrowIcon, RightArrowIcon} from "../Icons";
 import "./preview.less";
+import {Link} from "react-router-dom";
 
 class PreviewImageFrame extends React.Component {
 
@@ -33,8 +34,6 @@ class PreviewImageFrame extends React.Component {
     const img = this.img;
     if (!img) return 0;
     const imageRect = img.getBoundingClientRect();
-    const style = img.currentStyle || window.getComputedStyle(img);
-    //const margin = parseFloat(style.borderLeft) + parseFloat(style.borderRight);
     return imageRect.width;
   }
 
@@ -75,15 +74,21 @@ class PreviewImageFrame extends React.Component {
     }
 
     this.props.clearAnimate();
+  }
 
+  edit() {
+      const current = this.props.images.find(img => img === this.state.src);
+      const currentIndex = this.props.images.indexOf(current);
+      return this.props.editRoute + '/' + currentIndex;
   }
 
   render() {
     const {src, left, right} = this.state;
-    const {images} = this.props;
+    const {images, editRoute} = this.props;
 
     return (<div className='magnify_modal_img_frame_container'>
         <CrossIcon className='cross' onClick={() => this.onCrossClick()}/>
+            {editRoute && <Link to={this.edit()}><EditIcon className='edit'/></Link>}
         {left && <div className='left_arrow'>
           <LeftArrowIcon onClick={() => this.onArrowClick('left')}/>
         </div>}

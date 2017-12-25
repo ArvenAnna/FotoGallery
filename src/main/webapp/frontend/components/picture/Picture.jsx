@@ -102,7 +102,10 @@ class Picture extends React.Component {
                     </div>
                 </div>
                 {magnify &&
-                <Preview src={src} close={() => this.closePreview()} images={this.props.images || [this.props.src]}/>}
+                <Preview src={src}
+                         close={() => this.closePreview()}
+                         editRoute={this.props.editRoute}
+                         images={this.props.images || [this.props.src]}/>}
             </div>;
     }
 }

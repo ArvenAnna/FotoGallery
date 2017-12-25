@@ -4,11 +4,14 @@ import {ThemeProvider} from 'styled-components';
 
 import green from './constants/themes';
 
-import AppContainer from './containers/AppContainer.jsx';
+import {HashRouter} from 'react-router-dom';
+import FotoSlider from "./components/FotoSlider";
 
 ReactDOM.render(
   <ThemeProvider theme={green}>
-        <AppContainer/>
+      <HashRouter>
+          <FotoSlider/>
+      </HashRouter>
   </ThemeProvider>,
   document.getElementById('mount')
 )

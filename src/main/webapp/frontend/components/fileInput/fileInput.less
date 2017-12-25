@@ -1,13 +1,23 @@
-@import "constants";
-@import "picture/mixins";
+@import "../constants";
+@import "../picture/mixins";
 
 .file_input_wrapper {
+  position: relative;
+  .__flex_column_middle();
   height: 20rem;
   width: 100%;
   border-radius: @border_radius;
   margin-bottom: 1rem;
 
-  button{
+  input[type=file]{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer
+  }
+
+  button {
     width: 100%;
     color: @add_album_text;
     background-color: @add_album_bg;
@@ -17,13 +27,13 @@
   }
 
   .file_input_area {
+    .__flex_row_middle();
     width: 100%;
     height: 100%;
     background-color: @add_album_bg;
     border: @add_album_border;
     border-top: none;
     box-sizing: border-box;
-    .__flex_row_middle();
 
     &>svg {
       .__icon(2rem, @add_album_text);

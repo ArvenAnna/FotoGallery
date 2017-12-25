@@ -58,115 +58,132 @@ const Modal = styled.div`
 
 class Preview extends React.Component {
 
-
-
     constructor(props) {
-    super(props);
+        super(props);
 
 
-    this.animationTime = parseInt(constants['preview_animation_duration']);
+        this.animationTime = parseInt(constants['preview_animation_duration']);
 
-    this.state = {
-      imageWidth: 0,
-      animate: ''
-    };
-  }
-
-  setImageWidth(width) {
-    this.setState({
-      imageWidth: width,
-    });
-  }
-
-  clearAnimate() {
-    this.setState({
-      animate: ''
-    });
-  }
-
-  close() {
-    if (!(this.state.animate === 'decrease')) {
-      this.setState({
-        animate: 'decrease'
-      });
-      window.setTimeout(this.props.close, this.animationTime * 1000);
+        this.state = {
+            imageWidth: 0,
+            animate: ''
+        };
     }
-  }
 
-  componentDidMount() {
-    this.setState({
-      animate: 'increase'
-    });
-    window.setTimeout(() => this.clearAnimation(), this.animationTime * 1000);
-  }
+    setImageWidth(width) {
+        this.setState({
+            imageWidth: width,
+        });
+    }
+
+    clearAnimate() {
+        this.setState({
+            animate: ''
+        });
+    }
+
+    close() {
+        if (!(this.state.animate === 'decrease')) {
+            this.setState({
+                animate: 'decrease'
+            });
+            window.setTimeout(this.props.close, this.animationTime * 1000);
+        }
+    }
+
+    componentDidMount() {
+        this.setState({
+            animate: 'increase'
+        });
+        window.setTimeout(() => this.clearAnimation(), this.animationTime * 1000);
+    }
 
 
-  clearAnimation() {
-    this.setState({
-      animate: ''
-    });
-  }
+    clearAnimation() {
+        this.setState({
+            animate: ''
+        });
+    }
 
 
-    renderThumb({ style, ...props }) {
+    renderThumb({style, ...props}) {
         const thumbStyle = {
             backgroundColor: 'white',
             height: '70%'
         };
         return (
             <div
-                style={{ ...style, ...thumbStyle }}
+                style={{...style, ...thumbStyle}}
                 {...props}/>
         );
     }
 
-  render() {
-    const {animate, imageWidth} = this.state;
-    const {images, src} = this.props;
-    let bottomWidthWithoutPaddings = imageWidth;
-
-
-        const bottom = document.getElementById('bottom');
-        if(bottom) {
-            const style = bottom.currentStyle || window.getComputedStyle(bottom);
-            const padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-            bottomWidthWithoutPaddings = imageWidth - padding;
-
+    calculateTextWidth(imgWidth) {
+        const bottomSection = document.getElementsByClassName('magnify_modal_img_frame_bottom')[0];
+        if(bottomSection){
+            const style = bottomSection.currentStyle || window.getComputedStyle(bottomSection);
+            const paddings = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+            return parseFloat(imgWidth) - paddings;
         }
+        return 0;
+    }
 
+    calculateTextHeight() {
+        const bottomSection = document.getElementsByClassName('magnify_modal_img_frame_bottom')[0];
 
-    return (
-        <Modal className={`magnify_modal ${animate}`}
-               imageWidth={imageWidth}
-               animationTime={this.animationTime}>
-          <div className='magnify_modal_img_frame'>
-            <PreviewImageFrame src={src}
-                               images={images}
-                               setImageWidth={(width) => {this.setImageWidth(width)}}
-                               close={() => this.close()}
-                               clearAnimate={() => this.clearAnimate()}
-            />
+        if(bottomSection && this.caption){
+            const bottomSectionStyle = bottomSection.currentStyle || window.getComputedStyle(bottomSection);
+            const paddings = parseFloat(bottomSectionStyle.paddingTop) + parseFloat(bottomSectionStyle.paddingBottom);
 
-              <BottomSection id='bottom'
-                             className='magnify_modal_img_frame_bottom'
-                             imageWidth={imageWidth}
-              >
+            const captionStyle = this.caption.currentStyle || window.getComputedStyle(this.caption);
+            return parseFloat(bottomSectionStyle.height) - paddings - parseFloat(captionStyle.height);
+        }
+        return 0;
+    }
 
+    render() {
+        const {animate, imageWidth} = this.state;
+        const {images, src} = this.props;
 
+        return (
+            <Modal className={`magnify_modal ${animate}`}
+                   imageWidth={imageWidth}
+                   animationTime={this.animationTime}>
+                <div className='magnify_modal_img_frame'>
+                    <PreviewImageFrame src={src}
+                                       images={images}
+                                       editRoute={this.props.editRoute}
+                                       setImageWidth={(width) => {
+                                           this.setImageWidth(width)
+                                       }}
+                                       close={() => this.close()}
+                                       clearAnimate={() => this.clearAnimate()}
+                    />
 
-              <div className='magnify_modal_img_frame_bottom_caption'>Caption</div>
+                    <BottomSection className='magnify_modal_img_frame_bottom'
+                                   imageWidth={imageWidth}>
 
-                  <div>
-                    <Scroll height='100%' width={imageWidth}>
-              <div className='magnify_modal_img_frame_bottom_text'>Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason. Some text which was provided for some reason.</div> </Scroll>
-                  </div>
+                        <div className='magnify_modal_img_frame_bottom_caption' ref={r => this.caption = r }>Caption</div>
 
-            </BottomSection>
+                        <Scroll height={this.calculateTextHeight()}
+                                width={this.calculateTextWidth(imageWidth)}
+                                className='magnify_modal_img_frame_bottom_text'
+                                progress={true}>
+                            <div>Some text which was provided for some reason. Some text which was provided for some
+                                reason. Some text which was provided for some reason. Some text which was provided for
+                                some reason. Some text which was provided for some reason. Some text which was provided
+                                for some reason. Some text which was provided for some reason. Some text which was
+                                provided for some reason. Some text which was provided for some reason. Some text which
+                                was provided for some reason.
+                            </div>
+                        </Scroll>
 
-          </div>
-        </Modal>
-    );
-  }
+                    </BottomSection>
+
+                </div>
+            </Modal>
+        );
+    }
 }
 
 export default Preview;

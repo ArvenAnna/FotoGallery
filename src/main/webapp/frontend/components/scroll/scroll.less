@@ -1,18 +1,18 @@
-:root {
+.text_container {
+
   --scroll-track-width: 20px;
   --scroll-width: 10px;
-  --scroll-color: white; //rgba(1,1,1,0.7);
-  --track-color: red; //rgba(1,1,1,0.3);
-}
+  --scroll-color: rgba(1,1,1,0.7);
+  --track-color: rgba(1,1,1,0.3);
 
-.text_container {
   overflow: hidden;
   position: relative;
+  box-sizing: border-box;
   padding-right:  var(--scroll-track-width);
 
   .text {
     position: relative;
-    overflow: hidden;
+    //overflow: hidden;
   }
 
   .scroll_track {

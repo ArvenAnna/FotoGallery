@@ -31,18 +31,25 @@ class AlbumContainer extends React.Component {
         return (
             <Container>
                 <Picture src='/foto/download.jpg' animation='fade'
+                         editRoute='/edit'
                          images={['/foto/images.jpg', '/foto/download.jpg']}/>
                 <Picture src='/foto/images.jpg' animation='fade'
+                         editRoute='/edit'
                          images={['/foto/images.jpg', '/foto/download.jpg']}/>
                 <Picture src='/foto/5b405dc14959cd421a7579261b5ee261--awesome-pictures-colorful-pictures.jpg'
+                         editRoute='/edit'
                          animation='fade' images={['/foto/images.jpg', '/foto/download.jpg']}/>
                 <Picture src='/foto/images.jpg' animation='fade'
+                         editRoute='/edit'
                          images={['/foto/images.jpg', '/foto/download.jpg']}/>
                 <Picture src='/foto/download.jpg' animation='fade'
+                         editRoute='/edit'
                          images={['/foto/images.jpg', '/foto/download.jpg']}/>
                 <Picture src='/foto/images.jpg' animation='fade'
+                         editRoute='/edit'
                          images={['/foto/images.jpg', '/foto/download.jpg']}/>
                 <Picture src='/foto/download.jpg' animation='fade'
+                         editRoute='/edit'
                          images={['/foto/images.jpg', '/foto/download.jpg']}/>
 
             </Container>

@@ -21,7 +21,13 @@ require("styles.js");
 @preview_overlay: @black_few_transparent;
 
 @preview_border_radius: 0.3rem;
+@preview_border_width: 0.7rem;
 @frame_height: 90%;
+
+@scroll-track-color: black;
+@scroll-color: white;
+@scroll-background: linear-gradient(0deg, @scroll-track-color, @scroll-color);
+@scroll-width: 6px;
 
 // ---------------------- mixins -----------------------------
 
@@ -127,6 +133,14 @@ require("styles.js");
   .__increase_animation(background-color, @preview_overlay);
 }
 
+@keyframes fade_in_scroll_track {
+  .__increase_animation(background-color, @scroll-track-color);
+}
+
+@keyframes fade_in_scroll {
+  .__increase_animation(background, @scroll-background);
+}
+
 @keyframes fade_out_preview_bottom {
   0% {
     background-color: @preview_frame_color;
@@ -171,6 +185,14 @@ require("styles.js");
 
 @keyframes fade_out_overlay {
   .__decrease_animation(background-color, @preview_overlay);
+}
+
+@keyframes fade_out_scroll_track {
+  .__decrease_animation(background-color, @scroll-track-color);
+}
+
+@keyframes fade_out_scroll {
+  .__decrease_animation(background, @scroll-background);
 }
 
 // --------------------------- main styles -----------------------------
@@ -223,6 +245,18 @@ require("styles.js");
         }
       }
 
+      .edit {
+        position: absolute;
+        top: 1rem;
+        right: 3.5rem;
+        z-index: 1;
+        .__icon(2rem, @preview_cross);
+
+        &:hover {
+          fill: @preview_cross_hover;
+        }
+      }
+
       // --------------- arrow mixin -----------------------
       .__arrow(@side) {
         .__flex_row_middle();
@@ -257,27 +291,39 @@ require("styles.js");
 
       .image_preview {
         height: 100%;
-        border: 0.7rem solid @preview_frame_color;
+        border: @preview_border_width solid @preview_frame_color;
         box-sizing: border-box;
         border-radius: @preview_border_radius;
       }
     }
 
     &_bottom {
-      padding: 0 2rem;
+      padding-left: calc(@preview_border_width + 1rem);
+      padding-right: @preview_border_width;
       height: 20%;
       box-sizing: border-box;
       color: @preview_caption;
-      border-bottom: 1rem solid @preview_frame_color;
+      padding-bottom: 1rem;
 
       &_caption {
         font-size: 4vh;
+        padding-bottom: 1rem;
+        box-sizing: border-box;
       }
 
       &_text {
         font-style: italic;
         font-size: 2vh;
         color: @preview_text;
+
+        &.text_container .scroll_track {
+          background-color: @scroll-track-color;
+          width: @scroll-width;
+          .scroll {
+            background: @scroll-background;
+            width: @scroll-width;
+          }
+        }
       }
     }
   }
@@ -300,9 +346,18 @@ require("styles.js");
         }
         &_text {
           .__animation(fade_in_text);
+          &.text_container .scroll_track {
+            .__animation(fade_in_scroll_track);
+            .scroll {
+              .__animation(fade_in_scroll);
+            }
+          }
         }
     }
       .cross {
+        .__animation(fade_in_cross);
+      }
+      .edit {
         .__animation(fade_in_cross);
       }
       .left_arrow, .right_arrow {
@@ -324,6 +379,9 @@ require("styles.js");
     .cross {
       .__animation(fade_out_cross);
     }
+    .edit {
+      .__animation(fade_out_cross);
+    }
     .left_arrow, .right_arrow {
       .__animation(fade_out_arrow_container);
 
@@ -343,6 +401,12 @@ require("styles.js");
       }
       &_text {
         .__animation(fade_out_text_desc);
+        &.text_container .scroll_track {
+          .__animation(fade_out_scroll_track);
+          .scroll {
+            .__animation(fade_out_scroll);
+          }
+        }
       }
     }
 
