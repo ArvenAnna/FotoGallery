@@ -2,6 +2,7 @@ import React from 'react';
 import './editAlbum.less';
 import FileInput from "../fileInput/FileInput";
 import {CrossIcon, SaveIcon} from "../Icons";
+import Card from "./Card";
 
 class EditAlbum extends React.Component {
 
@@ -26,7 +27,7 @@ class EditAlbum extends React.Component {
     }
 
     componentDidMount() {
-        const els = document.getElementsByClassName('drag_image');
+        const els = document.getElementsByClassName('drag_container');
         for(let i=0; i<els.length; i++) {
             els[i].addEventListener('replace', (e)=>this.replaceImage(e.target))
         }
@@ -34,28 +35,30 @@ class EditAlbum extends React.Component {
 
     onMouseDown(e, picture) {
         e.preventDefault();
+        const target = e.target.parentElement;
 
         const x = e.clientX + window.scrollX;
         const y = e.clientY + window.scrollY;
 
-        const style = e.target.currentStyle || window.getComputedStyle(e.target);
+        const style = target.currentStyle || window.getComputedStyle(target);
 
         const elStartLeft = parseInt(style.left, 10);
         const elStartTop = parseInt(style.top, 10);
         const dragObj = {
             x, y, elStartLeft, elStartTop
         }
-        this.setState({dragStarted: true, dragFrom:picture, dragObj, dragFromEl: e.target});
-        e.target.style.zIndex = 10;
+        this.setState({dragStarted: true, dragFrom:picture, dragObj, dragFromEl: target});
+        target.style.zIndex = 10;
     }
 
     onMouseMove(e, picture) {
         e.preventDefault();
+        const target = e.target.parentElement;
         if(this.state.dragStarted && this.state.dragFrom == picture) {
             const x = e.clientX + window.scrollX;
             const y = e.clientY + window.scrollY;
-            e.target.style.top = (this.state.dragObj.elStartTop + y - this.state.dragObj.y) + 'px';
-            e.target.style.left = (this.state.dragObj.elStartLeft + x - this.state.dragObj.x) + 'px';
+            target.style.top = (this.state.dragObj.elStartTop + y - this.state.dragObj.y) + 'px';
+            target.style.left = (this.state.dragObj.elStartLeft + x - this.state.dragObj.x) + 'px';
         }
     }
 
@@ -74,20 +77,21 @@ class EditAlbum extends React.Component {
 
     onMouseUp(e, picture) {
         e.preventDefault();
-
+        const target = e.target.parentElement;
         const dragFrom = this.state.dragFrom;
 
         this.state.dragFromEl.style.top = '0px';
         this.state.dragFromEl.style.left = '0px';
 
-        e.target.style.top = '0px';
-        e.target.style.left = '0px';
+        target.style.top = '0px';
+        target.style.left = '0px';
 
         this.state.dragFromEl.style.zIndex = 0;
 
         if(picture == this.state.dragFrom) {
             const event = new Event('replace');
             document.elementFromPoint(e.clientX + window.scrollX, e.clientY + window.scrollY)
+                .parentElement
                 .dispatchEvent(event);
             return;
         }
@@ -99,7 +103,7 @@ class EditAlbum extends React.Component {
 
     }
 
-    onClick(e, p) {
+    openDetails() {
         this.setState({
             isTextOpen: true
         });
@@ -111,30 +115,29 @@ class EditAlbum extends React.Component {
         })
     }
 
+    deleteItem() {
+
+    }
+
     render() {
         const {isTextOpen} = this.state;
         return (
             <div className='edit_container'>
-                {this.pictures.sort((x,y) => x.order-y.order).map(p => isTextOpen
-                    ? <img className='drag_image'
-                           src={p.src}
-                           key={p.id}
-                           imgid={p.id}
-                           draggable={false}
-                    />
-                    : <img className='drag_image'
-                    src={p.src}
+                {this.pictures.sort((x,y) => x.order-y.order).map(p => <Card
                     key={p.id}
-                    imgid={p.id}
-                    draggable={true}
+                    picture={p}
                     onMouseDown={e => this.onMouseDown(e, p)}
                     onMouseUp={e => this.onMouseUp(e, p)}
                     onMouseMove={e => this.onMouseMove(e, p)}
-                    onDoubleClick={e => this.onClick(e, p)}
+                    openDetails={() => this.openDetails()}
+                    deleteItem={() => this.deleteItem()}
+
+                    isTextOpen={isTextOpen}
                 />)}
                 <FileInput className='new_image' disabled={isTextOpen}/>
                 {isTextOpen &&
                 <div className='new_text' ref={t => this.text = t}>
+                    <input/>
                     <textarea/>
                     <SaveIcon className='save_icon'/>
                     <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>

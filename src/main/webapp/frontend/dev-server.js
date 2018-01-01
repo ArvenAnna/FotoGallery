@@ -1,12 +1,12 @@
 const express = require('express');
-const routes = require('./constants/routes');
-const albums = require('./mocks/Albums');
+const routesModule = require('./constants/routes');
+const albumsModule = require('./mocks/Albums');
 
 const app = express();
 
-app.get(routes.routes.GET_ALBUMS, function(req, res){
+app.get(routesModule.routes.GET_ALBUMS, function(req, res){
   console.log("get albums called from proxy");
-  res.send(albums.albums);
+  res.send(albumsModule.albums);
 });
 
 // app.get('/api/ss', function(req, res){
