@@ -27,39 +27,6 @@ class EditAlbum extends React.Component {
     }
 
     componentDidMount() {
-        const els = document.getElementsByClassName('drag_container');
-        for(let i=0; i<els.length; i++) {
-            els[i].addEventListener('replace', (e)=>this.replaceImage(e.target))
-        }
-    }
-
-    onMouseDown(e, picture) {
-        e.preventDefault();
-        const target = e.target.parentElement;
-
-        const x = e.clientX + window.scrollX;
-        const y = e.clientY + window.scrollY;
-
-        const style = target.currentStyle || window.getComputedStyle(target);
-
-        const elStartLeft = parseInt(style.left, 10);
-        const elStartTop = parseInt(style.top, 10);
-        const dragObj = {
-            x, y, elStartLeft, elStartTop
-        }
-        this.setState({dragStarted: true, dragFrom:picture, dragObj, dragFromEl: target});
-        target.style.zIndex = 10;
-    }
-
-    onMouseMove(e, picture) {
-        e.preventDefault();
-        const target = e.target.parentElement;
-        if(this.state.dragStarted && this.state.dragFrom == picture) {
-            const x = e.clientX + window.scrollX;
-            const y = e.clientY + window.scrollY;
-            target.style.top = (this.state.dragObj.elStartTop + y - this.state.dragObj.y) + 'px';
-            target.style.left = (this.state.dragObj.elStartLeft + x - this.state.dragObj.x) + 'px';
-        }
     }
 
     replaceImage(target) {
@@ -119,6 +86,10 @@ class EditAlbum extends React.Component {
 
     }
 
+    changeDragState(obj) {
+        this.setState(obj);
+    }
+
     render() {
         const {isTextOpen} = this.state;
         return (
@@ -126,13 +97,14 @@ class EditAlbum extends React.Component {
                 {this.pictures.sort((x,y) => x.order-y.order).map(p => <Card
                     key={p.id}
                     picture={p}
-                    onMouseDown={e => this.onMouseDown(e, p)}
                     onMouseUp={e => this.onMouseUp(e, p)}
                     onMouseMove={e => this.onMouseMove(e, p)}
                     openDetails={() => this.openDetails()}
                     deleteItem={() => this.deleteItem()}
-
+                    replaceImage={(target) => this.replaceImage(target)}
                     isTextOpen={isTextOpen}
+                    changeDragState={(obj) => this.changeDragState(obj)}
+                    dragState={this.state}
                 />)}
                 <FileInput className='new_image' disabled={isTextOpen}/>
                 {isTextOpen &&
