@@ -43,7 +43,7 @@ class AlbumContainer extends React.Component {
                 {this.props.albums.map(album => <Picture main={album.images[0]}
                                                          key={album.id}
                                                          animation='fade'
-                                                         editRoute='/edit'
+                                                         editRoute={`/edit/${album.id}`}
                                                          images={album.images}/>)}
 
             </Container>

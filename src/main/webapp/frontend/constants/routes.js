@@ -1,5 +1,17 @@
+const apiPrefix = '/api/';
+
 const routes = {
-    GET_ALBUMS: '/api/albums'
+    GET_ALBUMS: `${apiPrefix}albums`,
+
+    ALBUM_ROUTE: `${apiPrefix}album`,
+    GET_ALBUM: (id) => `${apiPrefix}album?id=${id}`,
+
+    DELETE_FOTO: (id, album) => `${apiPrefix}foto?album=${album}&id=${id}`,
+    UPDATE_FOTO: (album) => `${apiPrefix}foto?album=${album}`,
+    FOTO_PATH: `${apiPrefix}foto`,
+
+
+
     // GET_RECEPTS: (departId) => `/recept_list.req?departId=${departId}`,
     // GET_RECEPT: (receptId) => `/recept.req?receptId=${receptId}`,
     // GET_INGRIDIENTS: '/ing_list.req',

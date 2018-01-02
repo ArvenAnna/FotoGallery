@@ -3,9 +3,10 @@ import {MagnifierIcon} from "../Icons";
 import './fileInput.less';
 
 class FileInput extends React.Component {
+
     render() {
         return <div className='file_input_wrapper'>
-            <button>Choose main foto</button>
+            <button>{this.props.label}</button>
             <div className='file_input_area'>
                 <MagnifierIcon/>
             </div>

@@ -19,9 +19,26 @@ class HttpService {
             });
     }
 
+    doDelete(route, transformResponse) {
+        return this.http
+            .delete(route)
+            .then(result => {
+                if (transformResponse) {
+                    return transformResponse(result.data)
+                }
+                return result.data
+            });
+    }
+
     doPost(route, request) {
         return this.http
             .post(route, JSON.stringify(request))
+            .then(result => result.data);
+    }
+
+    doPut(route, request) {
+        return this.http
+            .put(route, JSON.stringify(request))
             .then(result => result.data);
     }
 

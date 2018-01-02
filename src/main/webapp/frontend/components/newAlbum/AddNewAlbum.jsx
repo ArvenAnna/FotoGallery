@@ -48,7 +48,7 @@ class AddNewAlbum extends React.Component {
                 <Label>Name</Label>
                 <input/>
                 <Label>Title image:</Label>
-                <FileInput/>
+                <FileInput label='Choose main foto'/>
                 <Label>Description</Label>
                 <textarea/>
                 <button>ok</button>

@@ -3,115 +3,94 @@ import './editAlbum.less';
 import FileInput from "../fileInput/FileInput";
 import {CrossIcon, SaveIcon} from "../Icons";
 import Card from "./Card";
+import http from '../../HttpService';
+import connect from "react-redux/es/connect/connect";
+import {deleteFotoFromAlbum, saveFotoDescription} from "../../actions/albumActions";
+const routesModule = require('../../constants/routes');
 
+@connect(store => ({
+
+}), {
+    deleteFotoFromAlbum,
+    saveFotoDescription
+})
 class EditAlbum extends React.Component {
 
     constructor(props) {
         super(props);
-        this.pictures = [{
-            id: 1,
-            src: '/foto/download.jpg',
-            order: 1
-        }, {
-            id: 2,
-            src: '/foto/images.jpg',
-            order: 2
-        }];
         this.state = {
             dragStarted: false,
             dragFrom: null,
             dragFromEl: null,
             dragObj: null,
-            isTextOpen: false
+            openPicture: null,
+            album: null
         }
     }
 
     componentDidMount() {
+        http.doGet(routesModule.routes.GET_ALBUM(this.props.match.params.id))
+            .then(result => this.setState({album: result}));
     }
 
-    replaceImage(target) {
-        const dragFrom = this.state.dragFrom;
-
-        const attr = target.getAttribute('imgid');
-        const picture = this.pictures.find(p => p.id == attr);
-
-        this.setState({dragStarted: false, dragFrom:null, dragObj:null, dragFromEl:null});
-
-        const prevOrder = dragFrom.order;
-        dragFrom.order = picture.order;
-        picture.order = prevOrder;
-    }
-
-    onMouseUp(e, picture) {
-        e.preventDefault();
-        const target = e.target.parentElement;
-        const dragFrom = this.state.dragFrom;
-
-        this.state.dragFromEl.style.top = '0px';
-        this.state.dragFromEl.style.left = '0px';
-
-        target.style.top = '0px';
-        target.style.left = '0px';
-
-        this.state.dragFromEl.style.zIndex = 0;
-
-        if(picture == this.state.dragFrom) {
-            const event = new Event('replace');
-            document.elementFromPoint(e.clientX + window.scrollX, e.clientY + window.scrollY)
-                .parentElement
-                .dispatchEvent(event);
-            return;
-        }
-
-        this.setState({dragStarted: false, dragFrom:null, dragObj:null, dragFromEl:null});
-        const prevOrder = dragFrom.order;
-        dragFrom.order = picture.order;
-        picture.order = prevOrder;
-
-    }
-
-    openDetails() {
-        this.setState({
-            isTextOpen: true
-        });
+    openDetails(picture) {
+        this.setState({openPicture: picture});
     }
 
     onCrossClick() {
-        this.setState({
-            isTextOpen: false
-        })
+        this.setState({openPicture: null});
     }
 
-    deleteItem() {
-
+    deleteItem(picture) {
+        this.props.deleteFotoFromAlbum(picture.id, this.state.album.id);
+        const newPictures = this.state.album.images.filter(p => p.id != picture.id);
+        const newAlbum = Object.assign({}, {
+            ...this.state.album,
+            images: newPictures,
+        })
+        this.setState({album: newAlbum});
     }
 
     changeDragState(obj) {
         this.setState(obj);
     }
 
+    saveFotoDescription(picture) {
+        const newPictures = [...this.state.album.images];
+        const editedPicture = this.state.album.images.find(p => p.id == picture.id);
+        if(this.input.value) editedPicture.name = this.input.value;
+        if(this.textarea.value) editedPicture.text = this.text.value;
+
+        this.props.saveFotoDescription(this.state.album.id, editedPicture);
+
+        const newAlbum = Object.assign({}, {
+            ...this.state.album,
+            images: newPictures,
+        });
+        this.setState({album: newAlbum, openPicture: null});
+    }
+
     render() {
-        const {isTextOpen} = this.state;
-        return (
+        const {openPicture,album} = this.state;
+        return album && (
             <div className='edit_container'>
-                {this.pictures.sort((x,y) => x.order-y.order).map(p => <Card
+                {album.images.sort((x,y) => x.order-y.order).map(p => <Card
                     key={p.id}
                     picture={p}
-                    onMouseUp={e => this.onMouseUp(e, p)}
-                    onMouseMove={e => this.onMouseMove(e, p)}
-                    openDetails={() => this.openDetails()}
-                    deleteItem={() => this.deleteItem()}
+                    pictures={album.images}
+                    openDetails={(p) => this.openDetails(p)}
+                    deleteItem={(p) => this.deleteItem(p)}
                     replaceImage={(target) => this.replaceImage(target)}
-                    isTextOpen={isTextOpen}
+                    openPicture={openPicture}
                     changeDragState={(obj) => this.changeDragState(obj)}
                     dragState={this.state}
                 />)}
-                <FileInput className='new_image' disabled={isTextOpen}/>
-                {isTextOpen &&
+                <FileInput className='new_image' disabled={openPicture} label='Choose new foto'/>
+                {openPicture &&
                 <div className='new_text' ref={t => this.text = t}>
-                    <input/>
-                    <textarea/>
-                    <SaveIcon className='save_icon'/>
+                    <input defaultValue={openPicture.name} ref={i => this.input = i}/>
+                    <textarea defaultValue={openPicture.text} ref={t => this.textarea = t}/>
+                    <SaveIcon className='save_icon' onClick={() => this.saveFotoDescription(openPicture)}/>
                     <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>
                 </div>}
 

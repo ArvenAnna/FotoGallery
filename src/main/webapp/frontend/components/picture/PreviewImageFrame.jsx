@@ -79,19 +79,13 @@ class PreviewImageFrame extends React.Component {
     this.props.clearAnimate(main);
   }
 
-  edit() {
-      //const current = this.props.images.find(img => img === this.state.src);
-      const currentIndex = this.props.images.indexOf(this.state.main);
-      return this.props.editRoute + '/' + currentIndex;
-  }
-
   render() {
     const {main, left, right} = this.state;
     const {images, editRoute} = this.props;
 
     return (<div className='magnify_modal_img_frame_container'>
         <CrossIcon className='cross' onClick={() => this.onCrossClick()}/>
-            {editRoute && <Link to={this.edit()}><EditIcon className='edit'/></Link>}
+            {editRoute && <Link to={this.props.editRoute}><EditIcon className='edit'/></Link>}
         {left && <div className='left_arrow'>
           <LeftArrowIcon onClick={() => this.onArrowClick('left')}/>
         </div>}
