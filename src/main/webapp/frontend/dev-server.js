@@ -4,7 +4,6 @@ const albumsModule = require('./mocks/Albums');
 const bodyParser = require('body-parser');
 const app = express();
 
-
 app.use(bodyParser.json());
 
 app.get(routesModule.routes.GET_ALBUMS, function(req, res){
@@ -12,20 +11,33 @@ app.get(routesModule.routes.GET_ALBUMS, function(req, res){
   res.send(albumsModule.albums);
 });
 
+
 app.get(routesModule.routes.ALBUM_ROUTE, function(req, res){
     console.log("get album called from proxy");
     const foundAlbum = albumsModule.albums.find(album => album.id == req.query.id);
     res.send(foundAlbum);
 });
 
-app.delete(routesModule.routes.FOTO_PATH, function(req, res){
+app.put(routesModule.routes.ALBUM_ROUTE, function(req, res){
+    console.log("update album called from proxy");
+    console.dir(req.body);
+    res.send(req.body);
+});
+
+app.delete(routesModule.routes.ALBUM_ROUTE, function(req, res){
+    console.log("delete album called from proxy");
+    res.send(req.query.id);
+});
+
+
+app.delete(routesModule.routes.FOTO_ROUTE, function(req, res){
     console.log("delete foto called from proxy");
     const foundAlbum = albumsModule.albums.find(album => album.id == req.query.album);
     const deletedFoto = foundAlbum.images.find(picture => picture.id == req.query.id);
     res.send(deletedFoto);
 });
 
-app.put(routesModule.routes.FOTO_PATH, function(req, res){
+app.put(routesModule.routes.FOTO_ROUTE, function(req, res){
     console.log("update foto called from proxy");
     console.dir(req.body);
     res.send(req.body);

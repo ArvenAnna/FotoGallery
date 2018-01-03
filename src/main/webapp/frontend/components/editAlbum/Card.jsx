@@ -93,6 +93,8 @@ class Card extends React.Component {
         dragFromPicture.order = dragToPicture.order;
         dragToPicture.order = prevOrder;
 
+        newPictures.sort((x, y) => x.order - y.order);
+
         const newAlbum = Object.assign({}, {
             ...album,
             images: newPictures,

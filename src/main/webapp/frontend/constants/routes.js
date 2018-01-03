@@ -5,10 +5,14 @@ const routes = {
 
     ALBUM_ROUTE: `${apiPrefix}album`,
     GET_ALBUM: (id) => `${apiPrefix}album?id=${id}`,
+    DELETE_ALBUM : (id) => `${apiPrefix}album?id=${id}`,
 
+    FOTO_ROUTE: `${apiPrefix}foto`,
     DELETE_FOTO: (id, album) => `${apiPrefix}foto?album=${album}&id=${id}`,
     UPDATE_FOTO: (album) => `${apiPrefix}foto?album=${album}`,
-    FOTO_PATH: `${apiPrefix}foto`,
+
+
+
 
 
 

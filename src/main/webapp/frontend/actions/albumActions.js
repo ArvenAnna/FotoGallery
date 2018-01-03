@@ -39,11 +39,29 @@ export function deleteFotoFromAlbum(id, album) {
     }
 }
 
+export function deleteAlbum(id) {
+    return dispatch => {
+        //dispatch(albumsRequest());
+        return http
+            .doDelete(routesModule.routes.DELETE_ALBUM(id))
+            .then(result => dispatch(fetchAlbums()));
+    }
+}
+
 export function saveFotoDescription(album, image) {
     return dispatch => {
         //dispatch(albumsRequest());
         return http
             .doPut(routesModule.routes.UPDATE_FOTO(album), image)
+            .then(result => dispatch(fetchAlbums()));
+    }
+}
+
+export function saveAlbumDescription(album) {
+    return dispatch => {
+        //dispatch(albumsRequest());
+        return http
+            .doPut(routesModule.routes.ALBUM_ROUTE, album)
             .then(result => dispatch(fetchAlbums()));
     }
 }

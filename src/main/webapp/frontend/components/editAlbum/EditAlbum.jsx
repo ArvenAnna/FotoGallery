@@ -5,12 +5,14 @@ import {CrossIcon, SaveIcon} from "../Icons";
 import Card from "./Card";
 import http from '../../HttpService';
 import connect from "react-redux/es/connect/connect";
-import {deleteFotoFromAlbum, saveFotoDescription} from "../../actions/albumActions";
+import {deleteAlbum, deleteFotoFromAlbum, saveAlbumDescription, saveFotoDescription} from "../../actions/albumActions";
 const routesModule = require('../../constants/routes');
 
 @connect(store => ({}), {
     deleteFotoFromAlbum,
-    saveFotoDescription
+    saveFotoDescription,
+    saveAlbumDescription,
+    deleteAlbum
 })
 class EditAlbum extends React.Component {
 
@@ -54,6 +56,11 @@ class EditAlbum extends React.Component {
         this.setState({album: newAlbum});
     }
 
+    removeAlbum() {
+        this.props.deleteAlbum(this.state.album.id);
+        this.props.history.push('/');
+    }
+
     changeDragState(obj) {
         this.setState(obj);
     }
@@ -78,22 +85,19 @@ class EditAlbum extends React.Component {
         if (this.ainput.value) editedAlbum.name = this.ainput.value;
         if (this.atextarea.value) editedAlbum.description = this.atextarea.value;
 
-        //this.props.saveAlbumDescription(this.state.album.id, editedPicture);
+        this.props.saveAlbumDescription(editedAlbum);
 
         this.setState({album: editedAlbum, openedAlbum: false});
     }
 
     render() {
         const {openPicture, album, openedAlbum} = this.state;
-        if(album) {
-            console.dir(album.images);
-
-        }
         return album && (
                     <div className='edit_container'>
                         <div className='edit_album_card'>
                             <img className='album_image' src={album.images[0].src}/>
                             <div className='album_name' onClick={() => this.openAlbumDetails()}>{album.name}</div>
+                            <CrossIcon className='cross_icon' onClick={() => this.removeAlbum()}/>
                         </div>
                         {album.images.sort((x, y) => x.order - y.order).map(p => <Card
                             key={p.id}
