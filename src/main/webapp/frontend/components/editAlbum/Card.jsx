@@ -81,12 +81,25 @@ class Card extends React.Component {
     }
 
     changePictureAndClear(picture) {
-        const {dragFrom} = this.props.dragState;
-        this.props.changeDragState({dragStarted: false, dragFrom: null, dragObj: null, dragFromEl: null});
+        const {dragFrom, album} = this.props.dragState;
 
-        const prevOrder = dragFrom.order;
-        dragFrom.order = picture.order;
-        picture.order = prevOrder;
+        const newPictures = [...album.images];
+
+        const dragToPicture = album.images.find(p => p.id == picture.id);
+       // editedPicture.order = prevOrder;
+        const dragFromPicture = album.images.find(p => p.id == dragFrom.id);
+
+        const prevOrder = dragFromPicture.order;
+        dragFromPicture.order = dragToPicture.order;
+        dragToPicture.order = prevOrder;
+
+        const newAlbum = Object.assign({}, {
+            ...album,
+            images: newPictures,
+        });
+
+        this.props.changeDragState({dragStarted: false, dragFrom: null, dragObj: null, dragFromEl: null, album: newAlbum});
+        console.dir(newAlbum);
     }
 
     render() {

@@ -8,9 +8,7 @@ import connect from "react-redux/es/connect/connect";
 import {deleteFotoFromAlbum, saveFotoDescription} from "../../actions/albumActions";
 const routesModule = require('../../constants/routes');
 
-@connect(store => ({
-
-}), {
+@connect(store => ({}), {
     deleteFotoFromAlbum,
     saveFotoDescription
 })
@@ -24,6 +22,7 @@ class EditAlbum extends React.Component {
             dragFromEl: null,
             dragObj: null,
             openPicture: null,
+            openedAlbum: false,
             album: null
         }
     }
@@ -37,8 +36,12 @@ class EditAlbum extends React.Component {
         this.setState({openPicture: picture});
     }
 
+    openAlbumDetails() {
+        this.setState({openedAlbum: true});
+    }
+
     onCrossClick() {
-        this.setState({openPicture: null});
+        this.setState({openPicture: null, openedAlbum: false});
     }
 
     deleteItem(picture) {
@@ -58,8 +61,8 @@ class EditAlbum extends React.Component {
     saveFotoDescription(picture) {
         const newPictures = [...this.state.album.images];
         const editedPicture = this.state.album.images.find(p => p.id == picture.id);
-        if(this.input.value) editedPicture.name = this.input.value;
-        if(this.textarea.value) editedPicture.text = this.text.value;
+        if (this.pinput.value) editedPicture.name = this.pinput.value;
+        if (this.ptextarea.value) editedPicture.text = this.ptextarea.value;
 
         this.props.saveFotoDescription(this.state.album.id, editedPicture);
 
@@ -70,32 +73,56 @@ class EditAlbum extends React.Component {
         this.setState({album: newAlbum, openPicture: null});
     }
 
-    render() {
-        const {openPicture,album} = this.state;
-        return album && (
-            <div className='edit_container'>
-                {album.images.sort((x,y) => x.order-y.order).map(p => <Card
-                    key={p.id}
-                    picture={p}
-                    pictures={album.images}
-                    openDetails={(p) => this.openDetails(p)}
-                    deleteItem={(p) => this.deleteItem(p)}
-                    replaceImage={(target) => this.replaceImage(target)}
-                    openPicture={openPicture}
-                    changeDragState={(obj) => this.changeDragState(obj)}
-                    dragState={this.state}
-                />)}
-                <FileInput className='new_image' disabled={openPicture} label='Choose new foto'/>
-                {openPicture &&
-                <div className='new_text' ref={t => this.text = t}>
-                    <input defaultValue={openPicture.name} ref={i => this.input = i}/>
-                    <textarea defaultValue={openPicture.text} ref={t => this.textarea = t}/>
-                    <SaveIcon className='save_icon' onClick={() => this.saveFotoDescription(openPicture)}/>
-                    <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>
-                </div>}
+    saveAlbumDescription() {
+        const editedAlbum = Object.assign({}, {...this.state.album});
+        if (this.ainput.value) editedAlbum.name = this.ainput.value;
+        if (this.atextarea.value) editedAlbum.description = this.atextarea.value;
 
-            </div>
-        );
+        //this.props.saveAlbumDescription(this.state.album.id, editedPicture);
+
+        this.setState({album: editedAlbum, openedAlbum: false});
+    }
+
+    render() {
+        const {openPicture, album, openedAlbum} = this.state;
+        if(album) {
+            console.dir(album.images);
+
+        }
+        return album && (
+                    <div className='edit_container'>
+                        <div className='edit_album_card'>
+                            <img className='album_image' src={album.images[0].src}/>
+                            <div className='album_name' onClick={() => this.openAlbumDetails()}>{album.name}</div>
+                        </div>
+                        {album.images.sort((x, y) => x.order - y.order).map(p => <Card
+                            key={p.id}
+                            picture={p}
+                            pictures={album.images}
+                            openDetails={(p) => this.openDetails(p)}
+                            deleteItem={(p) => this.deleteItem(p)}
+                            replaceImage={(target) => this.replaceImage(target)}
+                            openPicture={openPicture}
+                            changeDragState={(obj) => this.changeDragState(obj)}
+                            dragState={this.state}
+                        />)}
+                        <FileInput className='new_image' disabled={openPicture} label='Choose new foto'/>
+                        {openPicture &&
+                        <div className='new_text'>
+                            <input defaultValue={openPicture.name} ref={i => this.pinput = i}/>
+                            <textarea defaultValue={openPicture.text} ref={t => this.ptextarea = t}/>
+                            <SaveIcon className='save_icon' onClick={() => this.saveFotoDescription(openPicture)}/>
+                            <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>
+                        </div>}
+                        {openedAlbum &&
+                        <div className='new_text'>
+                            <input defaultValue={album.name} ref={i => this.ainput = i}/>
+                            <textarea defaultValue={album.description} ref={t => this.atextarea = t}/>
+                            <SaveIcon className='save_icon' onClick={() => this.saveAlbumDescription()}/>
+                            <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>
+                        </div>}
+                    </div>
+            );
     }
 }
 
