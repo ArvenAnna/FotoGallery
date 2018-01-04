@@ -5,14 +5,18 @@ import {CrossIcon, SaveIcon} from "../Icons";
 import Card from "./Card";
 import http from '../../HttpService';
 import connect from "react-redux/es/connect/connect";
-import {deleteAlbum, deleteFotoFromAlbum, saveAlbumDescription, saveFotoDescription} from "../../actions/albumActions";
+import {
+    deleteAlbum, deleteFotoFromAlbum, fetchAlbums, saveAlbumDescription,
+    saveFotoDescription
+} from "../../actions/albumActions";
 const routesModule = require('../../constants/routes');
 
 @connect(store => ({}), {
     deleteFotoFromAlbum,
     saveFotoDescription,
     saveAlbumDescription,
-    deleteAlbum
+    deleteAlbum,
+    fetchAlbums
 })
 class EditAlbum extends React.Component {
 
@@ -90,6 +94,23 @@ class EditAlbum extends React.Component {
         this.setState({album: editedAlbum, openedAlbum: false});
     }
 
+    uploadFile(file) {
+        http.sendFile(routesModule.routes.UPLOAD_FOTO, file)
+               .then(id => {
+                   http.doPost(routesModule.routes.FOTO_ROUTE, id)
+                       .then(result => {
+                           const newPictures = [...this.state.album.images];
+                           newPictures.push(result);
+                           const newAlbum = Object.assign({}, {
+                               ...this.state.album,
+                               images: newPictures,
+                           });
+                           this.setState({album: newAlbum});
+                           this.props.fetchAlbums();
+                       });
+               });
+    }
+
     render() {
         const {openPicture, album, openedAlbum} = this.state;
         return album && (
@@ -110,7 +131,11 @@ class EditAlbum extends React.Component {
                             changeDragState={(obj) => this.changeDragState(obj)}
                             dragState={this.state}
                         />)}
-                        <FileInput className='new_image' disabled={openPicture} label='Choose new foto'/>
+                        <FileInput className='new_image'
+                                   disabled={openPicture}
+                                   label='Choose new foto'
+                                   uploadFile={(file) => this.uploadFile(file)}
+                        />
                         {openPicture &&
                         <div className='new_text'>
                             <input defaultValue={openPicture.name} ref={i => this.pinput = i}/>

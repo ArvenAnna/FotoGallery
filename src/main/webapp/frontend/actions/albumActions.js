@@ -24,6 +24,15 @@ export function fetchAlbums() {
     }
 }
 
+export function fetchAlbumsBySearch(search) {
+    return dispatch => {
+        dispatch(albumsRequest());
+        return http
+            .doGet(routesModule.routes.GET_ALBUMS_SEARCH(search))
+            .then(result => dispatch(setAlbums(result)));
+    }
+}
+
 // export function deleteFotoRequest() {
 //     return {
 //         type: types.REQ_ALBUMS
@@ -62,6 +71,15 @@ export function saveAlbumDescription(album) {
         //dispatch(albumsRequest());
         return http
             .doPut(routesModule.routes.ALBUM_ROUTE, album)
+            .then(result => dispatch(fetchAlbums()));
+    }
+}
+
+export function createAlbum(album) {
+    return dispatch => {
+        //dispatch(albumsRequest());
+        return http
+            .doPost(routesModule.routes.ALBUM_ROUTE, album)
             .then(result => dispatch(fetchAlbums()));
     }
 }
