@@ -13,7 +13,11 @@ app.use(fileUpload({
 
 app.get(routesModule.routes.GET_ALBUMS, function(req, res){
   console.log("get albums called from proxy");
-  res.send(albumsModule.albums);
+  if(req.query.search) {
+      res.send([albumsModule.albums[0]]);
+  } else {
+      res.send(albumsModule.albums);
+  }
 });
 
 
