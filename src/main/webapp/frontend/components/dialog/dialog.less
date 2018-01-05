@@ -1,0 +1,40 @@
+@dialog_text: white;
+@dialog_bg: black;
+@dialog_button: #232326;
+
+.Dialog {
+  position: absolute;
+  width: 30rem;
+  height: 20rem;
+  background-color: @dialog_bg;
+  box-shadow: 0 0 0.3rem 0.1rem @dialog_text;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &_text {
+    color: @dialog_text;
+    margin: 4rem 2rem 2rem 2rem;
+  }
+
+  .cross {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    top: 0.2rem;
+    right: 0.2rem;
+    fill: @dialog_text;
+  }
+
+  &_ok_button {
+    width: 10rem;
+    height: 2rem;
+    color: @dialog_text;
+    background-color: @dialog_button;
+    font-size: 1rem;
+    border-width: 3px;
+    border-radius: 0.3rem;
+    margin: 2rem;
+  }
+}

@@ -7,8 +7,9 @@ import http from '../../HttpService';
 import connect from "react-redux/es/connect/connect";
 import {
     deleteAlbum, deleteFotoFromAlbum, fetchAlbums, saveAlbumDescription,
-    saveFotoDescription
+    saveFotoDescription, saveItemsOrder
 } from "../../actions/albumActions";
+import Dialog from "../dialog/Dialog";
 const routesModule = require('../../constants/routes');
 
 @connect(store => ({}), {
@@ -16,7 +17,8 @@ const routesModule = require('../../constants/routes');
     saveFotoDescription,
     saveAlbumDescription,
     deleteAlbum,
-    fetchAlbums
+    fetchAlbums,
+    saveItemsOrder
 })
 class EditAlbum extends React.Component {
 
@@ -29,7 +31,8 @@ class EditAlbum extends React.Component {
             dragObj: null,
             openPicture: null,
             openedAlbum: false,
-            album: null
+            album: null,
+            openedDialog: false
         }
     }
 
@@ -51,6 +54,11 @@ class EditAlbum extends React.Component {
     }
 
     deleteItem(picture) {
+        if (this.state.album.images.length == 1) {
+            this.setState({openedDialog: true});
+            return;
+        }
+
         this.props.deleteFotoFromAlbum(picture.id, this.state.album.id);
         const newPictures = this.state.album.images.filter(p => p.id != picture.id);
         const newAlbum = Object.assign({}, {
@@ -112,13 +120,13 @@ class EditAlbum extends React.Component {
     }
 
     render() {
-        const {openPicture, album, openedAlbum} = this.state;
+        const {openPicture, album, openedAlbum, openedDialog} = this.state;
         return album && (
                     <div className='edit_container'>
                         <div className='edit_album_card'>
                             <img className='album_image' src={album.images[0].src}/>
                             <div className='album_name' onClick={() => this.openAlbumDetails()}>{album.name}</div>
-                            <CrossIcon className='cross_icon' onClick={() => this.removeAlbum()}/>
+                            <CrossIcon className='cross_icon' onClick={() => this.setState({openedDialog: true})}/>
                         </div>
                         {album.images.sort((x, y) => x.order - y.order).map(p => <Card
                             key={p.id}
@@ -130,6 +138,7 @@ class EditAlbum extends React.Component {
                             openPicture={openPicture}
                             changeDragState={(obj) => this.changeDragState(obj)}
                             dragState={this.state}
+                            updateOrder={(album) => this.props.saveItemsOrder(album)}
                         />)}
                         <FileInput className='new_image'
                                    disabled={openPicture}
@@ -150,6 +159,9 @@ class EditAlbum extends React.Component {
                             <SaveIcon className='save_icon' onClick={() => this.saveAlbumDescription()}/>
                             <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>
                         </div>}
+                        {openedDialog && <Dialog onClick={() => this.removeAlbum()}
+                        onClose={() => this.setState({openedDialog: false})}
+                                                 text="Do you really want to delete the album?"/>}
                     </div>
             );
     }

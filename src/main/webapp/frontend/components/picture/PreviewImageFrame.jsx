@@ -2,7 +2,13 @@ import React from "react";
 import {CrossIcon, EditIcon, LeftArrowIcon, RightArrowIcon} from "../Icons";
 import "./preview.less";
 import {Link} from "react-router-dom";
+import connect from "react-redux/es/connect/connect";
 
+@connect(store => ({
+    albums: store.albums
+}), {
+    fetchAlbums
+})
 class PreviewImageFrame extends React.Component {
 
   constructor(props) {

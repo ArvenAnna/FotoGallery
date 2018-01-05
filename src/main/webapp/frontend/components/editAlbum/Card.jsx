@@ -100,8 +100,8 @@ class Card extends React.Component {
             images: newPictures,
         });
 
+        this.props.updateOrder(newAlbum);
         this.props.changeDragState({dragStarted: false, dragFrom: null, dragObj: null, dragFromEl: null, album: newAlbum});
-        console.dir(newAlbum);
     }
 
     render() {

@@ -19,6 +19,7 @@ const Page = styled.div`
 
 const Content = styled.div`
     background-color: black;
+    width: 100%;
 `
 
 class FotoSlider extends React.Component {

@@ -75,6 +75,15 @@ export function saveAlbumDescription(album) {
     }
 }
 
+export function saveItemsOrder(album) {
+    return dispatch => {
+        //dispatch(albumsRequest());
+        return http
+            .doPut(routesModule.routes.UPDATE_ITEMS_ORDER, album)
+            .then(result => dispatch(fetchAlbums()));
+    }
+}
+
 export function createAlbum(album) {
     return dispatch => {
         //dispatch(albumsRequest());

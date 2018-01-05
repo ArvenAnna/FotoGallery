@@ -5,7 +5,11 @@ const albums = [];
 const albumReducer = (state = albums, action) => {
     switch (action.type) {
         case SET_ALBUMS:
-            return action.albums;
+            const sortedAlbums = action.albums;
+            sortedAlbums.forEach(album => {
+                album.images.sort((x, y) => x.order - y.order);
+            });
+            return sortedAlbums;
         default:
             return state;
     }

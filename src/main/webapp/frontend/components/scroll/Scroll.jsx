@@ -26,25 +26,22 @@ class Scroll extends React.Component {
     }
 
     componentDidMount() {
+        this.setStyles();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps != this.props) {
+            window.setTimeout(() => this.setStyles(), 100);
+        }
+    }
+
+    setStyles() {
         if (this.cont) {
             this.cont.style.height = this.props.height;
             this.cont.style.width = this.props.width;
         }
         if (this.track) {
             this.track.style.height = this.props.height;
-        }
-        if (this.scroll) {
-            this.scroll.style.height = this.calculateScrollHeight();
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.cont) {
-            this.cont.style.height = nextProps.height;
-            this.cont.style.width = nextProps.width;
-        }
-        if (this.track) {
-            this.track.style.height = nextProps.height;
         }
         if (this.scroll) {
             this.scroll.style.height = this.calculateScrollHeight();

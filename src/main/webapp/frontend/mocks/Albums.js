@@ -13,7 +13,7 @@ exports.albums = [
             }, {
                 id: 2,
                 src: '/foto/images.jpg',
-                text: 'beautiful picture 2',
+                text: 'beautiful picture 2 dshjgrfbus faegruw truiyew rjhew rj hjaew rawueir kjhaew jhaewrj haewjrhkj haewrlaewhrh aewhrjhjewhr ewhrkhaewuiryyewruyeu rewruiyuywryewry ewryuyewurywueyrui eyryueiwyru yewuryuyewury ewri weiyruiyewuiryuewyryewuiyruewiyruiyewyryew beautiful picture 2 dshjgrfbus faegruw truiyew rjhew rj hjaew rawueir kjhaew jhaewrj haewjrhkj haewrlaewhrh aewhrjhjewhr ewhrkhaewuiryyewruyeu rewruiyuywryewry ewryuyewurywueyrui eyryueiwyru yewuryuyewury ewri weiyruiyewuiryuewyryewuiyruewiyruiyewyryew beautiful picture 2 dshjgrfbus faegruw truiyew rjhew rj hjaew rawueir kjhaew jhaewrj haewjrhkj haewrlaewhrh aewhrjhjewhr ewhrkhaewuiryyewruyeu rewruiyuywryewry ewryuyewurywueyrui eyryueiwyru yewuryuyewury ewri weiyruiyewuiryuewyryewuiyruewiyruiyewyryew beautiful picture 2 dshjgrfbus faegruw truiyew rjhew rj hjaew rawueir kjhaew jhaewrj haewjrhkj haewrlaewhrh aewhrjhjewhr ewhrkhaewuiryyewruyeu rewruiyuywryewry ewryuyewurywueyrui eyryueiwyru yewuryuyewury ewri weiyruiyewuiryuewyryewuiyruewiyruiyewyryew beautiful picture 2 dshjgrfbus faegruw truiyew rjhew rj hjaew rawueir kjhaew jhaewrj haewjrhkj haewrlaewhrh aewhrjhjewhr ewhrkhaewuiryyewruyeu rewruiyuywryewry ewryuyewurywueyrui eyryueiwyru yewuryuyewury ewri weiyruiyewuiryuewyryewuiyruewiyruiyewyryew beautiful picture 2 dshjgrfbus faegruw truiyew rjhew rj hjaew rawueir kjhaew jhaewrj haewjrhkj haewrlaewhrh aewhrjhjewhr ewhrkhaewuiryyewruyeu rewruiyuywryewry ewryuyewurywueyrui eyryueiwyru yewuryuyewury ewri weiyruiyewuiryuewyryewuiyruewiyruiyewyryew',
                 name: 'pict2',
                 order: 2
             }
