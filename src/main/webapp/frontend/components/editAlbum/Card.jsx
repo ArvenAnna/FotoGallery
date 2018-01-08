@@ -1,6 +1,8 @@
 import React from 'react';
 import './editAlbum.less';
-import {CrossIcon, EditIcon} from "../Icons";
+import {CrossIcon, EditIcon, RotateIcon} from "../Icons";
+const routesModule = require('../../constants/routes');
+import http from '../../HttpService';
 
 class Card extends React.Component {
 
@@ -19,7 +21,7 @@ class Card extends React.Component {
     replaceImage(target) {
 
         const attr = target.getAttribute('imgid');
-        const picture = this.props.pictures.find(p => p.id == attr);
+        const picture = this.props.pictures.find(p => p._id == attr);
 
         this.changePictureAndClear(picture);
     }
@@ -85,9 +87,9 @@ class Card extends React.Component {
 
         const newPictures = [...album.images];
 
-        const dragToPicture = album.images.find(p => p.id == picture.id);
+        const dragToPicture = album.images.find(p => p._id == picture._id);
        // editedPicture.order = prevOrder;
-        const dragFromPicture = album.images.find(p => p.id == dragFrom.id);
+        const dragFromPicture = album.images.find(p => p._id == dragFrom._id);
 
         const prevOrder = dragFromPicture.order;
         dragFromPicture.order = dragToPicture.order;
@@ -104,18 +106,25 @@ class Card extends React.Component {
         this.props.changeDragState({dragStarted: false, dragFrom: null, dragObj: null, dragFromEl: null, album: newAlbum});
     }
 
+    rotateImage() {
+        http.doPut(routesModule.routes.ROTATE_FOTO, {src: this.props.picture.src})
+            .then(result => {
+                this.props.loadAlbum();
+            });
+    }
+
     render() {
         const {picture, openPicture} = this.props;
         return openPicture
             ? <div className='drag_container'
-                   imgid={picture.id}>
+                   imgid={picture._id}>
                 <img className='drag_image'
                      src={picture.src}
                      draggable={false}/>
             </div>
             : <div className='drag_container'
                    ref={r => this.dragContainer = r}
-                   imgid={picture.id}
+                   imgid={picture._id}
                    draggable={true}
                    onMouseDown={e => this.onMouseDown(e, picture)}
                    onMouseUp={e => this.onMouseUp(e, picture)}
@@ -123,6 +132,7 @@ class Card extends React.Component {
                 <img className='drag_image' src={picture.src}/>
                 <CrossIcon className='cross_icon' onClick={() => this.props.deleteItem(picture)}/>
                 <EditIcon className='edit_icon' onClick={() => this.props.openDetails(picture)}/>
+                <RotateIcon className='rotate_icon' onClick={() => this.rotateImage()}/>
                 <div className='text_description' onClick={() => this.props.openDetails(picture)}>{picture.name}</div>
             </div>
     }

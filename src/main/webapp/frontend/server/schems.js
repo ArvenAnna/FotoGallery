@@ -11,6 +11,8 @@ var AlbumModelSchema = new Schema({
     images: [{type: Schema.Types.ObjectId, ref: 'Foto'}]
 });
 
+AlbumModelSchema.index({'$**': 'text'});
+
 var FotoModelSchema = new Schema({
     id: Number,
     name: String,
@@ -20,7 +22,19 @@ var FotoModelSchema = new Schema({
     album: {type: Schema.Types.ObjectId, ref:'Album'}
 });
 
+FotoModelSchema.index({'$**': 'text'});
+
+const album = mongoose.model('Album', AlbumModelSchema );
+const foto = mongoose.model('Foto', FotoModelSchema );
+
+AlbumModelSchema.pre('remove', function(next) {
+    // 'this' is the client being removed. Provide callbacks here if you want
+    // to be notified of the calls' result.
+    foto.remove({album: this._id}).exec();
+    next();
+});
+
 // Compile model from schema
 
-exports.Album = mongoose.model('Album', AlbumModelSchema );
-exports.Foto = mongoose.model('Foto', FotoModelSchema );
+exports.Album = album;
+exports.Foto = foto;

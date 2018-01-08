@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import connect from "react-redux/es/connect/connect";
 import {fetchAlbums, fetchAlbumsBySearch} from "../actions/albumActions";
 import withRouter from "react-router-dom/es/withRouter";
+import {NavLink} from 'react-router-dom';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -21,6 +22,12 @@ const HeaderMenu = styled.div`
 const MenuItem = styled.div`
   padding: 1rem;
   cursor: pointer;
+  
+  a {
+    text-decoration: none;
+    color: white;
+  }
+  
 `
 
 const Search = styled.div`
@@ -46,6 +53,7 @@ class Header extends React.Component {
             <HeaderContainer>
                 <HeaderMenu>
                     <MenuItem onClick={this.props.createAlbum}>new album</MenuItem>
+                    <MenuItem><NavLink to='/'>album's list</NavLink></MenuItem>
                 </HeaderMenu>
                 <Search>Search: <input defaultValue=''
                     onKeyPress={(e) => this.onEnter(e)}/></Search>

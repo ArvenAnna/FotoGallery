@@ -17,7 +17,7 @@ const routesModule = require('../../constants/routes');
     saveFotoDescription,
     saveAlbumDescription,
     deleteAlbum,
-    fetchAlbums,
+   // fetchAlbums,
     saveItemsOrder
 })
 class EditAlbum extends React.Component {
@@ -37,8 +37,16 @@ class EditAlbum extends React.Component {
     }
 
     componentDidMount() {
+        this.loadAlbum();
+    }
+
+    loadAlbum() {
         http.doGet(routesModule.routes.GET_ALBUM(this.props.match.params.id))
-            .then(result => this.setState({album: result}));
+            .then(result => {
+                result.images.sort((x, y) => x.order - y.order);
+                result.images.forEach(image => image.src = image.src + '?forceUpdate=' + new Date().toISOString())
+                this.setState({album: result})
+            });
     }
 
     openDetails(picture) {
@@ -59,8 +67,8 @@ class EditAlbum extends React.Component {
             return;
         }
 
-        this.props.deleteFotoFromAlbum(picture.id, this.state.album.id);
-        const newPictures = this.state.album.images.filter(p => p.id != picture.id);
+        this.props.deleteFotoFromAlbum(picture._id);
+        const newPictures = this.state.album.images.filter(p => p._id != picture._id);
         const newAlbum = Object.assign({}, {
             ...this.state.album,
             images: newPictures,
@@ -69,7 +77,7 @@ class EditAlbum extends React.Component {
     }
 
     removeAlbum() {
-        this.props.deleteAlbum(this.state.album.id);
+        this.props.deleteAlbum(this.state.album._id);
         this.props.history.push('/');
     }
 
@@ -79,11 +87,11 @@ class EditAlbum extends React.Component {
 
     saveFotoDescription(picture) {
         const newPictures = [...this.state.album.images];
-        const editedPicture = this.state.album.images.find(p => p.id == picture.id);
+        const editedPicture = this.state.album.images.find(p => p._id == picture._id);
         if (this.pinput.value) editedPicture.name = this.pinput.value;
         if (this.ptextarea.value) editedPicture.text = this.ptextarea.value;
 
-        this.props.saveFotoDescription(this.state.album.id, editedPicture);
+        this.props.saveFotoDescription(this.state.album._id, editedPicture);
 
         const newAlbum = Object.assign({}, {
             ...this.state.album,
@@ -104,9 +112,11 @@ class EditAlbum extends React.Component {
 
     uploadFile(file) {
         http.sendFile(routesModule.routes.UPLOAD_FOTO, file)
-               .then(id => {
-                   http.doPost(routesModule.routes.FOTO_ROUTE, id)
-                       .then(result => {
+               .then(downloadedFoto => {
+                   http.doPost(routesModule.routes.FOTO_ROUTE, {
+                       src: downloadedFoto.src,
+                       album: this.state.album._id
+                   }).then(result => {
                            const newPictures = [...this.state.album.images];
                            newPictures.push(result);
                            const newAlbum = Object.assign({}, {
@@ -114,7 +124,7 @@ class EditAlbum extends React.Component {
                                images: newPictures,
                            });
                            this.setState({album: newAlbum});
-                           this.props.fetchAlbums();
+                           //this.props.fetchAlbums();
                        });
                });
     }
@@ -129,7 +139,7 @@ class EditAlbum extends React.Component {
                             <CrossIcon className='cross_icon' onClick={() => this.setState({openedDialog: true})}/>
                         </div>
                         {album.images.sort((x, y) => x.order - y.order).map(p => <Card
-                            key={p.id}
+                            key={p._id}
                             picture={p}
                             pictures={album.images}
                             openDetails={(p) => this.openDetails(p)}
@@ -139,6 +149,7 @@ class EditAlbum extends React.Component {
                             changeDragState={(obj) => this.changeDragState(obj)}
                             dragState={this.state}
                             updateOrder={(album) => this.props.saveItemsOrder(album)}
+                            loadAlbum={() => this.loadAlbum()}
                         />)}
                         <FileInput className='new_image'
                                    disabled={openPicture}

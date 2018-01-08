@@ -79,7 +79,8 @@ class Picture extends React.Component {
     }
 
     render() {
-        const {main} = this.props;
+        const {album} = this.props;
+        const main = album.images[0];
         const {animation, magnify} = this.state;
         return this.state.valid && <div>
                 <div
@@ -97,15 +98,15 @@ class Picture extends React.Component {
                             <MagnifierIcon/>
                         </div>
                         <div className={`overlay_bottom`}>
-                            <div className='overlay_bottom_text'>{main.text}</div>
+                            <div className='overlay_bottom_text'>{album.name}</div>
                         </div>
                     </div>
                 </div>
                 {magnify &&
                 <Preview main={main}
                          close={() => this.closePreview()}
-                         editRoute={this.props.editRoute}
-                         images={this.props.images}/>}
+                         editRoute={`/edit/${album._id}`}
+                         images={album.images}/>}
             </div>;
     }
 }

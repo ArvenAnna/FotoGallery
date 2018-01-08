@@ -63,7 +63,6 @@ app.delete(routesModule.routes.ALBUM_ROUTE, function(req, res){
 
 app.delete(routesModule.routes.FOTO_ROUTE, function(req, res){
     console.log("delete foto called from proxy");
-    const foundAlbum = albumsModule.albums.find(album => album.id == req.query.album);
     const deletedFoto = foundAlbum.images.find(picture => picture.id == req.query.id);
     res.send(deletedFoto);
 });

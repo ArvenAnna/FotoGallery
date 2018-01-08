@@ -39,12 +39,12 @@ export function fetchAlbumsBySearch(search) {
 //     };
 // }
 
-export function deleteFotoFromAlbum(id, album) {
+export function deleteFotoFromAlbum(id) {
     return dispatch => {
         //dispatch(albumsRequest());
         return http
-            .doDelete(routesModule.routes.DELETE_FOTO(id, album))
-            .then(result => dispatch(fetchAlbums()));
+            .doDelete(routesModule.routes.DELETE_FOTO(id))
+            //.then(result => dispatch(fetchAlbums()));
     }
 }
 
@@ -62,7 +62,7 @@ export function saveFotoDescription(album, image) {
         //dispatch(albumsRequest());
         return http
             .doPut(routesModule.routes.UPDATE_FOTO(album), image)
-            .then(result => dispatch(fetchAlbums()));
+            //.then(result => dispatch(fetchAlbums()));
     }
 }
 
@@ -71,7 +71,7 @@ export function saveAlbumDescription(album) {
         //dispatch(albumsRequest());
         return http
             .doPut(routesModule.routes.ALBUM_ROUTE, album)
-            .then(result => dispatch(fetchAlbums()));
+            //.then(result => dispatch(fetchAlbums()));
     }
 }
 
@@ -80,7 +80,7 @@ export function saveItemsOrder(album) {
         //dispatch(albumsRequest());
         return http
             .doPut(routesModule.routes.UPDATE_ITEMS_ORDER, album)
-            .then(result => dispatch(fetchAlbums()));
+            //.then(result => dispatch(fetchAlbums()));
     }
 }
 

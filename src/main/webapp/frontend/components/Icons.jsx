@@ -5,6 +5,7 @@ import Magnifier from '../svg/magnifier.svg';
 import Cross from '../svg/cancel.svg';
 import Edit from '../svg/edit.svg';
 import Save from '../svg/save-file-option.svg';
+import Rotate from '../svg/rotate-option.svg';
 
 const Icon = `
         width: 1rem;
@@ -41,4 +42,8 @@ export const EditIcon = styled(Edit)`
 
 export const SaveIcon = styled(Save)`
    ${Icon}
+`
+
+export const RotateIcon = styled(Rotate)`
+    ${Icon}
 `

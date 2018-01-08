@@ -9,7 +9,8 @@
   "scripts": {
     "test": "test",
     "dev-server": "node dev-server.js",
-    "dev-client": "webpack-dev-server --port 3000"
+    "dev-client": "webpack-dev-server --port 3000",
+    "server": "node --max-old-space-size=4192 server/server.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-fileupload": "^0.3.0",
+    "fs.promised": "^3.0.0",
+    "jimp": "^0.2.28",
     "js-to-styles-var-loader": "^1.0.3",
     "mongoose": "^5.0.0-rc1",
     "react": "16.2.0",
