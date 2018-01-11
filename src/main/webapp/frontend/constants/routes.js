@@ -13,9 +13,7 @@ const routes = {
     DELETE_FOTO: (id) => `${apiPrefix}foto?id=${id}`,
     UPDATE_FOTO: (album) => `${apiPrefix}foto?album=${album}`,
 
-    UPLOAD_FOTO: `${apiPrefix}upload`,
-    ROTATE_FOTO: `${apiPrefix}rotate`
-
+    UPLOAD_FOTO: `${apiPrefix}upload`
 };
 
 exports.routes = routes;

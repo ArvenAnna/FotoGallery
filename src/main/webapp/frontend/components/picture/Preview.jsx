@@ -3,7 +3,7 @@ import styled, {keyframes} from 'styled-components';
 //import { Scrollbars } from 'react-custom-scrollbars';
 import './preview.less';
 import PreviewImageFrame from "./PreviewImageFrame";
-import constants from './styles';
+import constants from '../../constants/styles';
 import Scroll from "../scroll/Scroll";
 
 const BottomSection = styled.div`
@@ -150,7 +150,7 @@ class Preview extends React.Component {
             <Modal className={`magnify_modal ${animate}`}
                    imageWidth={imageWidth}
                    animationTime={this.animationTime}>
-                <div className='magnify_modal_img_frame'>
+                <div className={`magnify_modal_img_frame`}>
                     <PreviewImageFrame main={main}
                                        images={images}
                                        editRoute={this.props.editRoute}

@@ -1,6 +1,6 @@
 import React from 'react';
 import './editAlbum.less';
-import {CrossIcon, EditIcon, RotateIcon} from "../Icons";
+import {CrossIcon, EditIcon} from "../Icons";
 const routesModule = require('../../constants/routes');
 import http from '../../HttpService';
 
@@ -132,7 +132,6 @@ class Card extends React.Component {
                 <img className='drag_image' src={picture.src}/>
                 <CrossIcon className='cross_icon' onClick={() => this.props.deleteItem(picture)}/>
                 <EditIcon className='edit_icon' onClick={() => this.props.openDetails(picture)}/>
-                <RotateIcon className='rotate_icon' onClick={() => this.rotateImage()}/>
                 <div className='text_description' onClick={() => this.props.openDetails(picture)}>{picture.name}</div>
             </div>
     }

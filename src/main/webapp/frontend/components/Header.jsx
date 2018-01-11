@@ -4,6 +4,7 @@ import connect from "react-redux/es/connect/connect";
 import {fetchAlbums, fetchAlbumsBySearch} from "../actions/albumActions";
 import withRouter from "react-router-dom/es/withRouter";
 import {NavLink} from 'react-router-dom';
+import constants from '../constants/styles';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -22,17 +23,40 @@ const HeaderMenu = styled.div`
 const MenuItem = styled.div`
   padding: 1rem;
   cursor: pointer;
+  text-shadow: 2px 2px ${constants.shadow_color};
+  
+  &:hover {
+    color: ${constants.shadow_color};
+    text-shadow: none;
+    a {
+        color: ${constants.shadow_color};
+    }
+  }
   
   a {
     text-decoration: none;
-    color: white;
+    color: ${constants.text_color};
   }
   
 `
 
 const Search = styled.div`
   padding: 1rem;
+  text-shadow: 2px 2px ${constants.shadow_color};
+  font-size: 1rem;
 `
+
+const SearchInput = styled.input`
+    background-color: ${constants.body_color};
+    color: ${constants.text_color};
+    padding-left: 3px;
+    
+    &:focus {
+        outline: none;
+        background-color: ${constants.body_color_light};
+    }
+`
+
 @withRouter
 @connect(store => ({}), {
     fetchAlbumsBySearch,
@@ -55,7 +79,7 @@ class Header extends React.Component {
                     <MenuItem onClick={this.props.createAlbum}>new album</MenuItem>
                     <MenuItem><NavLink to='/'>album's list</NavLink></MenuItem>
                 </HeaderMenu>
-                <Search>Search: <input defaultValue=''
+                <Search>Search: <SearchInput defaultValue=''
                     onKeyPress={(e) => this.onEnter(e)}/></Search>
             </HeaderContainer>
         );

@@ -36,6 +36,7 @@ app.post(routesModule.routes.UPLOAD_FOTO, function(req, res){
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
 
     let sampleFile = req.files.file;
+    console.dir(sampleFile);
 
     // Use the mv() method to place the file somewhere on your server
      sampleFile.mv('tempfiles/' + sampleFile.name, function(err) {
@@ -45,23 +46,6 @@ app.post(routesModule.routes.UPLOAD_FOTO, function(req, res){
          res.send({src: '/tempfiles/' + sampleFile.name});
     });
 });
-
-const Jimp = require("jimp");
-
-app.put(routesModule.routes.ROTATE_FOTO, function (req, res) {
-    console.log('rotate foto called from proxy');
-
-    Jimp.read(__dirname + '/..' + req.body.src).then(lenna => {
-        lenna.rotate(90)
-            .write(__dirname + '/..' + req.body.src, function() {
-                console.log('-------------');
-                res.send({f: 'f'});
-            }); // save
-
-    }).catch(function (err) {
-        res.status(500);
-    });
-})
 
 app.set('port', 4000);
 

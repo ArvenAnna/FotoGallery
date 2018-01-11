@@ -7,6 +7,8 @@ import Scroll from "./scroll/Scroll";
 import ProgressScroll from "./scroll/ProgressScroll";
 import {Route, Switch} from "react-router-dom";
 import EditAlbum from "./editAlbum/EditAlbum";
+import constants from '../constants/styles';
+
 
 const Page = styled.div`
     margin: 2rem 10rem;
@@ -20,6 +22,7 @@ const Page = styled.div`
 const Content = styled.div`
     background-color: black;
     width: 100%;
+    box-shadow: 5px 5px 5px 5px ${constants.preview_frame_color};
 `
 
 class FotoSlider extends React.Component {

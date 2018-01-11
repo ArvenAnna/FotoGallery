@@ -6,10 +6,11 @@ import Card from "./Card";
 import http from '../../HttpService';
 import connect from "react-redux/es/connect/connect";
 import {
-    deleteAlbum, deleteFotoFromAlbum, fetchAlbums, saveAlbumDescription,
+    deleteAlbum, deleteFotoFromAlbum, saveAlbumDescription,
     saveFotoDescription, saveItemsOrder
 } from "../../actions/albumActions";
 import Dialog from "../dialog/Dialog";
+import EditCanvas from "./EditCanvas";
 const routesModule = require('../../constants/routes');
 
 @connect(store => ({}), {
@@ -17,7 +18,6 @@ const routesModule = require('../../constants/routes');
     saveFotoDescription,
     saveAlbumDescription,
     deleteAlbum,
-   // fetchAlbums,
     saveItemsOrder
 })
 class EditAlbum extends React.Component {
@@ -32,7 +32,8 @@ class EditAlbum extends React.Component {
             openPicture: null,
             openedAlbum: false,
             album: null,
-            openedDialog: false
+            openedDialog: false,
+            imageDownloaded: false
         }
     }
 
@@ -81,7 +82,7 @@ class EditAlbum extends React.Component {
         this.props.history.push('/');
     }
 
-    changeDragState(obj) {
+    changeState(obj) {
         this.setState(obj);
     }
 
@@ -113,24 +114,14 @@ class EditAlbum extends React.Component {
     uploadFile(file) {
         http.sendFile(routesModule.routes.UPLOAD_FOTO, file)
                .then(downloadedFoto => {
-                   http.doPost(routesModule.routes.FOTO_ROUTE, {
-                       src: downloadedFoto.src,
-                       album: this.state.album._id
-                   }).then(result => {
-                           const newPictures = [...this.state.album.images];
-                           newPictures.push(result);
-                           const newAlbum = Object.assign({}, {
-                               ...this.state.album,
-                               images: newPictures,
-                           });
-                           this.setState({album: newAlbum});
-                           //this.props.fetchAlbums();
-                       });
+                   this.setState({
+                       imageDownloaded: downloadedFoto.src
+                   });
                });
     }
 
     render() {
-        const {openPicture, album, openedAlbum, openedDialog} = this.state;
+        const {openPicture, album, openedAlbum, openedDialog, imageDownloaded} = this.state;
         return album && (
                     <div className='edit_container'>
                         <div className='edit_album_card'>
@@ -146,16 +137,21 @@ class EditAlbum extends React.Component {
                             deleteItem={(p) => this.deleteItem(p)}
                             replaceImage={(target) => this.replaceImage(target)}
                             openPicture={openPicture}
-                            changeDragState={(obj) => this.changeDragState(obj)}
+                            changeDragState={(obj) => this.changeState(obj)}
                             dragState={this.state}
                             updateOrder={(album) => this.props.saveItemsOrder(album)}
                             loadAlbum={() => this.loadAlbum()}
                         />)}
-                        <FileInput className='new_image'
+                        {!imageDownloaded && <FileInput className='new_image'
                                    disabled={openPicture}
                                    label='Choose new foto'
                                    uploadFile={(file) => this.uploadFile(file)}
-                        />
+                        />}
+                        {imageDownloaded && <EditCanvas
+                            image={imageDownloaded}
+                            cleanImage={obj => this.changeState(obj)}
+                            album={album}
+                            />}
                         {openPicture &&
                         <div className='new_text'>
                             <input defaultValue={openPicture.name} ref={i => this.pinput = i}/>

@@ -1,4 +1,4 @@
-require("styles.js");
+require("../../constants/styles.js");
 @import "colors";
 @import "mixins";
 
@@ -8,8 +8,7 @@ require("styles.js");
 @picture_overlay_top: @black_mid_transparent;
 @picture_overlay_bottom: @black_few_transparent;
 
-@picture_shadow: @black_mid_transparent;
-
+//@picture_shadow: @black_mid_transparent;
 
 @picture_height: 30rem;
 
@@ -145,7 +144,7 @@ require("styles.js");
   position: relative;
   overflow: hidden;
   color: @picture_text;
-  box-shadow: 0.5rem 0.5rem 0.3rem 0.1rem @picture_shadow;
+  box-shadow: 0 0 0.3rem 0.3rem;
   border-radius: 0.3rem;
 
   &:hover {
