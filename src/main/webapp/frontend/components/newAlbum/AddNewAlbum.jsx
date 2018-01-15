@@ -5,6 +5,7 @@ import FileInput from "../fileInput/FileInput";
 import './addNewAlbum.less';
 import Scroll from "../scroll/Scroll";
 import connect from "react-redux/es/connect/connect";
+import {isVideo} from "../../utils/index";
 const routesModule = require('../../constants/routes');
 import http from '../../HttpService';
 import {
@@ -81,7 +82,11 @@ class AddNewAlbum extends React.Component {
                 <Label>Name</Label>
                 <input value={name} onChange={(e) => this.setState({name: e.target.value})}/>
                 <Label>Title image:</Label>
-                {src ? <img src={src}/> :
+                {src ? (isVideo(src) ? <video
+
+                                              controls="controls">
+                    <source src={src}/>
+                </video> : <img src={src}/>) :
                     <FileInput label='Choose main foto'
                                uploadFile={(file) => this.uploadFile(file)}/>}
                 <Label>Description</Label>
