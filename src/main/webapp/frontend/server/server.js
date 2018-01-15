@@ -36,7 +36,6 @@ app.post(routesModule.routes.UPLOAD_FOTO, function(req, res){
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
 
     let sampleFile = req.files.file;
-    console.dir(sampleFile);
 
     // Use the mv() method to place the file somewhere on your server
      sampleFile.mv('tempfiles/' + sampleFile.name, function(err) {

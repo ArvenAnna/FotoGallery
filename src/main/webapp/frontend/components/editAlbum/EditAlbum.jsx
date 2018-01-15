@@ -114,10 +114,42 @@ class EditAlbum extends React.Component {
     uploadFile(file) {
         http.sendFile(routesModule.routes.UPLOAD_FOTO, file)
                .then(downloadedFoto => {
-                   this.setState({
-                       imageDownloaded: downloadedFoto.src
-                   });
+                   if(this.isVideo(downloadedFoto.src)) {
+                       http.doPost(routesModule.routes.FOTO_ROUTE, {
+                           src: downloadedFoto.src,
+                           album: this.state.album._id
+                       }).then(result => {
+                           const newPictures = [...this.state.album.images];
+                           newPictures.push(result);
+                           const newAlbum = Object.assign({}, {
+                               ...this.state.album,
+                               images: newPictures,
+                           });
+
+                           this.setState({
+                               //imageDownloaded: null,
+                               album: newAlbum
+                           });
+                       });
+                   } else {
+                       this.setState({
+                           imageDownloaded: downloadedFoto.src
+                       });
+                   }
+
                });
+    }
+
+    isVideo(picture) {
+        let isVideo = false;
+        if (picture) {
+            let split = picture.split('?');
+            const splitArray = split[0].split('/');
+            let format = splitArray[splitArray.length - 1].split('.');
+            format = format[format.length - 1];
+            isVideo = (format == 'mp4');
+        }
+        return isVideo;
     }
 
     render() {
@@ -141,13 +173,14 @@ class EditAlbum extends React.Component {
                             dragState={this.state}
                             updateOrder={(album) => this.props.saveItemsOrder(album)}
                             loadAlbum={() => this.loadAlbum()}
+                            isVideo={() => this.isVideo(p.src)}
                         />)}
                         {!imageDownloaded && <FileInput className='new_image'
                                    disabled={openPicture}
                                    label='Choose new foto'
                                    uploadFile={(file) => this.uploadFile(file)}
                         />}
-                        {imageDownloaded && <EditCanvas
+                        {imageDownloaded && !this.isVideo(imageDownloaded) && <EditCanvas
                             image={imageDownloaded}
                             cleanImage={obj => this.changeState(obj)}
                             album={album}

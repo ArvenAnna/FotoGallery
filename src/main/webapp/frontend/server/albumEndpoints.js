@@ -106,10 +106,13 @@ const endpoints =  (app) => {
             });
 
             newFoto.save().then(foto => {
+                const splitArray = req.body.src.split('.');
+                const format = splitArray[splitArray.length - 1];
+
                 const oldPath = __dirname + '/..' + req.body.src;
                 const newDir = __dirname + '/../foto/' + savedAlbum._id;
-                const newPath = newDir + '/' + foto._id + '.jpg';
-                const relativePath = '/foto/' + savedAlbum._id + '/' + foto._id + '.jpg';
+                const newPath = newDir + '/' + foto._id + '.' + format;
+                const relativePath = '/foto/' + savedAlbum._id + '/' + foto._id + '.' + format;
 
                 mkdirp(newDir, function (err) {
                     if (err) throw err;

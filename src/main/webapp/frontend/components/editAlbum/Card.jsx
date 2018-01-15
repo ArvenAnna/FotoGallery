@@ -106,13 +106,6 @@ class Card extends React.Component {
         this.props.changeDragState({dragStarted: false, dragFrom: null, dragObj: null, dragFromEl: null, album: newAlbum});
     }
 
-    rotateImage() {
-        http.doPut(routesModule.routes.ROTATE_FOTO, {src: this.props.picture.src})
-            .then(result => {
-                this.props.loadAlbum();
-            });
-    }
-
     render() {
         const {picture, openPicture} = this.props;
         return openPicture
@@ -129,7 +122,11 @@ class Card extends React.Component {
                    onMouseDown={e => this.onMouseDown(e, picture)}
                    onMouseUp={e => this.onMouseUp(e, picture)}
                    onMouseMove={e => this.onMouseMove(e, picture)}>
-                <img className='drag_image' src={picture.src}/>
+                {this.props.isVideo()
+                    ? <video height="200" controls="controls" className='drag_video'>
+                    <source src={picture.src}/>
+                </video>
+                    : <img className='drag_image' src={picture.src}/>}
                 <CrossIcon className='cross_icon' onClick={() => this.props.deleteItem(picture)}/>
                 <EditIcon className='edit_icon' onClick={() => this.props.openDetails(picture)}/>
                 <div className='text_description' onClick={() => this.props.openDetails(picture)}>{picture.name}</div>

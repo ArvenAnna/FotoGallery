@@ -23,8 +23,13 @@ const endpoints =  (app) => {
 
                 newFoto.save().then(savedFoto => {
                     const oldPath = __dirname + '/..' + req.body.src;
-                    const newPath = __dirname + '/../foto/' + req.body.album + '/' + savedFoto._id + '.jpg';
-                    const relativePath = '/foto/' + req.body.album + '/' + savedFoto._id + '.jpg';
+
+                    const splitArray = req.body.src.split('.');
+                    const format = splitArray[splitArray.length - 1];
+
+
+                    const newPath = __dirname + '/../foto/' + req.body.album + '/' + savedFoto._id + '.' + format;
+                    const relativePath = '/foto/' + req.body.album + '/' + savedFoto._id + '.' + format;
 
                     fs.rename(oldPath, newPath, function (e) {
                         if (e) throw e;

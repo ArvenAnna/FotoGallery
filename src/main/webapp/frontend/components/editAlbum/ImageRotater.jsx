@@ -32,7 +32,7 @@ class AvatarEditor extends React.Component {
     }
 
     state = {
-        image: {}
+        image: null
     }
 
     isVertical () {
@@ -174,9 +174,9 @@ class AvatarEditor extends React.Component {
     }
 
     render () {
-        if(!this.state.image) {
-            return null;
-        }
+        // if(!this.state.image) {
+        //     return null;
+        // }
 
         const defaultStyle = {
             width: this.props.width,
