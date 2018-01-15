@@ -5,7 +5,10 @@ const constants = {
     'body_color': '#232326',
     'body_color_light': '#54545b',
     'shadow_color': 'rgba(238,130,238, 0.5)',
-    'text_color': 'white'
+    'text_color': 'white',
+    'picture_height': '300px',
+    'picture_edit_height': '200px',
+    'picture_edit_width': '300px'
 };
 
 module.exports = constants;

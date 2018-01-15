@@ -262,10 +262,11 @@ require("../../constants/styles.js");
         .__flex_row_middle();
         position: absolute;
         top: 50%;
-          @{side}: 1rem;
+        @{side}: 1rem;
         background-color: @preview_arrow_container;
         border-radius: 0.2rem;
         height: 5rem;
+        z-index: 1;
 
         &:hover {
           background-color: @preview_arrow_container_hover;
@@ -294,6 +295,7 @@ require("../../constants/styles.js");
         border: @preview_border_width solid @preview_frame_color;
         box-sizing: border-box;
         border-radius: @preview_border_radius;
+        display: block;
       }
     }
 

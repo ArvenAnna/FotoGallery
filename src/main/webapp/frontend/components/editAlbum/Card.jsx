@@ -1,8 +1,8 @@
 import React from 'react';
 import './editAlbum.less';
 import {CrossIcon, EditIcon} from "../Icons";
-const routesModule = require('../../constants/routes');
-import http from '../../HttpService';
+import {isVideo} from "../../utils/index";
+import * as styles from "../../constants/styles";
 
 class Card extends React.Component {
 
@@ -122,8 +122,10 @@ class Card extends React.Component {
                    onMouseDown={e => this.onMouseDown(e, picture)}
                    onMouseUp={e => this.onMouseUp(e, picture)}
                    onMouseMove={e => this.onMouseMove(e, picture)}>
-                {this.props.isVideo()
-                    ? <video height="200" controls="controls" className='drag_video'>
+                {isVideo(picture.src)
+                    ? <video height={styles.picture_edit_height}
+                             controls="controls"
+                             className='drag_image'>
                     <source src={picture.src}/>
                 </video>
                     : <img className='drag_image' src={picture.src}/>}

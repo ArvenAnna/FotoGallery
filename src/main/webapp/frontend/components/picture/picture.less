@@ -10,8 +10,6 @@ require("../../constants/styles.js");
 
 //@picture_shadow: @black_mid_transparent;
 
-@picture_height: 30rem;
-
 // ---------- animation mixins -----------
 
 .__fade_bg_color(@bgFrom, @bgTo) {
@@ -156,6 +154,7 @@ require("../../constants/styles.js");
   .image {
     margin: 0 auto;
     height: @picture_height;
+    display: block;
   }
 
   .overlay {

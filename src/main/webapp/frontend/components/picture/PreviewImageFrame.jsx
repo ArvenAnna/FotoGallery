@@ -2,6 +2,7 @@ import React from "react";
 import {CrossIcon, EditIcon, LeftArrowIcon, RightArrowIcon} from "../Icons";
 import "./preview.less";
 import {Link} from "react-router-dom";
+import {isVideo} from "../../utils/index";
 
 class PreviewImageFrame extends React.Component {
 
@@ -44,7 +45,7 @@ class PreviewImageFrame extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.main != this.state.main) {
       // in order to make sure width will be recalculated
-      window.setTimeout(() => this.changeImageWidth(), 100);
+      window.setTimeout(() => this.changeImageWidth(), 200);
     }
   }
 
@@ -95,7 +96,14 @@ class PreviewImageFrame extends React.Component {
         <div className='counter_container'>
           <div className='counter'>{`${(images.indexOf(main) + 1)} of ${images.length}`}</div>
         </div>
-        <img src={main.src} className='image_preview' ref={node => this.img = node}/>
+        {isVideo(main.src)
+            ? <video controls="controls"
+                                                     ref={node => this.img = node}
+                                                    className="image_preview"
+                     >
+              <source src={main.src}/>
+            </video>
+            :<img src={main.src} className='image_preview' ref={node => this.img = node}/>}
       </div>
     );
   }

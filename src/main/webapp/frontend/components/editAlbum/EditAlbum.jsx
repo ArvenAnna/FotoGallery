@@ -11,6 +11,8 @@ import {
 } from "../../actions/albumActions";
 import Dialog from "../dialog/Dialog";
 import EditCanvas from "./EditCanvas";
+import {isVideo} from "../../utils/index";
+import * as styles from "../../constants/styles";
 const routesModule = require('../../constants/routes');
 
 @connect(store => ({}), {
@@ -114,7 +116,7 @@ class EditAlbum extends React.Component {
     uploadFile(file) {
         http.sendFile(routesModule.routes.UPLOAD_FOTO, file)
                .then(downloadedFoto => {
-                   if(this.isVideo(downloadedFoto.src)) {
+                   if(isVideo(downloadedFoto.src)) {
                        http.doPost(routesModule.routes.FOTO_ROUTE, {
                            src: downloadedFoto.src,
                            album: this.state.album._id
@@ -140,24 +142,19 @@ class EditAlbum extends React.Component {
                });
     }
 
-    isVideo(picture) {
-        let isVideo = false;
-        if (picture) {
-            let split = picture.split('?');
-            const splitArray = split[0].split('/');
-            let format = splitArray[splitArray.length - 1].split('.');
-            format = format[format.length - 1];
-            isVideo = (format == 'mp4');
-        }
-        return isVideo;
-    }
-
     render() {
         const {openPicture, album, openedAlbum, openedDialog, imageDownloaded} = this.state;
         return album && (
                     <div className='edit_container'>
                         <div className='edit_album_card'>
-                            <img className='album_image' src={album.images[0].src}/>
+                            {isVideo(album.images[0].src)
+                            ? <video className="album_image"
+                                     height={styles.picture_edit_height}
+                                     width={styles.picture_edit_width}
+                                     controls="controls">
+                                    <source src={album.images[0].src}/>
+                                </video>
+                            : <img className='album_image' src={album.images[0].src}/>}
                             <div className='album_name' onClick={() => this.openAlbumDetails()}>{album.name}</div>
                             <CrossIcon className='cross_icon' onClick={() => this.setState({openedDialog: true})}/>
                         </div>
@@ -173,14 +170,13 @@ class EditAlbum extends React.Component {
                             dragState={this.state}
                             updateOrder={(album) => this.props.saveItemsOrder(album)}
                             loadAlbum={() => this.loadAlbum()}
-                            isVideo={() => this.isVideo(p.src)}
                         />)}
                         {!imageDownloaded && <FileInput className='new_image'
                                    disabled={openPicture}
                                    label='Choose new foto'
                                    uploadFile={(file) => this.uploadFile(file)}
                         />}
-                        {imageDownloaded && !this.isVideo(imageDownloaded) && <EditCanvas
+                        {imageDownloaded && !isVideo(imageDownloaded) && <EditCanvas
                             image={imageDownloaded}
                             cleanImage={obj => this.changeState(obj)}
                             album={album}

@@ -2,6 +2,8 @@ import React from "react";
 import {MagnifierIcon} from "../Icons";
 import "./picture.less";
 import Preview from "./Preview";
+import {isVideo} from "../../utils/index";
+import * as styles from "../../constants/styles";
 
 class Picture extends React.Component {
     // animation: fade, move
@@ -89,10 +91,15 @@ class Picture extends React.Component {
                     onMouseEnter={(e) => this.mouseEnter(e)}
                     onClick={(e) => this.click(e)}
                 >
-                    <img className='image'
+                    {isVideo(main.src)
+                        ? <video height={styles.picture_height}
+                                 controls="controls">
+                        <source src={main.src}/>
+                    </video>
+                        : <img className='image'
                          onError={(e) => this.handleBrokenImg(e)}
                          src={main.src}
-                         alt="something wrong happens"/>
+                         alt="something wrong happens"/>}
                     <div className={'overlay'}>
                         <div className={`overlay_top`}>
                             <MagnifierIcon/>

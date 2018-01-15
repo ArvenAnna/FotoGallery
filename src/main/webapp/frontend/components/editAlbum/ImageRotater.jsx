@@ -23,7 +23,7 @@ class AvatarEditor extends React.Component {
 
     static defaultProps = {
         rotate: 0,
-        width: 200,
+        width: 300,
         height: 200,
         style: {},
         onLoadFailure () {},

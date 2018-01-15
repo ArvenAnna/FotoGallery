@@ -2,6 +2,7 @@ import React from 'react';
 import './editCanvas.less';
 import {CrossIcon, RotateIcon, SaveIcon} from "../Icons";
 import AvatarEditor from "./ImageRotater";
+import * as styles from "../../constants/styles";
 const routesModule = require('../../constants/routes');
 import http from '../../HttpService';
 
@@ -11,8 +12,8 @@ class EditCanvas extends React.Component {
         super(props);
         this.state = {
             angle: 0,
-            width: 200,
-            height: 200
+            width: parseInt(styles.picture_edit_width),
+            height: parseInt(styles.picture_edit_height)
         }
     }
 
@@ -52,7 +53,7 @@ class EditCanvas extends React.Component {
 
     calculateParameters(newAngle) {
         const newState = {
-            height: 200,
+            height: parseInt(styles.picture_edit_height),
             angle : newAngle
         };
         newState.width = newAngle % 180 == 0
