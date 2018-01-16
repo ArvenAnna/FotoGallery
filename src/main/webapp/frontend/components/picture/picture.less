@@ -157,6 +157,10 @@ require("../../constants/styles.js");
     display: block;
   }
 
+  .video {
+    object-fit: cover;
+  }
+
   .overlay {
     display: flex;
     flex-direction: column;
@@ -167,7 +171,7 @@ require("../../constants/styles.js");
     height: 100%;
     visibility: hidden;
 
-    .overlay_top {
+    &_top {
       .__flex_row_middle();
       flex-grow: 1;
       background-color: @picture_overlay_top;
@@ -181,7 +185,7 @@ require("../../constants/styles.js");
       }
     }
 
-    .overlay_bottom {
+    &_bottom {
       .__flex_row_middle();
       background-color: @picture_overlay_bottom;
 

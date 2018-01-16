@@ -84,7 +84,7 @@ class Picture extends React.Component {
         const {album} = this.props;
         const main = album.images[0];
         const {animation, magnify} = this.state;
-        return this.state.valid && <div>
+        return this.state.valid && <div className="image_main_wrapper">
                 <div
                     className={`image_wrapper ${animation} ${magnify}`}
                     onMouseLeave={(e) => this.mouseLeave(e)}
@@ -93,7 +93,9 @@ class Picture extends React.Component {
                 >
                     {isVideo(main.src)
                         ? <video height={styles.picture_height}
-                                 controls="controls">
+                                 width={styles.picture_width}
+                                 controls="controls"
+                                 className="video">
                         <source src={main.src}/>
                     </video>
                         : <img className='image'
