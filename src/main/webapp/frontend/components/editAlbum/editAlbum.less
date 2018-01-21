@@ -1,109 +1,119 @@
 require("../../constants/styles.js");
 
-@add_album_bg: #232326;
-@add_album_border: white solid 1px;
-@add_album_text: white;
-
-.edit_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 2rem;
+.drag_container {
   position: relative;
+  left: 0;
+  top: 0;
+  width: @picture_edit_width;
+  height: @picture_edit_height;
+  margin: 0.5rem;
+  z-index: 0;
+  overflow: hidden;
 
-  .drag_container {
-    position: relative;
-    left: 0;
-    top: 0;
-    width: @picture_edit_width;
-    height: @picture_edit_height;
-    margin: 0.5rem;
-    z-index: 0;
-    overflow: hidden;
-
-    .cross_icon, .edit_icon {
-      position: absolute;
-      fill: @add_album_text;
-      width: 1rem;
-      height: 1rem;
-      top: 0.2rem;
-    }
-
-    .cross_icon {
-      right: 0.2rem;
-    }
-
-    .edit_icon {
-      right: 1.5rem;
-    }
-
-    .text_description {
-      position: absolute;
-      top: 2rem;
-      left: 0;
-      padding: 0 0.3rem;
-      font-size: 16px;
-      background-color: rgba(0, 0, 0, 0.4);
-      color: @add_album_text;
-    }
+  .cross_icon, .edit_icon {
+    position: absolute;
+    fill: @text_color;
+    width: 1rem;
+    height: 1rem;
+    top: 0.2rem;
+    background-color: rgba(0,0,0,0.7);
+    padding: 2px;
   }
 
-  .drag_image {
-    object-fit: cover;
+  .cross_icon {
+    right: 0.2rem;
+  }
+
+  .edit_icon {
+    right: 1.5rem;
+  }
+
+  .text_description {
+    position: absolute;
+    top: 2rem;
+    left: 0;
+    padding: 0 0.3rem;
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: @text_color;
+  }
+}
+
+.drag_image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: @border_radius;
+}
+
+.edit_file_input {
+  width: @picture_edit_width;
+  height: @picture_edit_height;
+  margin: 0.5rem;
+
+}
+
+.edit_album_card {
+  position: relative;
+  width: @picture_edit_width;
+  height: @picture_edit_height;
+  margin: 0.5rem;
+  color: @text_color;
+  box-shadow: 0 0 0.3rem 0.1rem @text_color;
+  overflow: hidden;
+
+  .album_image {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
-  .file_input_wrapper {
-    width: @picture_edit_width;
-    height: @picture_edit_height;
-    margin: 0.5rem;
-
+  .album_name {
+    position: absolute;
+    top: 2rem;
+    left: 0.3rem;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.4);
   }
 
-  .edit_album_card {
-    position: relative;
-    width: @picture_edit_width;
-    height: @picture_edit_height;
-    margin: 0.5rem;
-    color: @add_album_text;
-    box-shadow: 0 0 0.3rem 0.1rem @add_album_text;
-    overflow: hidden;
-
-    .album_image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .album_name {
-      position: absolute;
-      top: 2rem;
-      left: 0.3rem;
-      cursor: pointer;
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    .cross_icon {
-      position: absolute;
-      width: 2rem;
-      height: 2rem;
-      fill: @add_album_text;
-      top: 0.3rem;
-      right: 0.3rem;
-    }
+  .cross_icon {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    fill: @text_color;
+    top: 0.2rem;
+    right: 0.3rem;
+    background-color: rgba(0,0,0,0.7);
+    padding: 2px;
   }
+}
+
+.new_text_overlay {
+  position: fixed;
+  left:0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 40;
 
   .new_text {
-    position: absolute;
     width: 70%;
     height: 50%;
+    margin: 9rem auto 1rem auto;
+    position: relative;
+
+    &_caption {
+      position: absolute;
+      color: @text_color;
+      font-size: 1rem;
+      top: -2rem;
+      left: 0.5rem;
+    }
 
     .save_icon, .cross_icon {
       position: absolute;
-      fill: @add_album_text;
+      fill: @text_color;
       width: 2rem;
       height: 2rem;
       top: -2.2rem;
@@ -118,10 +128,10 @@ require("../../constants/styles.js");
     }
 
     textarea, input {
-      background-color: @add_album_bg;
+      background-color: @body_color;
       border-radius: 0.3rem;
       font-size: 1.5rem;
-      color: @add_album_text;
+      color: @text_color;
       padding: 0.5rem;
       line-height: 2rem;
       border: @add_album_border;
@@ -129,10 +139,9 @@ require("../../constants/styles.js");
       resize: none;
       width: 100%;
 
-
       &:focus {
         outline: none;
-        background-color: lighten(@add_album_bg, 20%);
+        background-color: lighten(@body_color, 20%);
       }
     }
   }

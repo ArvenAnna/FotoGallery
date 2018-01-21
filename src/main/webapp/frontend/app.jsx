@@ -14,7 +14,7 @@ ReactDOM.render(
   <ThemeProvider theme={green}>
       <Provider store={store}>
       <BrowserRouter>
-          <FotoSlider/>
+            <FotoSlider/>
       </BrowserRouter>
       </Provider>
   </ThemeProvider>,

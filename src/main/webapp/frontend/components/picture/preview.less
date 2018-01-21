@@ -197,6 +197,32 @@ require("../../constants/styles.js");
 
 // --------------------------- main styles -----------------------------
 
+@keyframes preview_overlay_remove {
+  0% {
+      background-color: rgba(0,0,0,1);
+  }
+  100% {
+    z-index: 50;
+    background-color: rgba(0,0,0,0);
+  }
+}
+
+.preview_overlay {
+  display:block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+
+  animation-name: preview_overlay_remove;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
 .magnify_modal {
   .__flex_row_middle();
   position: fixed;
@@ -233,28 +259,25 @@ require("../../constants/styles.js");
         }
       }
 
-      .cross {
+      .cross, .edit {
         position: absolute;
         top: 1rem;
-        right: 1rem;
         z-index: 1;
-        .__icon(2rem, @preview_cross);
+        .__icon(2rem, @text_color);
+        background-color: rgba(0,0,0,0.7);
+        padding: 3px;
 
         &:hover {
           fill: @preview_cross_hover;
         }
       }
 
-      .edit {
-        position: absolute;
-        top: 1rem;
-        right: 3.5rem;
-        z-index: 1;
-        .__icon(2rem, @preview_cross);
+      .cross {
+        right: 1rem;
+      }
 
-        &:hover {
-          fill: @preview_cross_hover;
-        }
+      .edit {
+        right: 3.5rem;
       }
 
       // --------------- arrow mixin -----------------------
@@ -293,7 +316,7 @@ require("../../constants/styles.js");
       .image_preview {
         height: 100%;
         border: @preview_border_width solid @preview_frame_color;
-        box-sizing: border-box;
+        //box-sizing: border-box;
         border-radius: @preview_border_radius;
         display: block;
       }
@@ -337,6 +360,9 @@ require("../../constants/styles.js");
     animation-duration: @preview_animation_duration;
     animation-timing-function: ease;
   }
+
+
+
 
   &.increase {
     .__animation(fade_in_overlay);

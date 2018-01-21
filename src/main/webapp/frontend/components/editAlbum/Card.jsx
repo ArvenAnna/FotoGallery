@@ -11,15 +11,24 @@ class Card extends React.Component {
         this.replaceEvent = 'replace';
     }
 
+
     componentWillReceiveProps() {
         if (this.dragContainer && !this.replaceAttached) {
             this.replaceAttached = true;
             this.dragContainer.addEventListener(this.replaceEvent, e => this.replaceImage(e.target));
+            document.body.addEventListener('mouseup', e => this.onUpBody(e));
+        }
+    }
+
+    onUpBody(e) {
+        const elementAtPoint = document.elementFromPoint(e.clientX + window.scrollX, e.clientY + window.scrollY)
+            .parentElement;
+        if (!elementAtPoint.classList.contains('drag_container')) {
+            this.props.changeDragState({dragStarted: false, dragFrom: null, dragObj: null, dragFromEl: null});
         }
     }
 
     replaceImage(target) {
-
         const attr = target.getAttribute('imgid');
         const picture = this.props.pictures.find(p => p._id == attr);
 
@@ -41,6 +50,7 @@ class Card extends React.Component {
         const dragObj = {
             x, y, elStartLeft, elStartTop
         }
+        target.style.zIndex = 10;
         this.props.changeDragState({dragStarted: true, dragFrom: picture, dragObj, dragFromEl: target});
         target.style.zIndex = 10;
     }
@@ -63,6 +73,10 @@ class Card extends React.Component {
         const {dragFrom, dragFromEl} = this.props.dragState;
         const target = e.target.parentElement;
 
+        if(!dragFromEl) {
+            return;
+        }
+
         dragFromEl.style.top = '0px';
         dragFromEl.style.left = '0px';
 
@@ -73,9 +87,14 @@ class Card extends React.Component {
 
         if (picture == dragFrom) {
             const event = new Event(this.replaceEvent);
-            document.elementFromPoint(e.clientX + window.scrollX, e.clientY + window.scrollY)
-                .parentElement
-                .dispatchEvent(event);
+            const elementAtPoint = document.elementFromPoint(e.clientX + window.scrollX, e.clientY + window.scrollY)
+                .parentElement;
+            if (elementAtPoint.classList.contains('drag_container')) {
+                elementAtPoint.dispatchEvent(event);
+            } else {
+                this.props.changeDragState({dragStarted: false, dragFrom: null, dragObj: null, dragFromEl: null});
+            }
+
             return;
         }
 

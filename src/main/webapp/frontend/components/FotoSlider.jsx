@@ -1,36 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
 import Header from "./Header";
 import AddNewAlbum from "./newAlbum/AddNewAlbum";
 import AlbumContainer from "./AlbumContainer";
-import Scroll from "./scroll/Scroll";
-import ProgressScroll from "./scroll/ProgressScroll";
 import {Route, Switch} from "react-router-dom";
 import EditAlbum from "./editAlbum/EditAlbum";
-import constants from '../constants/styles';
-
-
-const Page = styled.div`
-    margin: 2rem 10rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    
-   font-size:2rem;
-`
-
-const Content = styled.div`
-    background-color: black;
-    width: 100%;
-    box-shadow: 5px 5px 5px 5px ${constants.preview_frame_color};
-`
+import { Scrollbars } from 'react-custom-scrollbars';
 
 class FotoSlider extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            addAlbumModal: false
+            addAlbumModal: false,
+            width: 0,
+            height: 0
         }
     }
 
@@ -46,20 +29,33 @@ class FotoSlider extends React.Component {
         });
     }
 
-    render() {
-        return (
-            <Page>
-                {this.state.addAlbumModal && <AddNewAlbum closeModal={() => this.closeModal()}/>}
-                <Content>
-                    <Header createAlbum={() => this.createAlbum()}/>
-                    <Switch>
-                        <Route exact path='/' component={AlbumContainer}/>
-                        <Route path='/edit/:id' component={EditAlbum}/>
-                    </Switch>
-                </Content>
-            </Page>
+    componentDidMount() {
+        setTimeout(() => this.scrollbars.forceUpdate(), 100);
+    }
 
-        );
+
+
+    render() {
+
+        const Content = () => <div className="app_container">
+            {this.state.addAlbumModal && <AddNewAlbum closeModal={() => this.closeModal()}/>}
+
+            <div className="app_page">
+                <Header createAlbum={() => this.createAlbum()}/>
+                <Switch>
+                    <Route exact path='/' component={AlbumContainer}/>
+                    <Route path='/edit/:id' component={EditAlbum}/>
+                </Switch>
+            </div>
+        </div>;
+
+        return this.state.addAlbumModal ? <Content/> :
+            <Scrollbars
+                className="scroll_bar"
+                hideTracksWhenNotNeeded={true}
+                ref={(scrollbars) => this.scrollbars = scrollbars}>
+            <Content/>
+        </Scrollbars>
     }
 }
 

@@ -1,21 +1,21 @@
 require("../../constants/styles.js");
 
-//@add_album_bg: #232326;
-//@add_album_border: white solid 1px;
-
-@add_album_text: white;
-
 .Edit_canvas {
   position: relative;
   height: @picture_edit_height;
   margin: 0.5rem;
+  text-align: center;
+  border: @add_album_border;
+  border-radius: @border_radius;
 
   .cross_icon, .rotate_icon, .save_icon {
     position: absolute;
-    fill: @add_album_text;
+    fill: @text_color;
     width: 1rem;
     height: 1rem;
     top: 0.2rem;
+    background-color: rgba(0,0,0,0.7);
+    padding: 2px;
   }
 
   .cross_icon {

@@ -16,15 +16,11 @@ class AlbumContainer extends React.Component {
     }
 
     render() {
-        return (
-            <div class="album_container">
-                {this.props.albums.map(album => <Picture key={album._id}
-                                                         animation='fade'
-                                                         album={album}
-                />)}
-
-            </div>
-        );
+        const pictures = this.props.albums.map(album => <Picture key={album._id}
+                                                                 animation='fade'
+                                                                 album={album}
+        />);
+        return pictures;
     }
 }
 

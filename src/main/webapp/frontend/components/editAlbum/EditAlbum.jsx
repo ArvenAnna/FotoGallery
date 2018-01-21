@@ -115,91 +115,127 @@ class EditAlbum extends React.Component {
 
     uploadFile(file) {
         http.sendFile(routesModule.routes.UPLOAD_FOTO, file)
-               .then(downloadedFoto => {
-                   if(isVideo(downloadedFoto.src)) {
-                       http.doPost(routesModule.routes.FOTO_ROUTE, {
-                           src: downloadedFoto.src,
-                           album: this.state.album._id
-                       }).then(result => {
-                           const newPictures = [...this.state.album.images];
-                           newPictures.push(result);
-                           const newAlbum = Object.assign({}, {
-                               ...this.state.album,
-                               images: newPictures,
-                           });
+            .then(downloadedFoto => {
+                if (isVideo(downloadedFoto.src)) {
+                    http.doPost(routesModule.routes.FOTO_ROUTE, {
+                        src: downloadedFoto.src,
+                        album: this.state.album._id
+                    }).then(result => {
+                        const newPictures = [...this.state.album.images];
+                        newPictures.push(result);
+                        const newAlbum = Object.assign({}, {
+                            ...this.state.album,
+                            images: newPictures,
+                        });
 
-                           this.setState({
-                               //imageDownloaded: null,
-                               album: newAlbum
-                           });
-                       });
-                   } else {
-                       this.setState({
-                           imageDownloaded: downloadedFoto.src
-                       });
-                   }
+                        this.setState({
+                            //imageDownloaded: null,
+                            album: newAlbum
+                        });
+                    });
+                } else {
+                    this.setState({
+                        imageDownloaded: downloadedFoto.src
+                    });
+                }
 
-               });
+            });
     }
 
+    renderEditAlbumCard() {
+        return <div className='edit_album_card' key="edit_album_card">
+            {isVideo(this.state.album.images[0].src)
+                ? <video className="album_image"
+                         height={styles.picture_edit_height}
+                         width={styles.picture_edit_width}
+                         controls="controls">
+                    <source src={this.state.album.images[0].src}/>
+                </video>
+                : <img className='album_image' src={this.state.album.images[0].src}/>}
+            <div className='album_name' onClick={() => this.openAlbumDetails()}>{this.state.album.name}</div>
+            <CrossIcon className='cross_icon' onClick={() => this.setState({openedDialog: true})}/>
+        </div>
+    }
+
+    renderImages() {
+        return this.state.album.images.sort((x, y) => x.order - y.order).map(p => <Card
+            key={p._id}
+            picture={p}
+            pictures={this.state.album.images}
+            openDetails={(p) => this.openDetails(p)}
+            deleteItem={(p) => this.deleteItem(p)}
+            replaceImage={(target) => this.replaceImage(target)}
+            openPicture={this.state.openPicture}
+            changeDragState={(obj) => this.changeState(obj)}
+            dragState={this.state}
+            updateOrder={(album) => this.props.saveItemsOrder(album)}
+            loadAlbum={() => this.loadAlbum()}
+        />)
+    }
+
+    renderFileInput() {
+        return !this.state.imageDownloaded && <FileInput className='edit_file_input'
+                                                         disabled={this.state.openPicture}
+                                                         label='Choose new foto'
+                                                         uploadFile={(file) => this.uploadFile(file)}
+            />
+    }
+
+    renderEditCanvas() {
+        return this.state.imageDownloaded && !isVideo(this.state.imageDownloaded) && <EditCanvas
+                image={this.state.imageDownloaded}
+                cleanImage={obj => this.changeState(obj)}
+                album={this.state.album}
+            />
+    }
+
+    renderChangeFotoTextInfoDialog() {
+        return this.state.openPicture &&
+            <div className='new_text_overlay'>
+                <div className='new_text'>
+                    <div className="new_text_caption">Enter foto name and description:</div>
+                    <SaveIcon className='save_icon' onClick={() => this.saveFotoDescription(this.state.openPicture)}/>
+                    <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>
+                    <input defaultValue={this.state.openPicture.name} ref={i => this.pinput = i}/>
+                    <textarea defaultValue={this.state.openPicture.text} ref={t => this.ptextarea = t}/>
+                </div>
+            </div>
+    }
+
+    renderChangeAlbumTextInfoDialog() {
+        return this.state.openedAlbum &&
+            <div className='new_text_overlay'>
+                <div className='new_text'>
+                    <div className="new_text_caption">Enter album name and description:</div>
+                    <SaveIcon className='save_icon' onClick={() => this.saveAlbumDescription()}/>
+                    <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>
+                    <input defaultValue={this.state.album.name} ref={i => this.ainput = i}/>
+                    <textarea defaultValue={this.state.album.description} ref={t => this.atextarea = t}/>
+                </div>
+            </div>
+    }
+
+    renderDeleteDialog() {
+        return this.state.openedDialog && <Dialog onClick={() => this.removeAlbum()}
+                                                  onClose={() => this.setState({openedDialog: false})}
+                                                  text="Do you really want to delete the album?"/>
+    }
+
+
     render() {
-        const {openPicture, album, openedAlbum, openedDialog, imageDownloaded} = this.state;
-        return album && (
-                    <div className='edit_container'>
-                        <div className='edit_album_card'>
-                            {isVideo(album.images[0].src)
-                            ? <video className="album_image"
-                                     height={styles.picture_edit_height}
-                                     width={styles.picture_edit_width}
-                                     controls="controls">
-                                    <source src={album.images[0].src}/>
-                                </video>
-                            : <img className='album_image' src={album.images[0].src}/>}
-                            <div className='album_name' onClick={() => this.openAlbumDetails()}>{album.name}</div>
-                            <CrossIcon className='cross_icon' onClick={() => this.setState({openedDialog: true})}/>
-                        </div>
-                        {album.images.sort((x, y) => x.order - y.order).map(p => <Card
-                            key={p._id}
-                            picture={p}
-                            pictures={album.images}
-                            openDetails={(p) => this.openDetails(p)}
-                            deleteItem={(p) => this.deleteItem(p)}
-                            replaceImage={(target) => this.replaceImage(target)}
-                            openPicture={openPicture}
-                            changeDragState={(obj) => this.changeState(obj)}
-                            dragState={this.state}
-                            updateOrder={(album) => this.props.saveItemsOrder(album)}
-                            loadAlbum={() => this.loadAlbum()}
-                        />)}
-                        {!imageDownloaded && <FileInput className='new_image'
-                                   disabled={openPicture}
-                                   label='Choose new foto'
-                                   uploadFile={(file) => this.uploadFile(file)}
-                        />}
-                        {imageDownloaded && !isVideo(imageDownloaded) && <EditCanvas
-                            image={imageDownloaded}
-                            cleanImage={obj => this.changeState(obj)}
-                            album={album}
-                            />}
-                        {openPicture &&
-                        <div className='new_text'>
-                            <input defaultValue={openPicture.name} ref={i => this.pinput = i}/>
-                            <textarea defaultValue={openPicture.text} ref={t => this.ptextarea = t}/>
-                            <SaveIcon className='save_icon' onClick={() => this.saveFotoDescription(openPicture)}/>
-                            <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>
-                        </div>}
-                        {openedAlbum &&
-                        <div className='new_text'>
-                            <input defaultValue={album.name} ref={i => this.ainput = i}/>
-                            <textarea defaultValue={album.description} ref={t => this.atextarea = t}/>
-                            <SaveIcon className='save_icon' onClick={() => this.saveAlbumDescription()}/>
-                            <CrossIcon className='cross_icon' onClick={() => this.onCrossClick()}/>
-                        </div>}
-                        {openedDialog && <Dialog onClick={() => this.removeAlbum()}
-                        onClose={() => this.setState({openedDialog: false})}
-                                                 text="Do you really want to delete the album?"/>}
-                    </div>
-            );
+        const {album} = this.state;
+        if (!album) {
+            return null;
+        }
+        return <React.Fragment>
+            {this.renderEditAlbumCard()}
+            {this.renderImages()}
+            {this.renderFileInput()}
+            {this.renderEditCanvas()}
+            {this.renderChangeFotoTextInfoDialog()}
+            {this.renderChangeAlbumTextInfoDialog()}
+            {this.renderDeleteDialog()}
+        </React.Fragment>;
     }
 }
 

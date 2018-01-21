@@ -111,11 +111,12 @@ class Picture extends React.Component {
                         </div>
                     </div>
                 </div>
-                {magnify &&
+                {magnify && [<div key="preview_overlay" className="preview_overlay"/>,
                 <Preview main={main}
+                         key="preview"
                          close={() => this.closePreview()}
                          editRoute={`/edit/${album._id}`}
-                         images={album.images}/>}
+                         images={album.images}/>]}
             </div>;
     }
 }

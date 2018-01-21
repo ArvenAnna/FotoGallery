@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import {CrossIcon} from "../Icons";
 import FileInput from "../fileInput/FileInput";
 import './addNewAlbum.less';
-import Scroll from "../scroll/Scroll";
 import connect from "react-redux/es/connect/connect";
 import {isVideo} from "../../utils/index";
+import {Scrollbars} from "react-custom-scrollbars";
 const routesModule = require('../../constants/routes');
 import http from '../../HttpService';
 import {
@@ -33,7 +33,9 @@ class AddNewAlbum extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener('resize', () => this.calculateModalHeight())
+        setTimeout(() => this.scrollbars.forceUpdate(), 100);
+
+        // window.addEventListener('resize', () => this.calculateModalHeight())
         this.calculateModalHeight();
     }
 
@@ -74,11 +76,21 @@ class AddNewAlbum extends React.Component {
     render() {
         const {name, description, src, height} = this.state;
 
+
+
         return <div className='add_album'>
-            {/*<Scroll width='40%' height={height} className='scroll_container'>*/}
+            <Scrollbars
+                hideTracksWhenNotNeeded={true}
+                className="scroll_bar"
+                // renderTrackVertical={({ style, ...props }) =>
+                        //     <div {...props} style={{ ...style, backgroundColor: 'blue' }}/>}
+                         // renderTrackVertical={props => <div {...props} className="track-vertical"/>}
+                         // renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
+                        ref={(scrollbars) => this.scrollbars = scrollbars}
+            >
             <div className='add_album_modal' ref={r => this.modal = r}>
 
-                <CrossIcon onClick={this.props.closeModal}/>
+                <CrossIcon className="cross_icon" onClick={this.props.closeModal}/>
                 <Label>Name</Label>
                 <input value={name} onChange={(e) => this.setState({name: e.target.value})}/>
                 <Label>Title image:</Label>
@@ -91,11 +103,13 @@ class AddNewAlbum extends React.Component {
                                uploadFile={(file) => this.uploadFile(file)}/>}
                 <Label>Description</Label>
                 <textarea value={description} onChange={(e) => this.setState({description: e.target.value})}/>
-                <button onClick={() => this.createAlbum()}>ok</button>
+                {src && !isVideo(src) && <div className="warning">You will be able to rotate your foto in the edit mode after album creation.</div>}
+                <button className="ok_button" onClick={() => this.createAlbum()}>ok</button>
 
             </div>
-        {/*</Scroll>*/}
+            </Scrollbars>
         </div>
+
 
     }
 }

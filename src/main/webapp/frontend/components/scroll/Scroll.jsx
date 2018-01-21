@@ -142,7 +142,7 @@ class Scroll extends React.Component {
         }
         const textStyle = this.text.currentStyle || window.getComputedStyle(this.text);
         const contStyle = this.cont.currentStyle || window.getComputedStyle(this.cont);
-        return (parseFloat(textStyle.height) - parseFloat(contStyle.height)) > 1;
+        return !(this.props.width == 0) && (!(this.props.height == 0)) && (parseFloat(textStyle.height) - parseFloat(contStyle.height)) > 1;
     }
 
     getScrollDelta(e) {
@@ -173,6 +173,9 @@ class Scroll extends React.Component {
 
     render() {
         const Children = () => React.Children.toArray(this.props.children) || null;
+        if (!this.isScrollNeeded()) {
+            return <Children/>
+        }
         const contentWithoutScroll = <div className={`text_container ${this.props.className || ''}`}
                                           ref={node => this.cont = node}>
             <div className='text'

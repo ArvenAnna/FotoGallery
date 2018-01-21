@@ -19,10 +19,13 @@ class FileInput extends React.Component {
     }
 
     render() {
-        return <div className='file_input_wrapper'>
+        const classNames = this.props.className
+            ? `file_input_wrapper ${this.props.className}`
+            : 'file_input_wrapper';
+        return <div className={classNames}>
             <button>{this.props.label}</button>
             <div className='file_input_area'>
-                <MagnifierIcon/>
+                <MagnifierIcon className="magnify_icon"/>
             </div>
             <input type="file" disabled={this.props.disabled || false}
                    onChange={(e) => this.onChange(e)}/>

@@ -1,5 +1,8 @@
-@import "../../constants/constants";
+require("../../constants/styles.js");
 @import "../picture/mixins";
+
+@add_album_overlay: rgba(0,0,0,0.7);
+@add_new_album_image_height: 20rem;
 
 .add_album {
   .__flex_row_middle();
@@ -11,46 +14,46 @@
   height: 100%;
   background-color: @add_album_overlay;
 
-  .scroll_container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    .scroll_track {
-      background-color: red;
-    }
-  }
-
   &_modal {
     position: relative;
     .__flex_column_middle();
-    //width: 40%;
-    color: @add_album_text;
+    width: 500px;
+    color: @text_color;
+    margin: 2rem auto;
 
-    &>svg {
+    @media screen and (max-width: 700px) {
+      width: 90%;
+    }
+
+    .cross_icon {
       position: absolute;
       top: 0;
       right: 0;
-      .__icon(2rem, @add_album_text);
+      .__icon(1rem, @text_color);
     }
 
-    &>button {
+    .ok_button {
       width: 10rem;
       height: 2rem;
-      color: @add_album_text;
-      background-color: @add_album_bg;
+      color: @text_color;
+      background-color: @body_color;
       font-size: @add_album_font_size;
       border-width: 3px;
       border-radius: @border_radius;
     }
 
+    .warning {
+      margin: 0 0 0.7rem 0;
+      color: lighten(@body_color, 20%);
+    }
+
     input, textarea {
-      background-color: @add_album_bg;
+      background-color: @body_color;
       width: 100%;
       margin-bottom: 1rem;
       border-radius: 0.3rem;
       font-size: 1.5rem;
-      color: @add_album_text;
+      color: @text_color;
       padding: 0.5rem;
       line-height: 2rem;
       border: @add_album_border;
@@ -58,7 +61,7 @@
 
       &:focus {
         outline: none;
-        background-color: lighten(@add_album_bg, 20%);
+        background-color: lighten(@body_color, 20%);
       }
     }
 
@@ -68,15 +71,17 @@
     }
 
     img {
-      //width: 100%;
-      height: 20rem;
+      width: 100%;
+      height: @add_new_album_image_height;
       object-fit: cover;
       border: @add_album_border;
       box-sizing: border-box;
+      border-radius: @border_radius;
     }
 
     video {
-      height: 20rem;
+      height: @add_new_album_image_height;
+      border-radius: @border_radius;
     }
   }
 

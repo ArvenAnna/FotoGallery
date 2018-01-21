@@ -9,7 +9,11 @@ const constants = {
     'picture_height': '200px',
     'picture_width': '300px',
     'picture_edit_height': '200px',
-    'picture_edit_width': '300px'
+    'picture_edit_width': '300px',
+    'border_radius': '0.3rem',
+    'add_album_border': 'white 1px solid',
+    'add_album_font_size': '1rem',
+    'dialog_bg': 'black'
 };
 
 module.exports = constants;

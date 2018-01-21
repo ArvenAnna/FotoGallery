@@ -1,4 +1,18 @@
+require("./constants/styles.js");
+
 body {
-  background-color: #232326;
+  background-color: @body_color;
+  margin: 0;
   overflow: hidden; // TODO set in JS
+}
+
+.scroll_bar {
+  &>div:last-of-type {
+    background-color: @text_color;
+    border: 1px solid @text_color;
+
+    &>div {
+      background-color: @body_color !important;
+    }
+  }
 }

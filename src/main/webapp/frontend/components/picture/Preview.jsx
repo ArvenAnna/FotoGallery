@@ -84,17 +84,21 @@ class Preview extends React.Component {
     }
 
     close() {
-        if (!(this.state.animate === 'decrease')) {
-            this.setState({
-                animate: 'decrease'
-            });
-            window.setTimeout(this.props.close, this.animationTime * 1000);
-        }
+        this.props.close();
+        // if (!(this.state.animate === 'decrease')) {
+        //     this.setState({
+        //         animate: 'decrease'
+        //     });
+        //     window.setTimeout(this.props.close, this.animationTime * 1000);
+        // }
     }
 
     componentDidMount() {
+        // this.setState({
+        //     animate: 'increase'
+        // });
         this.setState({
-            animate: 'increase'
+            animate: 'overlay'
         });
         window.setTimeout(() => this.clearAnimation(), this.animationTime * 1000);
     }
@@ -147,7 +151,7 @@ class Preview extends React.Component {
         const {images, main} = this.props;
 
         return (
-            <Modal className={`magnify_modal ${animate}`}
+            <Modal className={`magnify_modal`}
                    imageWidth={imageWidth}
                    animationTime={this.animationTime}>
                 <div className={`magnify_modal_img_frame`}>

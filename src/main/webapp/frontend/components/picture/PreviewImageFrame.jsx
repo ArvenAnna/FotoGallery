@@ -3,6 +3,7 @@ import {CrossIcon, EditIcon, LeftArrowIcon, RightArrowIcon} from "../Icons";
 import "./preview.less";
 import {Link} from "react-router-dom";
 import {isVideo} from "../../utils/index";
+import constants from '../../constants/styles';
 
 class PreviewImageFrame extends React.Component {
 
@@ -23,8 +24,10 @@ class PreviewImageFrame extends React.Component {
   }
 
   componentDidMount() {
-    this.props.setImageWidth(this.getImageContainerWidth());
+    this.changeImageWidth();
     window.addEventListener('resize', () => this.changeImageWidth());
+    const animationTime = parseInt(constants['preview_animation_duration']);
+    window.setTimeout(() => this.changeImageWidth(), animationTime*1000 + 50)
   }
 
   componentWillUnmount() {
@@ -40,13 +43,6 @@ class PreviewImageFrame extends React.Component {
 
   changeImageWidth() {
     this.props.setImageWidth(this.getImageContainerWidth());
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.main != this.state.main) {
-      // in order to make sure width will be recalculated
-      window.setTimeout(() => this.changeImageWidth(), 200);
-    }
   }
 
   onCrossClick() {
@@ -98,12 +94,15 @@ class PreviewImageFrame extends React.Component {
         </div>
         {isVideo(main.src)
             ? <video controls="controls"
-                                                     ref={node => this.img = node}
-                                                    className="image_preview"
+                     ref={node => this.img = node}
+                     onLoad={() => this.changeImageWidth()}
+                     className="image_preview"
                      >
               <source src={main.src}/>
             </video>
-            :<img src={main.src} className='image_preview' ref={node => this.img = node}/>}
+            :<img onLoad={() => this.changeImageWidth()}
+                  src={main.src} className='image_preview'
+                  ref={node => this.img = node}/>}
       </div>
     );
   }
