@@ -85,24 +85,7 @@ class Preview extends React.Component {
 
     close() {
         this.props.close();
-        // if (!(this.state.animate === 'decrease')) {
-        //     this.setState({
-        //         animate: 'decrease'
-        //     });
-        //     window.setTimeout(this.props.close, this.animationTime * 1000);
-        // }
     }
-
-    componentDidMount() {
-        // this.setState({
-        //     animate: 'increase'
-        // });
-        this.setState({
-            animate: 'overlay'
-        });
-        window.setTimeout(() => this.clearAnimation(), this.animationTime * 1000);
-    }
-
 
     clearAnimation(slide) {
         this.setState({
@@ -110,18 +93,6 @@ class Preview extends React.Component {
         });
     }
 
-
-    renderThumb({style, ...props}) {
-        const thumbStyle = {
-            backgroundColor: 'white',
-            height: '70%'
-        };
-        return (
-            <div
-                style={{...style, ...thumbStyle}}
-                {...props}/>
-        );
-    }
 
     calculateTextWidth(imgWidth) {
         const bottomSection = document.getElementsByClassName('magnify_modal_img_frame_bottom')[0];
