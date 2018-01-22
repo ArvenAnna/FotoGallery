@@ -13,7 +13,8 @@ const constants = {
     'border_radius': '0.3rem',
     'add_album_border': 'white 1px solid',
     'add_album_font_size': '1rem',
-    'dialog_bg': 'black'
+    'dialog_bg': 'black',
+    'preview_border_width': '10px'
 };
 
 module.exports = constants;

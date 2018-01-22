@@ -20,40 +20,59 @@ class PreviewImageFrame extends React.Component {
       main: props.main,
       left: currentIndex > 0,
       right: currentIndex < (props.images.length - 1),
-        images: props.images,
-        index: currentIndex
+      images: props.images,
+      index: currentIndex
     };
   }
 
   componentDidMount() {
-    const containerStyle = this.cont.currentStyle || window.getComputedStyle(this.cont);
-    this.height = containerStyle.height;
-    //this.changeImageWidth();
-    window.addEventListener('resize', () => this.changeImageWidth());
-    const animationTime = parseInt(constants['preview_animation_duration']);
-    window.setTimeout(() => this.changeImageWidth(), animationTime*1000 + 50)
+    this.height = this.getContainerHeight();
+    window.addEventListener('resize', () => this.recalculateWidth());
+  }
+
+  getContainerHeight() {
+    if (this.cont) {
+        const containerStyle = this.cont.currentStyle || window.getComputedStyle(this.cont);
+        return parseFloat(containerStyle.height);
+    }
+    return 0;
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', () => this.changeImageWidth());
+    window.removeEventListener('resize', () => this.recalculateWidth());
   }
 
-  getImageContainerWidth() {
-    const img = this.img;
-    if (!img) return 0;
-    const imageRect = img.getBoundingClientRect();
-    return imageRect.width;
+  recalculateWidth() {
+    const naturalWidth = this.state.images[this.state.index].naturalWidth;
+    const naturalHeight = this.state.images[this.state.index].naturalHeight;
+
+    if (naturalWidth && naturalHeight &&  this.cont) {
+        this.height = this.getContainerHeight();
+        let width = naturalWidth * this.height/ naturalHeight;
+        if((width + parseFloat(constants.preview_border_width) * 2) > window.innerWidth) {
+            width  = window.innerWidth - parseFloat(constants.preview_border_width) * 2;
+            const height = naturalHeight * width / naturalWidth;
+            this.cont.style.height = height;
+        }
+        this.cont.style.width = width;
+        this.props.setImageWidth(width);
+    }
+
   }
 
-  changeImageWidth(e) {
-    //onload
-    console.dir(e.target);
-    console.log(e.target.width);
-    const width = e.target.naturalWidth * this.height / e.target.naturalHeight;
+  onLoad(e) {
+    let width = e.target.naturalWidth * this.height / e.target.naturalHeight;
     let newImages = [...this.state.images];
-    newImages[this.state.index].width = width;
+    newImages[this.state.index].naturalWidth = e.target.naturalWidth;
+    newImages[this.state.index].naturalHeight = e.target.naturalHeight;
+      if((width + parseFloat(constants.preview_border_width) * 2) > window.innerWidth) {
+          width  = window.innerWidth - parseFloat(constants.preview_border_width) * 2;
+          const height = e.target.naturalHeight * width / e.target.naturalWidth;
+          this.cont.style.height = height;
+
+      }
+    this.cont.style.width = width;
     this.setState({images: newImages});
-    // zapisat v img obj picture
     this.props.setImageWidth(width);
   }
 
@@ -63,7 +82,6 @@ class PreviewImageFrame extends React.Component {
 
   onArrowClick(arrow) {
     const {images} = this.props;
-    //const current = images.find(img => img === this.state.main);
     const currentIndex = images.indexOf(this.state.main);
     let main;
 
@@ -73,8 +91,8 @@ class PreviewImageFrame extends React.Component {
         main,
         left: (currentIndex - 1) > 0,
         right: (currentIndex - 1) < (images.length - 1),
-          index: currentIndex - 1
-      });
+        index: currentIndex - 1
+      }, this.recalculateWidth);
     }
 
     if (arrow === 'right' && currentIndex < (images.length - 1)) {
@@ -83,8 +101,8 @@ class PreviewImageFrame extends React.Component {
         main,
         left: (currentIndex + 1) > 0,
         right: (currentIndex + 1) < (images.length - 1),
-            index: currentIndex + 1
-      })
+        index: currentIndex + 1
+      }, this.recalculateWidth)
     }
 
     this.props.clearAnimate(main);
@@ -109,12 +127,12 @@ class PreviewImageFrame extends React.Component {
         {isVideo(main.src)
             ? <video controls="controls"
                      ref={node => this.img = node}
-                     onLoad={(e) => this.changeImageWidth(e)}
+                     onLoad={(e) => this.onLoad(e)}
                      className="image_preview"
                      >
               <source src={main.src}/>
             </video>
-            :<img onLoad={(e) => this.changeImageWidth(e)}
+            :<img onLoad={(e) => this.onLoad(e)}
                   src={main.src} className='image_preview'
                   ref={node => this.img = node}/>}
       </div>

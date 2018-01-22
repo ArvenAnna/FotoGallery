@@ -20,14 +20,15 @@ require("../../constants/styles.js");
 
 @preview_overlay: @black_few_transparent;
 
-@preview_border_radius: 0.3rem;
-@preview_border_width: 0.7rem;
 @frame_height: 90%;
 
 @scroll-track-color: black;
 @scroll-color: white;
 @scroll-background: linear-gradient(0deg, @scroll-track-color, @scroll-color);
 @scroll-width: 6px;
+
+@small_height: 600px;
+@small_width: 600px;
 
 // ---------------------- mixins -----------------------------
 
@@ -235,8 +236,9 @@ require("../../constants/styles.js");
 
   &_img_frame {
     height: @frame_height;
-    border-radius: @preview_border_radius;
+    border-radius: @border_radius;
     background-color: @preview_frame_color;
+    border: @preview_border_width solid @preview_frame_color;
 
     &_container {
       .__flex_row_middle();
@@ -249,6 +251,10 @@ require("../../constants/styles.js");
         top: 1.5rem;
         width: 100%;
 
+        @media screen and (max-height: @small_height), screen and (max-width: @small_width) {
+          top: 0.2rem;
+        }
+
         .counter {
           padding: 0.2rem 1rem;
           background-color: @preview_counter;
@@ -256,6 +262,11 @@ require("../../constants/styles.js");
           .__counter_shadow(@preview_counter_shadow);
           color: @white_few_transparent;
           font-size: 1rem;
+
+          @media screen and (max-height: @small_height), screen and (max-width: @small_width) {
+            font-size: 0.7rem;
+            font-weight: 600;
+          }
         }
       }
 
@@ -267,6 +278,11 @@ require("../../constants/styles.js");
         background-color: rgba(0,0,0,0.7);
         padding: 3px;
 
+        @media screen and (max-height: @small_height), screen and (max-width: @small_width) {
+          .__icon(1rem, @text_color);
+          top: 0.2rem;
+        }
+
         &:hover {
           fill: @preview_cross_hover;
         }
@@ -274,10 +290,18 @@ require("../../constants/styles.js");
 
       .cross {
         right: 1rem;
+
+        @media screen and (max-height: @small_height), screen and (max-width: @small_width) {
+          right: 0.2rem;
+        }
       }
 
       .edit {
         right: 3.5rem;
+
+        @media screen and (max-height: @small_height), screen and (max-width: @small_width) {
+          right: 1.8rem;
+        }
       }
 
       // --------------- arrow mixin -----------------------
@@ -291,12 +315,20 @@ require("../../constants/styles.js");
         height: 5rem;
         z-index: 1;
 
+        @media screen and (max-height: @small_height), screen and (max-width: @small_width) {
+          height: 3rem;
+        }
+
         &:hover {
           background-color: @preview_arrow_container_hover;
         }
 
         svg {
           .__icon(3rem, @preview_arrow);
+
+          @media screen and (max-height: @small_height), screen and (max-width: @small_width) {
+            .__icon(1rem, @preview_arrow);
+          }
 
           &:hover {
             fill: @preview_arrow_hover;
@@ -315,20 +347,19 @@ require("../../constants/styles.js");
 
       .image_preview {
         height: 100%;
-        border: @preview_border_width solid @preview_frame_color;
         //box-sizing: border-box;
-        border-radius: @preview_border_radius;
+        border-radius: @border_radius;
         display: block;
       }
     }
 
     &_bottom {
       padding-left: calc(@preview_border_width + 1rem);
-      padding-right: @preview_border_width;
       height: 20%;
       box-sizing: border-box;
       color: @preview_caption;
       padding-bottom: 1rem;
+      padding-top: 1rem;
 
       &_caption {
         font-size: 4vh;
