@@ -2,13 +2,20 @@ import React from 'react';
 import './editAlbum.less';
 import {CrossIcon, EditIcon} from "../Icons";
 import {isVideo} from "../../utils/index";
+import Loader from 'react-loaders';
+import 'loaders.css/src/animations/ball-scale-multiple.scss';
 import * as styles from "../../constants/styles";
+import Alert from 'react-s-alert';
 
 class Card extends React.Component {
 
     constructor(props) {
         super(props);
         this.replaceEvent = 'replace';
+        this.state = {
+            imageLoading: true,
+            imageLoadStarted: false
+        }
     }
 
 
@@ -125,8 +132,27 @@ class Card extends React.Component {
         this.props.changeDragState({dragStarted: false, dragFrom: null, dragObj: null, dragFromEl: null, album: newAlbum});
     }
 
+    onImageLoad() {
+        this.setState({imageLoading: false});
+    }
+
+    onImageError() {
+        Alert.error("Image for name {" + this.props.picture.name + "} loading failed", {});
+        this.setState({imageLoading: false});
+    }
+
+    loadImage(src) {
+        this.setState({imageLoadStarted: true});
+        const imageObj = new Image();
+        imageObj.onload = this.onImageLoad.bind(this);
+        imageObj.onerror = this.onImageError.bind(this);
+        imageObj.src = src;
+    }
+
     render() {
         const {picture, openPicture} = this.props;
+        const {imageLoading, imageLoadStarted} = this.state;
+        if (!imageLoadStarted && picture) this.loadImage(picture.src);
         return openPicture
             ? <div className='drag_container'
                    imgid={picture._id}>
@@ -141,7 +167,7 @@ class Card extends React.Component {
                    onMouseDown={e => this.onMouseDown(e, picture)}
                    onMouseUp={e => this.onMouseUp(e, picture)}
                    onMouseMove={e => this.onMouseMove(e, picture)}>
-                {isVideo(picture.src)
+                {imageLoading ? <Loader type="ball-scale-multiple"/> : isVideo(picture.src)
                     ? <video height={styles.picture_edit_height}
                              controls="controls"
                              className='drag_image'>

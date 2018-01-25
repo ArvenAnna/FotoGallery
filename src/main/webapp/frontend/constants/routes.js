@@ -2,7 +2,8 @@ const apiPrefix = '/api/';
 
 const routes = {
     GET_ALBUMS: `${apiPrefix}albums`,
-    GET_ALBUMS_SEARCH: (search) => `${apiPrefix}albums?search=${search}`,
+    GET_ALBUMS_PAGINATE: (offset, perPage) => `${apiPrefix}albums?offset=${offset}&limit=${perPage}`,
+    GET_ALBUMS_SEARCH: (search, offset, perPage) => `${apiPrefix}albums?search=${search}&offset=${offset}&limit=${perPage}`,
 
     ALBUM_ROUTE: `${apiPrefix}album`,
     GET_ALBUM: (id) => `${apiPrefix}album?id=${id}`,

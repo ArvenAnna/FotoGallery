@@ -4,6 +4,9 @@ import "./preview.less";
 import {Link} from "react-router-dom";
 import {isVideo} from "../../utils/index";
 import constants from '../../constants/styles';
+import Loader from 'react-loaders';
+import 'loaders.css/src/animations/ball-scale-multiple.scss';
+import Alert from 'react-s-alert';
 
 class PreviewImageFrame extends React.Component {
 
@@ -65,6 +68,7 @@ class PreviewImageFrame extends React.Component {
     let newImages = [...this.state.images];
     newImages[this.state.index].naturalWidth = e.target.naturalWidth;
     newImages[this.state.index].naturalHeight = e.target.naturalHeight;
+    newImages[this.state.index].loaded = true;
       if((width + parseFloat(constants.preview_border_width) * 2) > window.innerWidth) {
           width  = window.innerWidth - parseFloat(constants.preview_border_width) * 2;
           const height = e.target.naturalHeight * width / e.target.naturalWidth;
@@ -108,9 +112,24 @@ class PreviewImageFrame extends React.Component {
     this.props.clearAnimate(main);
   }
 
+  loadImageURL (imageURL) {
+        const imageObj = new Image();
+        imageObj.onload = this.onLoad.bind(this);
+        imageObj.onerror = this.onLoadFailure.bind(this);
+        imageObj.src = imageURL;
+  }
+
+  onLoadFailure() {
+      Alert.error("Image loading failed", {});
+      let newImages = [...this.state.images];
+      newImages[this.state.index].loaded = true;
+      this.setState({images: newImages});
+  }
+
   render() {
-    const {main, left, right} = this.state;
-    const {images, editRoute} = this.props;
+    const {main, left, right, images, index} = this.state;
+    const {editRoute} = this.props;
+    if(!images[index].loaded) this.loadImageURL(images[index].src);
 
     return (<div className='magnify_modal_img_frame_container' ref={cont => this.cont = cont}>
         <CrossIcon className='cross' onClick={() => this.onCrossClick()}/>
@@ -124,16 +143,14 @@ class PreviewImageFrame extends React.Component {
         <div className='counter_container'>
           <div className='counter'>{`${(images.indexOf(main) + 1)} of ${images.length}`}</div>
         </div>
-        {isVideo(main.src)
+        {!images[index].loaded ? <Loader type="ball-scale-multiple"/> : isVideo(main.src)
             ? <video controls="controls"
                      ref={node => this.img = node}
-                     onLoad={(e) => this.onLoad(e)}
                      className="image_preview"
                      >
               <source src={main.src}/>
             </video>
-            :<img onLoad={(e) => this.onLoad(e)}
-                  src={main.src} className='image_preview'
+            :<img src={main.src} className='image_preview'
                   ref={node => this.img = node}/>}
       </div>
     );

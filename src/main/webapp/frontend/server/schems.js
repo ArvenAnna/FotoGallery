@@ -1,5 +1,6 @@
 //Require Mongoose
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 
 //Define a schema
 var Schema = mongoose.Schema;
@@ -10,6 +11,7 @@ var AlbumModelSchema = new Schema({
     description: String,
     images: [{type: Schema.Types.ObjectId, ref: 'Foto'}]
 });
+AlbumModelSchema.plugin(mongoosePaginate);
 
 AlbumModelSchema.index({'$**': 'text'});
 
@@ -21,6 +23,7 @@ var FotoModelSchema = new Schema({
     order: Number,
     album: {type: Schema.Types.ObjectId, ref:'Album'}
 });
+FotoModelSchema.plugin(mongoosePaginate);
 
 FotoModelSchema.index({'$**': 'text'});
 

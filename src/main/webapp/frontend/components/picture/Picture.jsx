@@ -3,17 +3,22 @@ import {MagnifierIcon} from "../Icons";
 import "./picture.less";
 import Preview from "./Preview";
 import {isVideo} from "../../utils/index";
+import Loader from 'react-loaders';
 import * as styles from "../../constants/styles";
+import 'loaders.css/src/animations/ball-scale-multiple.scss';
+import Alert from 'react-s-alert';
 
 class Picture extends React.Component {
     // animation: fade, move
 
     constructor(props) {
         super(props);
+        this.imageLoadStarted = false;
 
         this.state = {
             magnify: '',
-            valid: true
+            valid: true,
+            loading: true,
         };
     }
 
@@ -74,16 +79,33 @@ class Picture extends React.Component {
         return diffs.find(el => el.diff == minDiff).side;
     }
 
-    handleBrokenImg(e) {
+    handleBrokenImg() {
+        Alert.error("Image for name {" + this.props.album.images[0].name + "} loading failed", {});
+        this.imageLoadStarted = true;
         this.setState({
+            loading: false,
             valid: false
         })
+    }
+
+    onLoad() {
+        this.imageLoadStarted = true;
+        this.setState({loading: false});
+    }
+
+    loadImage(url) {
+        let image = new Image();
+        image.onload = this.onLoad.bind(this);
+        image.onerror = this.handleBrokenImg.bind(this);
+        image.src = url;
     }
 
     render() {
         const {album} = this.props;
         const main = album.images[0];
-        const {animation, magnify} = this.state;
+        const {animation, magnify, loading} = this.state;
+        if (!this.imageLoadStarted) this.loadImage(main.src);
+
         return this.state.valid && <div className="image_main_wrapper">
                 <div
                     className={`image_wrapper ${animation} ${magnify}`}
@@ -91,17 +113,17 @@ class Picture extends React.Component {
                     onMouseEnter={(e) => this.mouseEnter(e)}
                     onClick={(e) => this.click(e)}
                 >
-                    {isVideo(main.src)
-                        ? <video height={styles.picture_height}
-                                 width={styles.picture_width}
-                                 controls="controls"
-                                 className="video">
-                        <source src={main.src}/>
-                    </video>
-                        : <img className='image'
-                         onError={(e) => this.handleBrokenImg(e)}
-                         src={main.src}
-                         alt="something wrong happens"/>}
+                    {loading
+                        ? <Loader type="ball-scale-multiple" className="image_loader"/>
+                        : isVideo(main.src)
+                            ? <video height={styles.picture_height}
+                                     width={styles.picture_width}
+                                     className="video">
+                                <source src={main.src}/>
+                            </video>
+                            : <img className='image'
+                                   src={main.src}
+                                   alt="something wrong happens"/>}
                     <div className={'overlay'}>
                         <div className={`overlay_top`}>
                             <MagnifierIcon/>
@@ -122,3 +144,4 @@ class Picture extends React.Component {
 }
 
 export default Picture;
+

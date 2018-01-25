@@ -5,6 +5,7 @@ import AvatarEditor from "./ImageRotater";
 import * as styles from "../../constants/styles";
 const routesModule = require('../../constants/routes');
 import http from '../../HttpService';
+import Alert from 'react-s-alert';
 
 class EditCanvas extends React.Component {
 
@@ -13,7 +14,8 @@ class EditCanvas extends React.Component {
         this.state = {
             angle: 0,
             width: parseInt(styles.picture_edit_width),
-            height: parseInt(styles.picture_edit_height)
+            height: parseInt(styles.picture_edit_height),
+            imageLoading: true
         }
     }
 
@@ -41,8 +43,10 @@ class EditCanvas extends React.Component {
                                 imageDownloaded: null,
                                 album: newAlbum
                             });
-                        });
-                });
+                        })
+                        .catch(e => Alert.error(e.response.data.error, {}));;
+                })
+                .catch(e => Alert.error(e.response.data.error, {}));
         });
     }
 
@@ -63,10 +67,16 @@ class EditCanvas extends React.Component {
     }
 
     onLoad(imgInfo) {
+        this.setState({imageLoading: false});
         this.naturalWidth = imgInfo.naturalWidth;
         this.naturalHeight = imgInfo.naturalHeight;
 
         this.calculateParameters(this.state.angle);
+    }
+
+    onImageFailure() {
+        Alert.error("Image loading failed", {});
+        this.setState({imageLoading: false});
     }
 
     closeImage() {
@@ -75,7 +85,7 @@ class EditCanvas extends React.Component {
 
     render() {
         const {image} = this.props;
-        const {angle, width, height} = this.state;
+        const {angle, width, height, imageLoading} = this.state;
         return <div className="Edit_canvas">
             <AvatarEditor
                 ref={ae => this.avatar = ae}
@@ -84,6 +94,8 @@ class EditCanvas extends React.Component {
                 width={width}
                 height={height}
                 onLoadSuccess={(imgInfo) => this.onLoad(imgInfo)}
+                onLoadFailure={() => this.onImageFailure()}
+                loading={imageLoading}
             />
             <RotateIcon className='rotate_icon' onClick={() => this.rotateImage()}/>
             <SaveIcon className='save_icon' onClick={() => this.getEditedImage()}/>

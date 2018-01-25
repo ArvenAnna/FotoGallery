@@ -1,5 +1,6 @@
 require("../../constants/styles.js");
 
+
 .drag_container {
   position: relative;
   left: 0;
@@ -9,6 +10,13 @@ require("../../constants/styles.js");
   margin: 0.5rem;
   z-index: 0;
   overflow: hidden;
+  text-align: center;
+
+  .loader {
+    display: inline-block;
+    position: absolute;
+    top: calc(@picture_edit_height/2);
+  }
 
   .cross_icon, .edit_icon {
     position: absolute;
@@ -61,6 +69,13 @@ require("../../constants/styles.js");
   color: @text_color;
   box-shadow: 0 0 0.3rem 0.1rem @text_color;
   overflow: hidden;
+  text-align: center;
+
+  .loader {
+    display: inline-block;
+    position: absolute;
+    top: calc(@picture_edit_height/2);
+  }
 
   .album_image {
     width: 100%;

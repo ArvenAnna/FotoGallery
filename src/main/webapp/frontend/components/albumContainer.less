@@ -1,7 +1,5 @@
 require("../constants/styles.js");
 
-//@import "../constants/constants";
-
 .app_container {
   margin: 2rem 0;
   display: flex;
@@ -17,6 +15,72 @@ require("../constants/styles.js");
     align-items: stretch;
     z-index: 0;
 
+    .P_pagination {
+      grid-column-start: 1;
+      grid-column-end: 5;
+      color: @text_color;
+      cursor: pointer;
+      text-align: center;
+
+      @media screen and (max-width: 1400px) {
+        grid-column-end: 4;
+      }
+
+      @media screen and (max-width: 1000px) {
+        grid-column-end: 3;
+      }
+
+      @media screen and (max-width: 700px) {
+        grid-column-end: 2;
+      }
+
+      .arrow {
+        fill: @text_color;
+        height: calc(@pagination_size/2);
+        width: calc(@pagination_size/2);
+      }
+
+      .P_link_page {
+        display: inline-block;
+        height: @pagination_size;
+        width: @pagination_size;
+        line-height: @pagination_size;
+        vertical-align: middle;
+        border: 1px solid @text_color;
+      }
+
+      .P_page, .P_prev_page, .P_next_page {
+        display: inline-block;
+        margin: 2px;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .P_link_prev_page, .P_link_next_page {
+        &:focus {
+          outline: none;
+        }
+      }
+
+      .active {
+        color: @dialog_bg;
+        background-color: @text_color;
+
+        .P_link_page {
+          font-weight: 800;
+          border: 1px solid lighten(@dialog_bg, 80%);
+        }
+      }
+
+      .disabled {
+        color: darken(@text_color, 80%);
+        cursor: default;
+
+        .arrow {
+          fill: darken(@text_color, 80%);
+        }
+      }
+    }
 
     @media screen and (max-width: 1400px) {
       grid-template-columns: repeat(3, 1fr);
@@ -28,6 +92,28 @@ require("../constants/styles.js");
 
     @media screen and (max-width: 700px) {
       grid-template-columns: repeat(1, 1fr);
+    }
+
+    .Data_loader {
+      grid-column-start: 1;
+      grid-column-end: 5;
+
+      @media screen and (max-width: 1400px) {
+        grid-column-end: 4;
+      }
+
+      @media screen and (max-width: 1000px) {
+        grid-column-end: 3;
+      }
+
+      @media screen and (max-width: 700px) {
+        grid-column-end: 2;
+      }
+
+      .loader-inner {
+        margin:auto;
+      }
+
     }
 
     .header_menu {

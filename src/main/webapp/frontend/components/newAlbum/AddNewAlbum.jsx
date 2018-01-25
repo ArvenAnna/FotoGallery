@@ -8,6 +8,8 @@ import {isVideo} from "../../utils/index";
 import {Scrollbars} from "react-custom-scrollbars";
 const routesModule = require('../../constants/routes');
 import http from '../../HttpService';
+import Loader from 'react-loaders';
+import 'loaders.css/src/animations/ball-scale-multiple.scss';
 import {
     createAlbum
 } from "../../actions/albumActions";
@@ -28,7 +30,8 @@ class AddNewAlbum extends React.Component {
             height: '100%',
             name: '',
             description: '',
-            src: null
+            src: null,
+            fileUploading: false
         }
     }
 
@@ -56,10 +59,12 @@ class AddNewAlbum extends React.Component {
     }
 
     uploadFile(file) {
+        this.setState({fileUploading: true});
         http.sendFile(routesModule.routes.UPLOAD_FOTO, file)
             .then(id => {
-                this.setState({src: id.src});
-            });
+                this.setState({src: id.src, fileUploading: false});
+            })
+            .catch(e => this.setState({fileUploading: false}));
     }
 
     createAlbum() {
@@ -74,9 +79,7 @@ class AddNewAlbum extends React.Component {
     }
 
     render() {
-        const {name, description, src, height} = this.state;
-
-
+        const {name, description, src, fileUploading, height} = this.state;
 
         return <div className='add_album'>
             <Scrollbars
@@ -94,11 +97,11 @@ class AddNewAlbum extends React.Component {
                 <Label>Name</Label>
                 <input value={name} onChange={(e) => this.setState({name: e.target.value})}/>
                 <Label>Title image:</Label>
-                {src ? (isVideo(src) ? <video
-
-                                              controls="controls">
-                    <source src={src}/>
-                </video> : <img src={src}/>) :
+                {fileUploading
+                    ? <Loader type="ball-scale-multiple"/>
+                    : src
+                    ? (isVideo(src) ? <video controls="controls"><source src={src}/></video> : <img src={src}/>)
+                    :
                     <FileInput label='Choose main foto'
                                uploadFile={(file) => this.uploadFile(file)}/>}
                 <Label>Description</Label>

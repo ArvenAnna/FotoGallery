@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Loader from 'react-loaders';
+import 'loaders.css/src/animations/ball-scale-multiple.scss';
 
 const isFileAPISupported = typeof File !== 'undefined'
 
@@ -18,7 +20,8 @@ class AvatarEditor extends React.Component {
 
         onLoadFailure: PropTypes.func,
         onLoadSuccess: PropTypes.func,
-        onImageReady: PropTypes.func
+        onImageReady: PropTypes.func,
+        loading: PropTypes.bool
     }
 
     static defaultProps = {
@@ -28,7 +31,8 @@ class AvatarEditor extends React.Component {
         style: {},
         onLoadFailure () {},
         onLoadSuccess () {},
-        onImageReady () {}
+        onImageReady () {},
+        loading: false
     }
 
     state = {
@@ -76,10 +80,12 @@ class AvatarEditor extends React.Component {
     }
 
     componentDidUpdate () {
-        const canvas = ReactDOM.findDOMNode(this.canvas)
-        const context = canvas.getContext('2d')
-        context.clearRect(0, 0, canvas.width, canvas.height)
-        this.paintImage(context, this.state.image);
+        if (this.canvas) {
+            const canvas = ReactDOM.findDOMNode(this.canvas)
+            const context = canvas.getContext('2d')
+            context.clearRect(0, 0, canvas.width, canvas.height)
+            this.paintImage(context, this.state.image);
+        }
     }
 
     handleImageReady (image) {
@@ -174,9 +180,9 @@ class AvatarEditor extends React.Component {
     }
 
     render () {
-        // if(!this.state.image) {
-        //     return null;
-        // }
+        if(this.props.loading) {
+             return <Loader type="ball-scale-multiple"/>;
+        }
 
         const defaultStyle = {
             width: this.props.width,

@@ -13,9 +13,17 @@ module.exports = {
       loader: 'babel-loader',
     }, {
       test: /\.css$/,
-      exclude: [/node_modules/, /bin/],
+      //exclude: [/node_modules/, /bin/],
+      // include(filepath) {
+      //     if (filepath.includes('react-notifications')) return true;
+      //     return false;
+      // },
       loader: "style-loader!css-loader!autoprefixer-loader"
     }, {
+        test: /\.scss$/,
+        //exclude: [/node_modules/, /bin/],
+        loader: "style-loader!css-loader!autoprefixer-loader!sass-loader"
+    },{
       test: /\.less$/,
       exclude: [/node_modules/, /bin/],
       loader: "style-loader!css-loader!autoprefixer-loader!less-loader!js-to-styles-var-loader"

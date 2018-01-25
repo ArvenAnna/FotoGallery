@@ -14,6 +14,11 @@ import EditCanvas from "./EditCanvas";
 import {isVideo} from "../../utils/index";
 import * as styles from "../../constants/styles";
 const routesModule = require('../../constants/routes');
+import Loader from 'react-loaders';
+import 'loaders.css/src/animations/ball-scale-multiple.scss';
+import 'loaders.css/src/animations/ball-grid-pulse.scss';
+import Alert from 'react-s-alert';
+
 
 @connect(store => ({}), {
     deleteFotoFromAlbum,
@@ -35,7 +40,10 @@ class EditAlbum extends React.Component {
             openedAlbum: false,
             album: null,
             openedDialog: false,
-            imageDownloaded: false
+            imageDownloaded: false,
+            imageLoading: true,
+            imageLoadStarted: false,
+            albumLoading: false
         }
     }
 
@@ -44,12 +52,14 @@ class EditAlbum extends React.Component {
     }
 
     loadAlbum() {
+        this.setState({albumLoading: true});
         http.doGet(routesModule.routes.GET_ALBUM(this.props.match.params.id))
             .then(result => {
                 result.images.sort((x, y) => x.order - y.order);
                 result.images.forEach(image => image.src = image.src + '?forceUpdate=' + new Date().toISOString())
-                this.setState({album: result})
-            });
+                this.setState({album: result, albumLoading: false});
+            })
+            .catch(e => Alert.error(e.response.data.error, {}));
     }
 
     openDetails(picture) {
@@ -132,26 +142,46 @@ class EditAlbum extends React.Component {
                             //imageDownloaded: null,
                             album: newAlbum
                         });
-                    });
+                    }).catch(e => Alert.error(e.response.data.error, {}));
                 } else {
                     this.setState({
                         imageDownloaded: downloadedFoto.src
                     });
                 }
 
-            });
+            })
+            .catch(e => Alert.error(e.response.data.error, {}));
+    }
+
+    onImageLoad() {
+        this.setState({imageLoading: false, });
+    }
+
+    onImageError() {
+        Alert.error("Image for name {" + this.state.album.images[0].name + "} loading failed", {});
+        this.setState({imageLoading: false});
+    }
+
+    loadImage(src) {
+        this.setState({imageLoadStarted: true});
+        const imageObj = new Image()
+        imageObj.onload = this.onImageLoad.bind(this);
+        imageObj.onerror = this.onImageError.bind(this);
+        imageObj.src = src;
     }
 
     renderEditAlbumCard() {
+        if(!this.state.imageLoadStarted) this.loadImage(this.state.album.images[0].src);
         return <div className='edit_album_card' key="edit_album_card">
-            {isVideo(this.state.album.images[0].src)
+            {this.state.imageLoading ? <Loader type="ball-scale-multiple"/> : isVideo(this.state.album.images[0].src)
                 ? <video className="album_image"
                          height={styles.picture_edit_height}
                          width={styles.picture_edit_width}
                          controls="controls">
                     <source src={this.state.album.images[0].src}/>
                 </video>
-                : <img className='album_image' src={this.state.album.images[0].src}/>}
+                : <img className='album_image'
+                       src={this.state.album.images[0].src}/>}
             <div className='album_name' onClick={() => this.openAlbumDetails()}>{this.state.album.name}</div>
             <CrossIcon className='cross_icon' onClick={() => this.setState({openedDialog: true})}/>
         </div>
@@ -223,10 +253,10 @@ class EditAlbum extends React.Component {
 
 
     render() {
-        const {album} = this.state;
-        if (!album) {
-            return null;
-        }
+        const {album, albumLoading} = this.state;
+        if(albumLoading) return <Loader type="ball-grid-pulse" className='Data_loader'/>;
+        if (!album) return null;
+
         return <React.Fragment>
             {this.renderEditAlbumCard()}
             {this.renderImages()}

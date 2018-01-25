@@ -39,9 +39,7 @@ app.post(routesModule.routes.UPLOAD_FOTO, function(req, res){
 
     // Use the mv() method to place the file somewhere on your server
      sampleFile.mv('tempfiles/' + sampleFile.name, function(err) {
-        if (err)
-            return res.status(500).send(err);
-
+         if (err) return res.status(500).send("File uploading failed");
          res.send({src: '/tempfiles/' + sampleFile.name});
     });
 });

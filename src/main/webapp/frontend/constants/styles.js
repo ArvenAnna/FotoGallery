@@ -14,7 +14,8 @@ const constants = {
     'add_album_border': 'white 1px solid',
     'add_album_font_size': '1rem',
     'dialog_bg': 'black',
-    'preview_border_width': '10px'
+    'preview_border_width': '10px',
+    'pagination_size': '20px'
 };
 
 module.exports = constants;

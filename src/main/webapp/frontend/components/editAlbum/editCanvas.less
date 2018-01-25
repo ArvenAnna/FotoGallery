@@ -8,6 +8,12 @@ require("../../constants/styles.js");
   border: @add_album_border;
   border-radius: @border_radius;
 
+  .loader {
+    display: inline-block;
+    top: calc(@picture_edit_height/2);
+    position: absolute;
+  }
+
   .cross_icon, .rotate_icon, .save_icon {
     position: absolute;
     fill: @text_color;

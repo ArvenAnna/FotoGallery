@@ -5,6 +5,9 @@ import AlbumContainer from "./AlbumContainer";
 import {Route, Switch} from "react-router-dom";
 import EditAlbum from "./editAlbum/EditAlbum";
 import { Scrollbars } from 'react-custom-scrollbars';
+import Alert from 'react-s-alert';
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/scale.css';
 
 class FotoSlider extends React.Component {
 
@@ -50,12 +53,21 @@ class FotoSlider extends React.Component {
         </div>;
 
         return this.state.addAlbumModal ? <Content/> :
-            <Scrollbars
+            [<Scrollbars
                 className="scroll_bar"
                 hideTracksWhenNotNeeded={true}
                 ref={(scrollbars) => this.scrollbars = scrollbars}>
             <Content/>
-        </Scrollbars>
+        </Scrollbars>,<Alert stack={{limit: 6}}
+                             effect='scale'
+                             timeout={5000}
+                             position='top-right'
+                             beep={{
+                // info: '/path-to-audio/file-info.mp3',
+                 error: '../sounds/Sound_error.mp3',
+                // warning: '/path-to-audio/file-warning.mp3',
+                 success: '../sounds/Sound_success.mp3'}}
+            />]
     }
 }
 
