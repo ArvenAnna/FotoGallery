@@ -7,7 +7,7 @@ import http from '../../HttpService';
 import connect from "react-redux/es/connect/connect";
 import {
     deleteAlbum, deleteFotoFromAlbum, saveAlbumDescription,
-    saveFotoDescription, saveItemsOrder
+    saveFotoInformation, saveItemsOrder
 } from "../../actions/albumActions";
 import Dialog from "../dialog/Dialog";
 import EditCanvas from "./EditCanvas";
@@ -22,7 +22,7 @@ import Alert from 'react-s-alert';
 
 @connect(store => ({}), {
     deleteFotoFromAlbum,
-    saveFotoDescription,
+    saveFotoInformation,
     saveAlbumDescription,
     deleteAlbum,
     saveItemsOrder
@@ -104,7 +104,7 @@ class EditAlbum extends React.Component {
         if (this.pinput.value) editedPicture.name = this.pinput.value;
         if (this.ptextarea.value) editedPicture.text = this.ptextarea.value;
 
-        this.props.saveFotoDescription(this.state.album._id, editedPicture);
+        this.props.saveFotoInformation(editedPicture);
 
         const newAlbum = Object.assign({}, {
             ...this.state.album,

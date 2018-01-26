@@ -6,6 +6,7 @@ import Cross from '../svg/cancel.svg';
 import Edit from '../svg/edit.svg';
 import Save from '../svg/save-file-option.svg';
 import Rotate from '../svg/rotate-option.svg';
+import Earth from '../svg/grid-world.svg';
 
 const Icon = `
         width: 1rem;
@@ -45,5 +46,9 @@ export const SaveIcon = styled(Save)`
 `
 
 export const RotateIcon = styled(Rotate)`
+    ${Icon}
+`
+
+export const EarthIcon = styled(Earth)`
     ${Icon}
 `

@@ -12,7 +12,6 @@ const routes = {
 
     FOTO_ROUTE: `${apiPrefix}foto`,
     DELETE_FOTO: (id) => `${apiPrefix}foto?id=${id}`,
-    UPDATE_FOTO: (album) => `${apiPrefix}foto?album=${album}`,
 
     UPLOAD_FOTO: `${apiPrefix}upload`
 };

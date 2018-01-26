@@ -54,11 +54,13 @@ class FotoSlider extends React.Component {
 
         return this.state.addAlbumModal ? <Content/> :
             [<Scrollbars
+                key="scrollbars"
                 className="scroll_bar"
                 hideTracksWhenNotNeeded={true}
                 ref={(scrollbars) => this.scrollbars = scrollbars}>
             <Content/>
         </Scrollbars>,<Alert stack={{limit: 6}}
+                             key="alert"
                              effect='scale'
                              timeout={5000}
                              position='top-right'

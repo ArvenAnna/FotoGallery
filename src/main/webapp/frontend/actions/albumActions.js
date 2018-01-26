@@ -69,11 +69,11 @@ export function deleteAlbum(id) {
     }
 }
 
-export function saveFotoDescription(album, image) {
+export function saveFotoInformation(image) {
     return dispatch => {
         //dispatch(albumsRequest());
         return http
-            .doPut(routesModule.routes.UPDATE_FOTO(album), image)
+            .doPut(routesModule.routes.FOTO_ROUTE, image)
             .catch(e => Alert.error(e.response.data.error, {}));
             //.then(result => dispatch(fetchAlbums()));
     }

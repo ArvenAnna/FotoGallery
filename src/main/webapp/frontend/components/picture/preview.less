@@ -270,7 +270,7 @@ require("../../constants/styles.js");
         }
       }
 
-      .cross, .edit {
+      .cross, .edit, .earth {
         position: absolute;
         top: 1rem;
         z-index: 1;
@@ -301,6 +301,14 @@ require("../../constants/styles.js");
 
         @media screen and (max-height: @small_height), screen and (max-width: @small_width) {
           right: 1.8rem;
+        }
+      }
+
+      .earth {
+        right: 6rem;
+
+        @media screen and (max-height: @small_height), screen and (max-width: @small_width) {
+          right: 3.4rem;
         }
       }
 

@@ -66,13 +66,13 @@ const endpoints =  (app) => {
 
     app.put(routesModule.routes.FOTO_ROUTE, function(req, res){
         console.log("update foto called from proxy");
-
-        Foto.findByIdAndUpdate(req.body._id, {name: req.body.name, text:req.body.text}, {new: true})
+        console.dir(req.body);
+        Foto.findByIdAndUpdate(req.body._id, {name: req.body.name, text:req.body.text, position: req.body.position}, {new: true})
             .then(updatedFoto => {
+                console.log(updatedFoto);
                 res.send(updatedFoto);
             })
-            .catch(e => res.status(500).send({error: "Error during updating foto"}));
-
+            .catch(e => res.status(500).send({error: "Error during updating foto desription"}));
     });
 }
 

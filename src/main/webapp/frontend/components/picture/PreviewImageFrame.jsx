@@ -1,5 +1,5 @@
 import React from "react";
-import {CrossIcon, EditIcon, LeftArrowIcon, RightArrowIcon} from "../Icons";
+import {CrossIcon, EditIcon, LeftArrowIcon, RightArrowIcon, EarthIcon} from "../Icons";
 import "./preview.less";
 import {Link} from "react-router-dom";
 import {isVideo} from "../../utils/index";
@@ -7,6 +7,7 @@ import constants from '../../constants/styles';
 import Loader from 'react-loaders';
 import 'loaders.css/src/animations/ball-scale-multiple.scss';
 import Alert from 'react-s-alert';
+import GMap from "./GMap";
 
 class PreviewImageFrame extends React.Component {
 
@@ -24,7 +25,8 @@ class PreviewImageFrame extends React.Component {
       left: currentIndex > 0,
       right: currentIndex < (props.images.length - 1),
       images: props.images,
-      index: currentIndex
+      index: currentIndex,
+      mode: 'main'
     };
   }
 
@@ -126,14 +128,32 @@ class PreviewImageFrame extends React.Component {
       this.setState({images: newImages});
   }
 
+  onEarthClick() {
+     this.setState({mode: 'map'});
+  }
+
+    closeMap() {
+        this.setState({mode: 'main'});
+    }
+
+ changeFoto(foto) {
+     let newImages = [...this.state.images];
+     newImages[this.state.index] = foto;
+      this.setState({
+          main: foto,
+          images: newImages
+      })
+ }
+
   render() {
     const {main, left, right, images, index} = this.state;
     const {editRoute} = this.props;
     if(!images[index].loaded) this.loadImageURL(images[index].src);
 
-    return (<div className='magnify_modal_img_frame_container' ref={cont => this.cont = cont}>
+    return <React.Fragment><div className='magnify_modal_img_frame_container' ref={cont => this.cont = cont}>
         <CrossIcon className='cross' onClick={() => this.onCrossClick()}/>
             {editRoute && <Link to={this.props.editRoute}><EditIcon className='edit'/></Link>}
+        <EarthIcon className='earth' onClick={() => this.onEarthClick()}/>
         {left && <div className='left_arrow'>
           <LeftArrowIcon onClick={() => this.onArrowClick('left')}/>
         </div>}
@@ -153,7 +173,8 @@ class PreviewImageFrame extends React.Component {
             :<img src={main.src} className='image_preview'
                   ref={node => this.img = node}/>}
       </div>
-    );
+        {this.state.mode == 'map' && <GMap close={() => this.closeMap()} index={index} images={images} changeCoordinates={(foto) => this.changeFoto(foto)}/>}
+    </React.Fragment>;
   }
 }
 

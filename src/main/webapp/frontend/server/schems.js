@@ -18,6 +18,7 @@ AlbumModelSchema.index({'$**': 'text'});
 var FotoModelSchema = new Schema({
     id: Number,
     name: String,
+    position: {lat:Number, lng: Number},
     src: String,
     text: String,
     order: Number,

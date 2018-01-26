@@ -1,0 +1,28 @@
+require("../../constants/styles.js");
+@import "mixins";
+
+.map_container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  color: @text_color;
+  z-index: 2;
+
+  .map_foto {
+    position: absolute;
+    max-width: 100%;
+  }
+
+  .cross {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+    .__icon(2rem, @text_color);
+    background-color: rgba(0,0,0,0.7);
+    padding: 3px;
+
+  }
+}
