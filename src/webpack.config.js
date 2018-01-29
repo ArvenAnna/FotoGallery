@@ -70,7 +70,7 @@ module.exports = {
   },
 
   devtool: "source-map",
-  watch: true,
+ // watch: true,
   watchOptions: {
     aggregateTimeout: 100
   },

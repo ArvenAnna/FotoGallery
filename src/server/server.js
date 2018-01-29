@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 const album = require('./albumEndpoints');
 const foto = require('./fotoEndpoints');
+var path = require('path');
 
 const app = express();
 
@@ -43,6 +44,16 @@ app.post(routesModule.routes.UPLOAD_FOTO, function(req, res){
          res.send({src: '/tempfiles/' + sampleFile.name});
     });
 });
+
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '/../index.html'));
+});
+
+app.use('/bin', express.static('bin'));
+app.use('/foto', express.static('foto'));
+app.use('/sounds', express.static('sounds'));
+app.use('/tempfiles', express.static('tempfiles'));
+app.use('/svg', express.static('svg'));
 
 app.set('port', 4000);
 
