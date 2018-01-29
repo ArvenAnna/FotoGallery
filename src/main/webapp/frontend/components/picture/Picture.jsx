@@ -104,7 +104,7 @@ class Picture extends React.Component {
         const {album} = this.props;
         const main = album.images[0];
         const {animation, magnify, loading} = this.state;
-        if (!this.imageLoadStarted) this.loadImage(main.src);
+        if (!this.imageLoadStarted && !isVideo(main.src)) this.loadImage(main.src);
 
         return this.state.valid && <div className="image_main_wrapper">
                 <div
@@ -113,11 +113,13 @@ class Picture extends React.Component {
                     onMouseEnter={(e) => this.mouseEnter(e)}
                     onClick={(e) => this.click(e)}
                 >
-                    {loading
+                    {(loading && !isVideo(main.src))
                         ? <Loader type="ball-scale-multiple" className="image_loader"/>
                         : isVideo(main.src)
                             ? <video height={styles.picture_height}
                                      width={styles.picture_width}
+                                     onError={(e) => this.handleBrokenImg(e)}
+                                     onLoadedMetadata={(e) => this.onLoad(e)}
                                      className="video">
                                 <source src={main.src}/>
                             </video>

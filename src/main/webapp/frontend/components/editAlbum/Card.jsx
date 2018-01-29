@@ -152,7 +152,7 @@ class Card extends React.Component {
     render() {
         const {picture, openPicture} = this.props;
         const {imageLoading, imageLoadStarted} = this.state;
-        if (!imageLoadStarted && picture) this.loadImage(picture.src);
+        if (!imageLoadStarted && picture && !isVideo(picture.src)) this.loadImage(picture.src);
         return openPicture
             ? <div className='drag_container'
                    imgid={picture._id}>
@@ -167,8 +167,10 @@ class Card extends React.Component {
                    onMouseDown={e => this.onMouseDown(e, picture)}
                    onMouseUp={e => this.onMouseUp(e, picture)}
                    onMouseMove={e => this.onMouseMove(e, picture)}>
-                {imageLoading ? <Loader type="ball-scale-multiple"/> : isVideo(picture.src)
+                {(imageLoading && !isVideo(picture.src)) ? <Loader type="ball-scale-multiple"/> : isVideo(picture.src)
                     ? <video height={styles.picture_edit_height}
+                             onLoadedMetadata={(e) => this.onImageLoad(e)}
+                             onError={(e) => this.onImageError(e)}
                              controls="controls"
                              className='drag_image'>
                     <source src={picture.src}/>

@@ -171,17 +171,20 @@ class EditAlbum extends React.Component {
     }
 
     renderEditAlbumCard() {
-        if(!this.state.imageLoadStarted) this.loadImage(this.state.album.images[0].src);
+        const {src} = this.state.album.images[0];
+        if(!this.state.imageLoadStarted && !isVideo(src)) this.loadImage(src);
         return <div className='edit_album_card' key="edit_album_card">
-            {this.state.imageLoading ? <Loader type="ball-scale-multiple"/> : isVideo(this.state.album.images[0].src)
+            {(this.state.imageLoading && !isVideo(src)) ? <Loader type="ball-scale-multiple"/> : isVideo(this.state.album.images[0].src)
                 ? <video className="album_image"
+                         onError={(e) => this.onImageError(e)}
+                         onLoadedMetadata={(e) => this.onImageLoad(e)}
                          height={styles.picture_edit_height}
                          width={styles.picture_edit_width}
                          controls="controls">
-                    <source src={this.state.album.images[0].src}/>
+                    <source src={src}/>
                 </video>
                 : <img className='album_image'
-                       src={this.state.album.images[0].src}/>}
+                       src={src}/>}
             <div className='album_name' onClick={() => this.openAlbumDetails()}>{this.state.album.name}</div>
             <CrossIcon className='cross_icon' onClick={() => this.setState({openedDialog: true})}/>
         </div>

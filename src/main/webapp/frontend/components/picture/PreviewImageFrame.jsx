@@ -75,7 +75,6 @@ class PreviewImageFrame extends React.Component {
           width  = window.innerWidth - parseFloat(constants.preview_border_width) * 2;
           const height = e.target.naturalHeight * width / e.target.naturalWidth;
           this.cont.style.height = height;
-
       }
     this.cont.style.width = width;
     this.setState({images: newImages});
@@ -88,7 +87,8 @@ class PreviewImageFrame extends React.Component {
 
   onArrowClick(arrow) {
     const {images} = this.props;
-    const currentIndex = images.indexOf(this.state.main);
+    const current = images.filter(i => this.state.main._id == i._id)[0];
+    const currentIndex = this.props.images.indexOf(current);
     let main;
 
     if (arrow === 'left' && currentIndex > 0) {
@@ -115,10 +115,12 @@ class PreviewImageFrame extends React.Component {
   }
 
   loadImageURL (imageURL) {
-        const imageObj = new Image();
-        imageObj.onload = this.onLoad.bind(this);
-        imageObj.onerror = this.onLoadFailure.bind(this);
-        imageObj.src = imageURL;
+        if(!isVideo(imageURL)) {
+            const imageObj = new Image();
+            imageObj.onload = this.onLoad.bind(this);
+            imageObj.onerror = this.onLoadFailure.bind(this);
+            imageObj.src = imageURL;
+        }
   }
 
   onLoadFailure() {
@@ -145,12 +147,29 @@ class PreviewImageFrame extends React.Component {
       })
  }
 
+    onVideoLoaded(e) {
+        let width = e.target.videoWidth * this.height / e.target.videoHeight;
+        let newImages = [...this.state.images];
+        newImages[this.state.index].naturalWidth = e.target.videoWidth;
+        newImages[this.state.index].naturalHeight = e.target.videoHeight;
+        newImages[this.state.index].loaded = true;
+        if((width + parseFloat(constants.preview_border_width) * 2) > window.innerWidth) {
+            width  = window.innerWidth - parseFloat(constants.preview_border_width) * 2;
+            const height = e.target.videoHeight * width / e.target.videoWidth;
+            this.cont.style.height = height;
+        }
+        this.cont.style.width = width;
+        this.setState({images: newImages});
+        this.props.setImageWidth(width);
+    }
+
   render() {
     const {main, left, right, images, index} = this.state;
     const {editRoute} = this.props;
     if(!images[index].loaded) this.loadImageURL(images[index].src);
 
-    return <React.Fragment><div className='magnify_modal_img_frame_container' ref={cont => this.cont = cont}>
+    return <React.Fragment>
+        <div className='magnify_modal_img_frame_container' ref={cont => this.cont = cont}>
         <CrossIcon className='cross' onClick={() => this.onCrossClick()}/>
             {editRoute && <Link to={this.props.editRoute}><EditIcon className='edit'/></Link>}
         <EarthIcon className='earth' onClick={() => this.onEarthClick()}/>
@@ -163,8 +182,9 @@ class PreviewImageFrame extends React.Component {
         <div className='counter_container'>
           <div className='counter'>{`${(images.indexOf(main) + 1)} of ${images.length}`}</div>
         </div>
-        {!images[index].loaded ? <Loader type="ball-scale-multiple"/> : isVideo(main.src)
+        {(!images[index].loaded && !isVideo(main.src)) ? <Loader type="ball-scale-multiple"/> : isVideo(main.src)
             ? <video controls="controls"
+                     onLoadedMetadata={(e) => this.onVideoLoaded(e)}
                      ref={node => this.img = node}
                      className="image_preview"
                      >
