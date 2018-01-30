@@ -1,7 +1,7 @@
 /target/
 /.idea/
 /*.iml
-/src/main/webapp/frontend/node_modules/
-/src/main/webapp/frontend/foto/
-/src/main/webapp/frontend/tempfiles/
-/src/main/webapp/frontend/bin/
+/src/node_modules/
+/src/foto/
+/src/tempfiles/
+/src/bin/
