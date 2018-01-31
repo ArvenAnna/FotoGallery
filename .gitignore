@@ -1,8 +1,9 @@
 /target/
 /.idea/
 /*.iml
-/src/node_modules/
-/src/foto/
-/src/tempfiles/
-/src/bin/
-/src/package-lock.json
+/node_modules/
+/foto/
+/tempfiles/
+/bin/
+/package-lock.json
+/data

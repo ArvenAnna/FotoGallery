@@ -1,19 +1,24 @@
 const express = require('express');
-const routesModule = require('../constants/routes');
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
+const path = require('path');
+
+const routesModule = require('../constants/routes');
 const album = require('./albumEndpoints');
 const foto = require('./fotoEndpoints');
-var path = require('path');
+const { badRequest, serverError, ok } = require('./utils');
+const { tempDir } = require('./constants');
+
+const expressLogging = require('express-logging');
+const logger = require('logops');
+const mongoose = require('mongoose');
 
 const app = express();
+app.use(expressLogging(logger));
 
-var mongoose = require('mongoose');
 
-var mongoDB = 'mongodb://127.0.0.1/GALLERY';
-mongoose.connect(mongoDB, {
-    useMongoClient: true
-});
+const mongoDB = 'mongodb://mongo/GALLERY';
+mongoose.connect(mongoDB, {});
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;
 //Get the default connection
@@ -30,30 +35,27 @@ app.use(fileUpload({
 album.Endpoints(app);
 foto.Endpoints(app);
 
-app.post(routesModule.routes.UPLOAD_FOTO, function(req, res){
-    console.log("upload foto called from proxy");
-    if (!req.files)
-        return res.status(400).send('No files were uploaded.');
-    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
 
-    let sampleFile = req.files.file;
+app.post(routesModule.routes.UPLOAD_FOTO, (req, res) => {
+    if (!req.files) return badRequest(res, 'No files were uploaded.');
 
-    // Use the mv() method to place the file somewhere on your server
-     sampleFile.mv('tempfiles/' + sampleFile.name, function(err) {
-         if (err) return res.status(500).send("File uploading failed");
-         res.send({src: '/tempfiles/' + sampleFile.name});
+    const uploadedFile = req.files.file;
+
+    uploadedFile.mv(tempDir + '/' + uploadedFile.name, (err) => {
+         err
+             ? serverError(res, "File uploading failed", err)
+             : ok(res, {src: '/' + tempDir + '/' + uploadedFile.name});
     });
 });
 
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/../index.html'));
-});
 
+app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/../index.html')));
 app.use('/bin', express.static('bin'));
 app.use('/foto', express.static('foto'));
 app.use('/sounds', express.static('sounds'));
 app.use('/tempfiles', express.static('tempfiles'));
 app.use('/svg', express.static('svg'));
+
 
 app.set('port', 4000);
 
