@@ -7,7 +7,12 @@ import Loader from 'react-loaders';
 import * as styles from "../../constants/styles";
 import 'loaders.css/src/animations/ball-scale-multiple.scss';
 import Alert from 'react-s-alert';
+import connect from "react-redux/es/connect/connect";
+import {fetchAlbums} from "../../actions/albumActions";
 
+@connect(store => ({}), {
+    fetchAlbums
+})
 class Picture extends React.Component {
     // animation: fade, move
 
@@ -30,6 +35,7 @@ class Picture extends React.Component {
     };
 
     closePreview() {
+        this.props.fetchAlbums();
         this.setState({
             magnify: ''
         });

@@ -8,7 +8,12 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/scale.css';
+import connect from "react-redux/es/connect/connect";
+import {fetchAlbums} from "../actions/albumActions";
 
+@connect(store => ({}), {
+    fetchAlbums
+})
 class FotoSlider extends React.Component {
 
     constructor(props) {
@@ -18,6 +23,7 @@ class FotoSlider extends React.Component {
             width: 0,
             height: 0
         }
+        props.fetchAlbums();
     }
 
     createAlbum() {
@@ -35,8 +41,6 @@ class FotoSlider extends React.Component {
     componentDidMount() {
         setTimeout(() => this.scrollbars.forceUpdate(), 100);
     }
-
-
 
     render() {
 

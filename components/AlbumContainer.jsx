@@ -1,7 +1,7 @@
 import React from 'react';
 import Picture from "./picture/Picture";
 import connect from "react-redux/es/connect/connect";
-import {fetchAlbums, PAGE_ITEMS} from "../actions/albumActions";
+import {fetchAlbums, fetchAlbumsBySearch, PAGE_ITEMS} from "../actions/albumActions";
 import Loader from 'react-loaders';
 import './albumContainer.less';
 import 'loaders.css/src/animations/ball-grid-pulse.scss';
@@ -9,24 +9,28 @@ import ReactPaginate from 'react-paginate';
 import LeftArrow from '../svg/left-arrow.svg';
 import RightArrow from '../svg/right-arrow.svg';
 
-
 @connect(store => ({
     albums: store.albums,
     isLoadingAlbums: store.isLoadingAlbums,
-    itemCount: store.itemCount
+    itemCount: store.itemCount,
+    search: store.search
 }), {
-    fetchAlbums
+    fetchAlbums,
+    fetchAlbumsBySearch
 })
 class AlbumContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.props.fetchAlbums();
     }
 
     handlePageClick(data) {
         let selected = data.selected;
         let offset = Math.ceil(selected * PAGE_ITEMS);
-        this.props.fetchAlbums(offset);
+        if(this.props.search) {
+            this.props.fetchAlbumsBySearch(this.props.search, offset)
+        } else {
+            this.props.fetchAlbums(offset);
+        }
     }
 
 

@@ -11,10 +11,11 @@ export function albumsRequest() {
     };
 }
 
-export function setAlbums(result) {
+export function setAlbums(result, search = null) {
     return {
         type: types.SET_ALBUMS,
-        result: result
+        result: result,
+        search
     };
 }
 
@@ -40,7 +41,7 @@ export function fetchAlbumsBySearch(search, offset, perPage) {
         dispatch(albumsRequest());
         return http
             .doGet(routesModule.routes.GET_ALBUMS_SEARCH(search, pagesOffset, itemsPerPage))
-            .then(result => dispatch(setAlbums(result)))
+            .then(result => dispatch(setAlbums(result, search)))
             .catch(e => {
                 Alert.error(e.response.data.error, {});
                 dispatch({type: types.REQ_ALBUMS_ERROR});

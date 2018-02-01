@@ -1,4 +1,5 @@
 import {REQ_ALBUMS, REQ_ALBUMS_ERROR, SET_ALBUMS} from "../constants/ActionTypes";
+import {mode} from "../actions/albumActions";
 
 const albums = [];
 const isLoadingAlbums = false;
@@ -38,10 +39,20 @@ const countReducer = (state = 0, action) => {
     }
 }
 
+const modeReducer = (state = null, action) => {
+    switch (action.type) {
+        case SET_ALBUMS:
+            return action.search;
+        default:
+            return state;
+    }
+}
+
 const AlbumReducer = {
     albums: albumReducer,
     isLoadingAlbums: loaderReducer,
-    itemCount: countReducer
+    itemCount: countReducer,
+    search: modeReducer
 }
 
 export default AlbumReducer;
