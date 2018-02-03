@@ -17,7 +17,7 @@ const app = express();
 app.use(expressLogging(logger));
 
 
-const mongoDB = 'mongodb://mongo/GALLERY';
+const mongoDB = 'mongodb://localhost/GALLERY'; //TODO: set from env (in docker env: mongodb://mongo/GALLERY)
 mongoose.connect(mongoDB, {});
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;
