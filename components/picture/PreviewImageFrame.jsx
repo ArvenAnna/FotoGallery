@@ -171,7 +171,8 @@ class PreviewImageFrame extends React.Component {
     return <React.Fragment>
         <div className='magnify_modal_img_frame_container' ref={cont => this.cont = cont}>
         <CrossIcon className='cross' onClick={() => this.onCrossClick()}/>
-            {editRoute && <Link to={this.props.editRoute}><EditIcon className='edit'/></Link>}
+        {editRoute && <Link to={this.props.editRoute}>
+                <EditIcon className='edit'/></Link>}
         <EarthIcon className='earth' onClick={() => this.onEarthClick()}/>
         {left && <div className='left_arrow'>
           <LeftArrowIcon onClick={() => this.onArrowClick('left')}/>

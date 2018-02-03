@@ -1,16 +1,19 @@
 import React from 'react';
-import Header from "./Header";
-import AddNewAlbum from "./newAlbum/AddNewAlbum";
-import AlbumContainer from "./AlbumContainer";
-import {Route, Switch} from "react-router-dom";
-import EditAlbum from "./editAlbum/EditAlbum";
+import {Route, Switch, withRouter} from "react-router-dom";
+import connect from "react-redux/es/connect/connect";
 import { Scrollbars } from 'react-custom-scrollbars';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/scale.css';
-import connect from "react-redux/es/connect/connect";
+
+import Header from "./Header";
+import AddNewAlbum from "./newAlbum/AddNewAlbum";
+import AlbumContainer from "./AlbumContainer";
+import EditAlbum from "./editAlbum/EditAlbum";
+
 import {fetchAlbums} from "../actions/albumActions";
 
+@withRouter
 @connect(store => ({}), {
     fetchAlbums
 })

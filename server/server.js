@@ -7,7 +7,7 @@ const routesModule = require('../constants/routes');
 const album = require('./albumEndpoints');
 const foto = require('./fotoEndpoints');
 const { badRequest, serverError, ok } = require('./utils');
-const { tempDir } = require('./constants');
+const { tempDir, dbName } = require('./constants');
 
 const expressLogging = require('express-logging');
 const logger = require('logops');
@@ -16,8 +16,10 @@ const mongoose = require('mongoose');
 const app = express();
 app.use(expressLogging(logger));
 
+const args = process.argv.slice(2);
+const dbHost = args[0];
 
-const mongoDB = 'mongodb://localhost/GALLERY'; //TODO: set from env (in docker env: mongodb://mongo/GALLERY)
+const mongoDB = 'mongodb://' + dbHost + '/' + dbName;
 mongoose.connect(mongoDB, {});
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;
@@ -35,19 +37,15 @@ app.use(fileUpload({
 album.Endpoints(app);
 foto.Endpoints(app);
 
-
 app.post(routesModule.routes.UPLOAD_FOTO, (req, res) => {
     if (!req.files) return badRequest(res, 'No files were uploaded.');
 
     const uploadedFile = req.files.file;
 
-    uploadedFile.mv(tempDir + '/' + uploadedFile.name, (err) => {
-         err
-             ? serverError(res, "File uploading failed", err)
-             : ok(res, {src: '/' + tempDir + '/' + uploadedFile.name});
-    });
+    uploadedFile.mv(tempDir + '/' + uploadedFile.name)
+        .then(() => ok(res, {src: '/' + tempDir + '/' + uploadedFile.name}))
+        .catch(e => serverError(res, "File uploading failed", e));
 });
-
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/../index.html')));
 app.use('/bin', express.static('bin'));
