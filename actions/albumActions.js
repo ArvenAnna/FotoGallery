@@ -3,7 +3,7 @@ import http from '../HttpService';
 const routesModule = require('../constants/routes');
 import Alert from 'react-s-alert';
 
-export const PAGE_ITEMS = 3;
+export const PAGE_ITEMS = 20;
 
 export function albumsRequest() {
     return {
