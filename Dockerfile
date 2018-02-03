@@ -6,4 +6,4 @@ RUN npm install && npm install webpack -g
 COPY . /usr/src/app
 RUN webpack
 EXPOSE 4000
-CMD npm run server
+CMD npm run docker-server
