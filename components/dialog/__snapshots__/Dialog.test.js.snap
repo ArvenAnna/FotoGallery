@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dialog should render correctly 1`] = `
+<div
+  className="Dialog"
+>
+  <styled.
+    className="cross"
+    onClick={[Function]}
+  />
+  <div
+    className="Dialog_text"
+  >
+    mock text
+  </div>
+  <button
+    className="Dialog_ok_button"
+    onClick={[Function]}
+  >
+    ok
+  </button>
+</div>
+`;

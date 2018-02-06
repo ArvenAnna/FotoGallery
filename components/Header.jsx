@@ -26,6 +26,7 @@ class Header extends React.Component {
         return (
                 [<div key="header_menu" className="header_menu">
                     <div className="menu_item" onClick={this.props.createAlbum}>new album</div>
+                    <div className="menu_item" onClick={this.props.openMap}>map</div>
                     <div className="menu_item"><NavLink to='/' onClick={this.props.fetchAlbums}>album's list</NavLink></div>
                 </div>,
                 <div className="search_menu" key="search">Search: <input className="search_input" defaultValue=''

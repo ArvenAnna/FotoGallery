@@ -12,9 +12,12 @@ import AlbumContainer from "./AlbumContainer";
 import EditAlbum from "./editAlbum/EditAlbum";
 
 import {fetchAlbums} from "../actions/albumActions";
+import GMap from "./map";
 
 @withRouter
-@connect(store => ({}), {
+@connect(store => ({
+    albums: store.albums
+}), {
     fetchAlbums
 })
 class FotoSlider extends React.Component {
@@ -24,7 +27,8 @@ class FotoSlider extends React.Component {
         this.state = {
             addAlbumModal: false,
             width: 0,
-            height: 0
+            height: 0,
+            mapOpened: false
         }
         props.fetchAlbums();
     }
@@ -35,9 +39,16 @@ class FotoSlider extends React.Component {
         });
     }
 
+    openMap() {
+        this.setState({
+            mapOpened: true
+        });
+    }
+
     closeModal() {
         this.setState({
-            addAlbumModal: false
+            addAlbumModal: false,
+            mapOpened: false
         });
     }
 
@@ -47,11 +58,20 @@ class FotoSlider extends React.Component {
 
     render() {
 
+        let imagesForMap = [];
+
+        this.props.albums.forEach(al => {
+            imagesForMap = imagesForMap.concat(al.images);
+        })
+
         const Content = () => <div className="app_container">
             {this.state.addAlbumModal && <AddNewAlbum closeModal={() => this.closeModal()}/>}
+            {this.state.mapOpened && <GMap
+                images={imagesForMap}
+                close={() => this.closeModal()}/>}
 
             <div className="app_page">
-                <Header createAlbum={() => this.createAlbum()}/>
+                <Header createAlbum={() => this.createAlbum()} openMap={() => this.openMap()}/>
                 <Switch>
                     <Route exact path='/' component={AlbumContainer}/>
                     <Route path='/edit/:id' component={EditAlbum}/>

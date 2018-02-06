@@ -7,7 +7,7 @@ import constants from '../../constants/styles';
 import Loader from 'react-loaders';
 import 'loaders.css/src/animations/ball-scale-multiple.scss';
 import Alert from 'react-s-alert';
-import GMap from "./GMap";
+import GMap from "../map";
 
 class PreviewImageFrame extends React.Component {
 
@@ -194,7 +194,11 @@ class PreviewImageFrame extends React.Component {
             :<img src={main.src} className='image_preview'
                   ref={node => this.img = node}/>}
       </div>
-        {this.state.mode == 'map' && <GMap close={() => this.closeMap()} index={index} images={images} changeCoordinates={(foto) => this.changeFoto(foto)}/>}
+        {this.state.mode == 'map' && <GMap
+            close={() => this.closeMap()}
+            index={index}
+            images={images}
+            changeCoordinates={(foto) => this.changeFoto(foto)}/>}
     </React.Fragment>;
   }
 }
