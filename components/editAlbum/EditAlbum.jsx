@@ -43,7 +43,8 @@ class EditAlbum extends React.Component {
             imageDownloaded: false,
             imageLoading: true,
             imageLoadStarted: false,
-            albumLoading: false
+            albumLoading: false,
+            fileUploading: false
         }
     }
 
@@ -124,6 +125,7 @@ class EditAlbum extends React.Component {
     }
 
     uploadFile(file) {
+        this.setState({fileUploading: true});
         http.sendFile(routesModule.routes.UPLOAD_FOTO, file)
             .then(downloadedFoto => {
                 if (isVideo(downloadedFoto.src)) {
@@ -140,17 +142,25 @@ class EditAlbum extends React.Component {
 
                         this.setState({
                             //imageDownloaded: null,
-                            album: newAlbum
+                            album: newAlbum,
+                            fileUploading: false
                         });
-                    }).catch(e => Alert.error(e.response.data.error, {}));
+                    }).catch(e => {
+                        Alert.error(e.response.data.error, {});
+                        this.setState({fileUploading: false});
+                    });
                 } else {
                     this.setState({
-                        imageDownloaded: downloadedFoto.src
+                        imageDownloaded: downloadedFoto.src,
+                        fileUploading: false
                     });
                 }
 
             })
-            .catch(e => Alert.error(e.response.data.error, {}));
+            .catch(e => {
+                Alert.error(e.response.data.error, {});
+                this.setState({fileUploading: false});
+            });
     }
 
     onImageLoad() {
@@ -207,6 +217,7 @@ class EditAlbum extends React.Component {
     }
 
     renderFileInput() {
+        if (this.state.fileUploading) return <Loader type="ball-scale-multiple"/>;
         return !this.state.imageDownloaded && <FileInput className='edit_file_input'
                                                          disabled={this.state.openPicture}
                                                          label='Choose new foto'

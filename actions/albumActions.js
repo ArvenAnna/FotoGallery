@@ -54,7 +54,7 @@ export function deleteFotoFromAlbum(id) {
         //dispatch(albumsRequest());
         return http
             .doDelete(routesModule.routes.DELETE_FOTO(id))
-            .then(result => Alert.success('Album deleted', {}))
+            //.then(result => Alert.success('Foto deleted', {}))
             .catch(e => Alert.error(e.response.data.error, {}));
             //.then(result => dispatch(fetchAlbums()));
     }
@@ -65,7 +65,10 @@ export function deleteAlbum(id) {
         //dispatch(albumsRequest());
         return http
             .doDelete(routesModule.routes.DELETE_ALBUM(id))
-            .then(result => dispatch(fetchAlbums()))
+            .then(result => {
+                Alert.success('Foto deleted', {});
+                dispatch(fetchAlbums());
+            })
             .catch(e => Alert.error(e.response.data.error, {}));
     }
 }

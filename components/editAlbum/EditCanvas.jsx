@@ -6,6 +6,8 @@ import * as styles from "../../constants/styles";
 const routesModule = require('../../constants/routes');
 import http from '../../HttpService';
 import Alert from 'react-s-alert';
+import Loader from 'react-loaders';
+import 'loaders.css/src/animations/ball-scale-multiple.scss';
 
 class EditCanvas extends React.Component {
 
@@ -15,11 +17,13 @@ class EditCanvas extends React.Component {
             angle: 0,
             width: parseInt(styles.picture_edit_width),
             height: parseInt(styles.picture_edit_height),
-            imageLoading: true
+            imageLoading: true,
+            imageSaving: false
         }
     }
 
     getEditedImage() {
+        this.setState({imageSaving: true});
         const {album, image} = this.props;
         this.avatar.getImage().toBlob(img => {
             let name = image.split('/');
@@ -43,10 +47,17 @@ class EditCanvas extends React.Component {
                                 imageDownloaded: null,
                                 album: newAlbum
                             });
+                            this.setState({imageSaving: false});
                         })
-                        .catch(e => Alert.error(e.response.data.error, {}));;
+                        .catch(e => {
+                            this.setState({imageSaving: false});
+                            Alert.error(e.response.data.error, {});
+                        });
                 })
-                .catch(e => Alert.error(e.response.data.error, {}));
+                .catch(e => {
+                    this.setState({imageSaving: false});
+                    Alert.error(e.response.data.error, {})
+                });
         });
     }
 
@@ -85,7 +96,8 @@ class EditCanvas extends React.Component {
 
     render() {
         const {image} = this.props;
-        const {angle, width, height, imageLoading} = this.state;
+        const {angle, width, height, imageLoading, imageSaving} = this.state;
+        if(imageSaving) return <Loader type="ball-scale-multiple"/>;
         return <div className="Edit_canvas">
             <AvatarEditor
                 ref={ae => this.avatar = ae}

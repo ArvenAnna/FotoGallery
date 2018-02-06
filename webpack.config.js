@@ -18,15 +18,15 @@ module.exports = {
       //     if (filepath.includes('react-notifications')) return true;
       //     return false;
       // },
-      loader: "style-loader!css-loader!autoprefixer-loader"
+      loader: "style-loader!css-loader!postcss-loader"
     }, {
         test: /\.scss$/,
         //exclude: [/node_modules/, /bin/],
-        loader: "style-loader!css-loader!autoprefixer-loader!sass-loader"
+        loader: "style-loader!css-loader!postcss-loader!sass-loader"
     },{
       test: /\.less$/,
       exclude: [/node_modules/, /bin/],
-      loader: "style-loader!css-loader!autoprefixer-loader!less-loader!js-to-styles-var-loader"
+      loader: "style-loader!css-loader!less-loader!js-to-styles-var-loader"
     }, {
       test: /\.png$/,
       exclude: [/node_modules/, /bin/],
@@ -56,7 +56,7 @@ module.exports = {
         {
           loader: 'babel-loader',
           options: {
-            presets: ['es2015', 'react']
+            presets: ['env', 'react']
           }
         },
         {

@@ -44,6 +44,10 @@ require("../../constants/styles.js");
       font-size: @add_album_font_size;
       border-width: 3px;
       border-radius: @border_radius;
+
+      &.disabled {
+        color: lighten(@body_color, 20%);
+      }
     }
 
     .warning {

@@ -81,6 +81,8 @@ class AddNewAlbum extends React.Component {
     render() {
         const {name, description, src, fileUploading, height} = this.state;
 
+        const buttonDisabled = !name || !description || !src;
+
         return <div className='add_album'>
             <Scrollbars
                 hideTracksWhenNotNeeded={true}
@@ -107,7 +109,7 @@ class AddNewAlbum extends React.Component {
                 <Label>Description</Label>
                 <textarea value={description} onChange={(e) => this.setState({description: e.target.value})}/>
                 {src && !isVideo(src) && <div className="warning">You will be able to rotate your foto in the edit mode after album creation.</div>}
-                <button className="ok_button" onClick={() => this.createAlbum()}>ok</button>
+                <button disabled={buttonDisabled} className={`ok_button ${buttonDisabled ? 'disabled' : ''}`} onClick={() => this.createAlbum()}>ok</button>
 
             </div>
             </Scrollbars>

@@ -1,5 +1,7 @@
+const videoFormats = ['mp4', 'mov'];
+
 export const isVideo = (src) => {
-    return getFormat(src) == 'mp4';
+    return videoFormats.includes(getFormat(src));
 }
 
 function getFormat(src) {
@@ -10,5 +12,5 @@ function getFormat(src) {
         format = splitArray[splitArray.length - 1].split('.');
         format = format[format.length - 1];
     }
-    return format;
+    return format.toLowerCase();
 }
