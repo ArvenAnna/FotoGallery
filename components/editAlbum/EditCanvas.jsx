@@ -97,7 +97,7 @@ class EditCanvas extends React.Component {
     render() {
         const {image} = this.props;
         const {angle, width, height, imageLoading, imageSaving} = this.state;
-        if(imageSaving) return <Loader type="ball-scale-multiple"/>;
+        if(imageSaving) return <div className="Edit_canvas"><Loader type="ball-scale-multiple"/></div>;
         return <div className="Edit_canvas">
             <AvatarEditor
                 ref={ae => this.avatar = ae}

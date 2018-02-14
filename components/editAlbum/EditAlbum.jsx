@@ -217,7 +217,7 @@ class EditAlbum extends React.Component {
     }
 
     renderFileInput() {
-        if (this.state.fileUploading) return <Loader type="ball-scale-multiple"/>;
+        if (this.state.fileUploading) return <div className='edit_file_input'><Loader type="ball-scale-multiple"/></div>;
         return !this.state.imageDownloaded && <FileInput className='edit_file_input'
                                                          disabled={this.state.openPicture}
                                                          label='Choose new foto'
