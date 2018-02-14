@@ -7,7 +7,7 @@ import {saveFotoInformation} from "../../actions/albumActions";
 
 @connect(store => ({}), {
     saveFotoInformation
-});
+})
 class GMap extends React.Component {
 
     constructor(props) {
