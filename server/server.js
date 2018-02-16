@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fileUpload = require('express-fileupload');
+//const fileUpload = require('express-fileupload');
 const path = require('path');
 
 const routesModule = require('../constants/routes');
@@ -12,6 +12,21 @@ const { tempDir, dbName } = require('./constants');
 const expressLogging = require('express-logging');
 const logger = require('logops');
 const mongoose = require('mongoose');
+
+// for file uploading
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, __dirname + '/../' + tempDir + '/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+});
+const uploading = multer({
+    storage: storage,
+}).single('file');
 
 const app = express();
 app.use(expressLogging(logger));
@@ -30,21 +45,17 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(bodyParser.json());
-app.use(fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 },
-}));
+
 
 album.Endpoints(app);
 foto.Endpoints(app);
 
+
 app.post(routesModule.routes.UPLOAD_FOTO, (req, res) => {
-    if (!req.files) return badRequest(res, 'No files were uploaded.');
-
-    const uploadedFile = req.files.file;
-
-    uploadedFile.mv(tempDir + '/' + uploadedFile.name)
-        .then(() => ok(res, {src: '/' + tempDir + '/' + uploadedFile.name}))
-        .catch(e => serverError(res, "File uploading failed", e));
+    uploading(req, res, function (err) {
+        if(err) serverError(res, "Error during uploading file", err);
+        ok(res, {src: '/' + tempDir + '/' + req.file.originalname})
+    });
 });
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/../index.html')));

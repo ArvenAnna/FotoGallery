@@ -44,8 +44,8 @@ const endpoints =  (app) => {
 
         Foto.findById(req.query.id)
             .then(foundFoto => foundFoto.remove()
-                    .then(() => fs.unlink(__dirname + '/../' + foundFoto.src,  err => {
-                            if (err) return serverError(res, "Error during removing foto file", e);
+                    .then(() => fs.unlink(__dirname + '/../' + foundFoto.src,  e => {
+                            if (e) return serverError(res, "Error during removing foto file", e);
                             ok(res, req.query.id);
                         }))
                     .catch(e => serverError(res, "Error during foto information deletion", e)))

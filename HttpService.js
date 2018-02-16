@@ -48,10 +48,21 @@ class HttpService {
         //fd.append('receptId', receptId);
         return this.http
             .post(route, fd, {
-                headers: {'Content-Type': undefined}
+                headers: {'Content-Type': 'multipart/form-data'}
             })
             .then(result => result.data);
     }
+
+    // sendMultipartFile(route, file) {
+    //     const formData = new FormData();
+    //     formData.append('file', file)
+    //     const config = {
+    //         headers: {
+    //             'content-type': 'multipart/form-data'
+    //         }
+    //     }
+    //     return  post(route, formData, config)
+    // }
 }
 
 export default new HttpService();

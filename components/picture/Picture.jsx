@@ -9,6 +9,7 @@ import 'loaders.css/src/animations/ball-scale-multiple.scss';
 import Alert from 'react-s-alert';
 import connect from "react-redux/es/connect/connect";
 import {fetchAlbums} from "../../actions/albumActions";
+import ReactTooltip from 'react-tooltip';
 
 @connect(store => ({}), {
     fetchAlbums
@@ -113,7 +114,7 @@ class Picture extends React.Component {
         if (!this.imageLoadStarted && !isVideo(main.src)) this.loadImage(main.src);
 
         return this.state.valid && <div className="image_main_wrapper">
-                <div
+                <div data-tip data-for={album._id}
                     className={`image_wrapper ${animation} ${magnify}`}
                     onMouseLeave={(e) => this.mouseLeave(e)}
                     onMouseEnter={(e) => this.mouseEnter(e)}
@@ -141,6 +142,9 @@ class Picture extends React.Component {
                         </div>
                     </div>
                 </div>
+                <ReactTooltip id={album._id} place='bottom'>
+                    <div className='tooltip'>{album.description}</div>
+                </ReactTooltip>
                 {magnify && [<div key="preview_overlay" className="preview_overlay"/>,
                 <Preview main={main}
                          key="preview"
