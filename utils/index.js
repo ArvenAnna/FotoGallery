@@ -1,4 +1,4 @@
-const videoFormats = ['mp4', 'mov'];
+const videoFormats = ['mp4', 'mov', 'avi'];
 
 export const isVideo = (src) => {
     return videoFormats.includes(getFormat(src));
