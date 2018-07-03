@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"GALLERY.fotos"},{"v":2,"key":{"_fts":"text","_ftsx":1},"name":"$**_text","ns":"GALLERY.fotos","background":true,"weights":{"$**":1},"default_language":"english","language_override":"language","textIndexVersion":3}],"uuid":"603bcc4f5dd64d89bd145bd9bb5f649a"}

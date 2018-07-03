@@ -6,5 +6,4 @@ foto/
 tempfiles/
 bin/
 package-lock.json
-data
-!data/dump/
+data/db
