@@ -8,3 +8,12 @@ Stack: rest API on NodeJS, MongoDB, React, Redux, less; application dockerized. 
   docker-compose build
 then, after it will finish:
   docker-compose up
+  
+3. In order to use my db dump go indide mongo container and run:
+    mongorestore --db GALLERY /dump/GALLERY/albums.bson
+    mongorestore --db GALLERY /dump/GALLERY/fotos.bson
+    
+    To make dump go inside mongo container and run:
+    mongodump
+    
+    dump files appear in dump directory
